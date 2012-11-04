@@ -3,3 +3,5 @@
 
 node_modules/
 .bem/cache
+
+site.bundles
