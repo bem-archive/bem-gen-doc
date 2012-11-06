@@ -4,4 +4,5 @@
 node_modules/
 .bem/cache
 
+bem-bl
 site.bundles
