@@ -4,7 +4,7 @@ var PATH = require('path'),
     BEM_CORE_TECHS = PATH.resolve(__dirname,
             '../../bem-bl/blocks-common/i-bem/bem/techs');
 
-exports.getTechs = function() {html
+exports.getTechs = function() {
 
     return {
         'bemjson.js'    : '',
