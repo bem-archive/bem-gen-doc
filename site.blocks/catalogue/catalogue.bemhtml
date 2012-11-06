@@ -1,0 +1,21 @@
+block catalogue {
+
+    default: {
+        applyCtx({
+            block: 'layout',
+            content: {
+                elem: 'col',
+                content: this.ctx
+            }
+        })
+    }
+
+    elem item {
+
+        tag: 'section'
+
+        this.isLast(), mix: { mods: { 'last-of': 'yes' } }
+
+    }
+
+}

@@ -1,0 +1,47 @@
+block block {
+
+    elem mod, content: {
+        var ctx = this.ctx;
+
+        return [
+            {
+                elem: 'mod-name',
+                content: ctx.name
+            },
+            {
+                elem: 'mod-title',
+                content: ctx.title
+            },
+            ctx.description,
+            {
+                elem: 'mod-val-list',
+                content: ctx.content
+            }
+        ];
+    }
+
+    elem mod-name, tag: 'h4'
+
+    elem mod-val-list, tag: 'table'
+
+    elem mod-val {
+
+        default: applyCtx({
+            tag: 'tr',
+            content: [
+                {
+                    elem: 'mod-val-name',
+                    content: this.ctx.name
+                },
+                {
+                    elem: 'mod-val-title',
+                    content: this.ctx.title
+                }
+            ]
+        })
+    }
+
+    elem mod-val-name, tag: 'th'
+    elem mod-val-title, tag: 'td'
+
+}

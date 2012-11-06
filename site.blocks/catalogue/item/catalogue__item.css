@@ -1,0 +1,11 @@
+.catalogue__item
+{
+    border-bottom: 1px dotted rgba(0,0,0,0.2);
+
+    padding: 20px 0;
+}
+
+.catalogue__item_last-of_yes
+{
+    border-bottom: none;
+}

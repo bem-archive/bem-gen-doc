@@ -1,0 +1,31 @@
+block block {
+
+    default: {
+        applyCtx({
+            block: 'catalogue',
+            elem: 'item',
+            content: this.ctx
+        });
+    }
+
+    content: [
+        {
+            elem: 'name',
+            content: this.ctx.name
+        },
+        {
+            elem: 'title',
+            content: this.ctx.title
+        },
+        this.ctx.description,
+        this.ctx.content,
+        this.ctx.examples
+    ]
+
+    elem section {
+
+        tag: 'h3'
+
+    }
+
+}

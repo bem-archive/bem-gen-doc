@@ -1,0 +1,18 @@
+block block {
+
+    elem elem, content: [
+        {
+            elem: 'elem-name',
+            content: this.ctx.name
+        },
+        {
+            elem: 'elem-title',
+            content: this.ctx.title
+        },
+        this.ctx.description,
+        this.ctx.content
+    ]
+
+    elem elem-name, tag: 'h4'
+
+}
