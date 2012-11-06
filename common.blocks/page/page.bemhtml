@@ -1,0 +1,83 @@
+block page {
+
+    doctype: this.ctx.doctype || '<!doctype html>'
+
+    tag: 'body'
+
+    default: {
+        var ctx = this.ctx,
+            doctype = apply('doctype'),
+            buf = [
+                doctype,
+                {
+                    elem: 'root',
+                    content: [
+                        {
+                            elem: 'head',
+                            content: [
+                                {
+                                    elem: 'meta',
+                                    attrs: { charset: 'utf-8' }
+                                },
+                                {
+                                    elem: 'title',
+                                    content: ctx.title
+                                },
+
+                                (ctx.meta || ''),
+
+                                (ctx.hasOwnProperty('favicon') ?
+                                        { elem: 'favicon', url: ctx.favicon } : ''),
+
+                                {
+                                    elem: 'assets',
+                                    content: ctx.assets
+                                }
+                            ]
+                        },
+                        ctx
+                    ]
+                }
+            ];
+
+        applyCtx(buf);
+    }
+
+    elem root, tag: 'html'
+
+    elem meta {
+
+        bem: false
+        tag: 'meta'
+
+    }
+
+    elem title {
+
+        bem: false
+        tag: 'title'
+
+    }
+
+    elem link {
+
+        bem: false
+        tag: 'link'
+
+    }
+
+    elem head {
+
+        bem: false
+        tag: 'head'
+
+    }
+
+    elem favicon {
+
+        tag: 'link',
+        attrs: { rel: 'shortcut icon', href: this.ctx.url }
+
+    }
+
+}
