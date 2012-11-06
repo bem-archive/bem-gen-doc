@@ -219,6 +219,7 @@ MAKE.decl('BundleNode', {
             'bemjson.js',
             'bemdecl.js',
             'deps.js',
+            'bemhtml',
             'html',
             'css',
             'js'
@@ -229,10 +230,13 @@ MAKE.decl('BundleNode', {
     getLevels : function() {
 
         return [
-            '../../bem-bl/blocks-common',
-            '../../bem-bl/blocks-desktop',
-            '../../common.blocks'
-        ];
+                'bem-bl/blocks-common',
+                'bem-bl/blocks-desktop',
+                'common.blocks',
+                'site.blocks'
+            ].map(function(path) {
+                return PATH.resolve(this.root, path);
+            }, this);
 
     }
 
