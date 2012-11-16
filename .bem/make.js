@@ -46,7 +46,8 @@ MAKE.decl('Arch', {
                 root : this.root
             });
 
-        this.arch.setNode(site, bundles);
+        // XXX: unhardcodeme
+        this.arch.setNode(site).addParents('site.bundles*', site);
 
         return site.getId();
 
