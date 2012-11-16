@@ -46,7 +46,7 @@ MAKE.decl('Arch', {
                 root : this.root
             });
 
-        this.arch.setNode(site, libs);
+        this.arch.setNode(site, bundles);
 
         return site.getId();
 
@@ -89,25 +89,34 @@ MAKE.decl('InstrospectNode', 'Node', /** @lends Instrospect.prototype */{
                 BEM.createLevel(prj.getRelPathByObj(level, level.tech)).getDeclByIntrospection());
         });
 
-        var ctx = _this.createCtx(decls);
-        ctx.then(function(ctx) {
+        var ctx = _this.createCtx(decls)
+            .then(function(ctx) {
 
-            prj.getTech('bundles').createByDecl({ block : SITE_BUNDLES }, prj, { force : false });
+                // TODO: унести в отдельную (MagicNode?) ноду
+                var bundles = BEM.createLevel(prj.getRelPathByObj({ 'block' : SITE_BUNDLES }, 'bundles')),
+                    prefix = bundles.getByObj({ 'block' : 'index' }),
 
-            var bemjson = createBemjson(ctx),
-                bundles = BEM.createLevel(prj.getRelPathByObj({ 'block' : SITE_BUNDLES }, 'bundles')),
-                prefix = bundles.getByObj({ 'block' : 'index' }),
+                    json = _this.getBemjson(prefix)
+                        .then(function(BEMJSON) {
 
-                page = _this.getPageBemjson();
+                            return BEMJSON.build({
+                                block: 'global',
+                                pageTitle: 'My page',
+                                pageName: 'index',
+                                decls: ctx
+                            });
 
-            // XXX
-            page.content.content = bemjson;
+                        }),
+                    bemhtml = _this.getBemhtml(prefix);
 
-            return bundles.getTech('bemjson.js').storeCreateResults(prefix,
-                    { 'bemjson.js' : '(' + JSON.stringify(page, null, 4) + ')\n' }, true);
+                Q.all([bemhtml, json]).spread(function(bemhtml, json) {
 
-        })
-        .end();
+                    bundles.getTech('html').storeCreateResults(prefix, { 'html' : bemhtml.apply(json) }, true);
+
+                });
+
+            })
+            .end();
 
     },
 
@@ -188,20 +197,24 @@ MAKE.decl('InstrospectNode', 'Node', /** @lends Instrospect.prototype */{
 
     },
 
-    getPageBemjson : function() {
+    getOptimizedPrefix : function(prefix) {
+        return PATH.join(PATH.dirname(prefix), '_' + PATH.basename(prefix));
+    },
 
-        return {
-            block : 'page',
-            title : '',
-            assets : [
-                { elem: 'css', url: '_index.css' },
-                { elem: 'js', url: '_index.js' }
-            ],
-            content : {
-                block : 'catalogue',
-                content : []
-            }
-        }
+    getBemjson : function(prefix) {
+
+        var path = this.getOptimizedPrefix(prefix) + '.bemtree.js';
+        return U.readFile(path).then(function(data) {
+            return ( new Function('global', '"use strict";' + data + ';return BEM.JSON;') )();
+        });
+
+    },
+
+    getBemhtml : function(prefix) {
+
+        var path = this.getOptimizedPrefix(prefix) + '.bemhtml.js';
+        return Q.resolve(require(path).BEMHTML);
+
     }
 
 }, /** @lends Instrospect */{
@@ -220,11 +233,11 @@ MAKE.decl('BundleNode', {
     getTechs : function() {
 
         return [
-            'bemjson.js',
             'bemdecl.js',
             'deps.js',
             'bemhtml',
-            'html',
+            'bemtree.js',
+//            'html',
             'css',
             'js'
         ];
@@ -234,58 +247,23 @@ MAKE.decl('BundleNode', {
     getLevels : function() {
 
         return [
-                'bem-bl/blocks-common',
-                'bem-bl/blocks-desktop',
+                'lib/bem-bl/blocks-common',
+                'lib/bem-bl/blocks-desktop',
                 'common.blocks',
                 'site.blocks'
             ].map(function(path) {
                 return PATH.resolve(this.root, path);
             }, this);
 
+    },
+
+    'create-bemtree.js-node' : function(tech, bundleNode, magicNode) {
+        return this.createDefaultTechNode.apply(this, arguments);
+    },
+
+    'create-bemtree.js-optimizer-node' : function() {
+        return this['create-js-optimizer-node'].apply(this, arguments);
     }
 
 });
-
-
-function createBemjson(ctx, type) {
-
-    if(!ctx) return;
-
-    var obj;
-
-    if(Array.isArray(ctx)) {
-        obj = [];
-
-        ctx.forEach(function(item) {
-            obj.push(createBemjson(item, type));
-        });
-
-        return obj;
-    };
-
-    obj = {};
-
-    !type || type === 'block' ?
-        obj.block = 'block' :
-        obj.elem = type;
-
-    obj.name = ctx.name;
-    obj.title = ctx.title || [];
-    obj.description = ctx.desc || [];
-
-    var content = obj.content || (obj.content = []);
-
-    var mods = createBemjson(ctx.mods, 'mod');
-    mods && [].push.apply(content, mods);
-
-    var vals = createBemjson(ctx.vals, 'mod-val');
-    vals && [].push.apply(content, vals);
-
-    var elems = createBemjson(ctx.elems, 'elem');
-    elems && [].push.apply(content, elems);
-
-    return obj
-
-}
-
 
