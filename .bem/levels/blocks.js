@@ -1,6 +1,6 @@
 var PATH = require('path'),
 
-    BEMBL_TECHS = PATH.resolve(__dirname, '../../bem-bl/blocks-common/i-bem/bem/techs');
+    BEMBL_TECHS = PATH.resolve(__dirname, '../../lib/bem-bl/blocks-common/i-bem/bem/techs');
 
 
 exports.getTechs = function() {

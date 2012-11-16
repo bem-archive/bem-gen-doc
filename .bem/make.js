@@ -22,18 +22,22 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp : /^.+?\.bundles$/,
 
-//    getLibraries : function() {
-//
-//        return {
-//            'bem-bl' : {
-//                type        : 'git',
-//                url         : 'git://github.com/bem/bem-bl.git',
-//                treeish     : '0.3',
-//                npmPackages : false
-//            }
-//        }
-//
-//    },
+    getLibraries : function() {
+
+        return {
+            'lib/bem-bl' : {
+                type        : 'git',
+                url         : 'git://github.com/bem/bem-bl.git',
+                treeish     : '0.3'
+            },
+            'lib/bem-json' : {
+                type        : 'git',
+                url         : 'git://github.com/delfrrr/bem-json.git',
+                npmPackages : false
+            }
+        }
+
+    },
 
     createCustomNodes : function(common, libs, blocks, bundles) {
 
