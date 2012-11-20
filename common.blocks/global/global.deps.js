@@ -1,5 +1,5 @@
 ({
     mustDeps: [
-        { block: 'i-bem', elem: 'html' }
+        { block: 'bemhtml' }
     ]
 })
