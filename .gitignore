@@ -3,7 +3,8 @@
 
 node_modules/
 .bem/cache
+lib/
 
-bem-bl
-site.bundles
-/lib
+site.bundles/*/*
+!site.bundles/.bem
+!site.bundles/*/*.bemdecl.js
