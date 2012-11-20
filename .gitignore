@@ -1,8 +1,9 @@
 .project
 .settings
 
-node_modules/
 .bem/cache
+.bem/snapshots
+node_modules/
 lib/
 
 site.bundles/*/*
