@@ -1,17 +1,23 @@
 var PATH = require('path'),
 
-    BEMBL_TECHS = PATH.resolve(__dirname, '../../bem-bl/blocks-common/i-bem/bem/techs');
+    presolve = PATH.resolve.bind(this, __dirname),
+
+    LIB_ROOT = presolve('../../lib'),
+    PRJ_TECHS = presolve('../techs'),
+    BEMHTML_TECHS = presolve(LIB_ROOT, 'bem-html/.bem/techs');
 
 
 exports.getTechs = function() {
     var techs = {
             'title.txt' : 'title.txt',
             'desc.txt'  : 'desc.txt',
-            'bemhtml'   : PATH.join(BEMBL_TECHS, 'bemhtml'),
             'css'       : 'css',
             'js'        : 'js',
+            'examples'  : 'bem/lib/techs/examples.js',
             'priv.js'   : 'priv.js',
-            'examples'  : 'bem/lib/techs/examples.js'
+            
+            'bemhtml'   : PATH.join(BEMHTML_TECHS, 'bemhtml'),
+            'bemtree.js': PATH.join(PRJ_TECHS, 'bemtree.js')
         };
     return techs;
 };
