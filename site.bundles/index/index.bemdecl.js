@@ -1,5 +1,7 @@
 exports.blocks = [
-    { "name": "global" },
-    { "name": "page" },
-    { "name": "catalogue" }
+    { 'block': 'global' },
+    { 'block': 'page' },
+    { 'block': 'catalogue' },
+    { 'block': 'block' },
+    { 'block': 'block', elems: ['elem', 'mod'] },
 ];
