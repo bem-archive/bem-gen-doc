@@ -1,5 +1,6 @@
 var PATH = require('path'),
 
+    pjoin = PATH.join,
     presolve = PATH.resolve.bind(this, __dirname),
 
     LIB_ROOT = presolve('../../lib'),
@@ -8,18 +9,18 @@ var PATH = require('path'),
 
 
 exports.getTechs = function() {
-    var techs = {
+    return {
             'title.txt' : 'title.txt',
-            'desc.txt'  : 'desc.txt',
+            
             'css'       : 'css',
             'js'        : 'js',
             'examples'  : 'bem/lib/techs/examples.js',
             'priv.js'   : 'priv.js',
             
-            'bemhtml'   : PATH.join(BEMHTML_TECHS, 'bemhtml'),
-            'bemtree.js': PATH.join(PRJ_TECHS, 'bemtree.js')
+            'bemhtml'   : pjoin(BEMHTML_TECHS, 'bemhtml'),
+            'desc.md'   : pjoin(PRJ_TECHS, 'desc.md'),
+            'bemtree.js': pjoin(PRJ_TECHS, 'bemtree.js')
         };
-    return techs;
 };
 
 exports['get-elem'] = function(block, elem) {
