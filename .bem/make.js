@@ -30,12 +30,16 @@ MAKE.decl('Arch', {
                 url         : 'git://github.com/bem/bem-bl.git',
                 treeish     : '0.3'
             },
+            'lib/bem-html' : {
+                type        : 'git',
+                url         : 'git://github.com/bem/bl-core-bemhtml.git'
+            },
             'lib/bem-json' : {
                 type        : 'git',
                 url         : 'git://github.com/delfrrr/bem-json.git',
                 npmPackages : false
             }
-        }
+        };
 
     },
 
@@ -238,7 +242,6 @@ MAKE.decl('BundleNode', {
             'deps.js',
             'bemhtml',
             'bemtree.js',
-//            'html',
             'css',
             'js'
         ];
@@ -248,8 +251,7 @@ MAKE.decl('BundleNode', {
     getLevels : function() {
 
         return [
-                'lib/bem-bl/blocks-common',
-                'lib/bem-bl/blocks-desktop',
+                'lib/bem-html/common.blocks',
                 'common.blocks',
                 'site.blocks'
             ].map(function(path) {

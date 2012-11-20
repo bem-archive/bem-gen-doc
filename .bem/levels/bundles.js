@@ -7,18 +7,19 @@ var PATH = require('path'),
     LIB_ROOT = presolve('../../lib'),
 
     PRJ_TECHS = presolve('../techs'),
-    BEM_CORE_TECHS = pjoin(LIB_ROOT, 'bem-bl/blocks-common/i-bem/bem/techs');
+    BEMHTML_TECHS = pjoin(LIB_ROOT, 'bem-html/.bem/techs'),
+    BEMBL_TECHS = pjoin(LIB_ROOT, 'bem-bl/blocks-common/i-bem/bem/techs');
 
 exports.getTechs = function() {
 
     return {
-//        'bemjson.js'    : '',
         'bemdecl.js'    : 'bemdecl.js',
         'deps.js'       : 'deps.js',
         'js'            : 'js-i',
         'css'           : 'css',
-        'bemhtml'       : pjoin(BEM_CORE_TECHS, 'bemhtml.js'),
-        'html'          : pjoin(BEM_CORE_TECHS, 'html'),
+        
+        'bemhtml'       : pjoin(BEMHTML_TECHS, 'bemhtml.js'),
+        'html'          : pjoin(BEMBL_TECHS, 'html'),
 
         'bemtree.js'    : pjoin(PRJ_TECHS, 'bemtree.js')
     };
