@@ -51,6 +51,9 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
         _this.createCtx(decls)
             .then(function(ctx) {
 
+                console.log(require('sys').inspect(ctx, null, 99));
+                return;
+                
                 // TODO: унести в отдельную (MagicNode?) ноду
                 var bundles = BEM.createLevel(prj.getRelPathByObj({ 'block' : _this.siteBundleName }, 'bundles')),
                     prefix = bundles.getByObj({ 'block' : 'index' }),
@@ -149,6 +152,14 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
     },
 
     'get-desc.txt-data' : function(item, tech) {
+
+        return this['get-tech-data'].apply(this, arguments).then(function(data) {
+            return { desc : data[tech] };
+        });
+
+    },
+
+    'get-desc.md-data' : function(item, tech) {
 
         return this['get-tech-data'].apply(this, arguments).then(function(data) {
             return { desc : data[tech] };
