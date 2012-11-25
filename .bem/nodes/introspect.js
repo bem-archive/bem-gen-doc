@@ -3,15 +3,39 @@ var PATH = require('path'),
     Q = BEM.require('qq'),
     registry = BEM.require('./nodesregistry'),
     
+    createLevel = BEM.createLevel,
     U = BEM.util,
     
     IntrospectNodeName = exports.IntrospectNodeName = 'IntrospectNode';
 
 
+function inspect(s) {
+    console.log(require('sys').inspect(s, null, 9)); 
+}
+
+/**
+ * Convert decl naming `elem, [block, elem]` to obj 
+ * @param {String} typ
+ * @param {Array} args
+ * @returns {Object}
+ */
+function declToObj(typ, args) {
+    var bemobj = {},
+        keys = ['block', 'mod', 'val'],
+        len = args.length,
+        i = 0;
+    
+    typ.indexOf('elem') === 0 && keys.splice(1, 0, 'elem');
+    
+    while( (bemobj[keys[i]] = args[i++]) && i < len );
+    
+    return bemobj;
+}
+
+
 exports.__defineGetter__(IntrospectNodeName, function() {
     return registry.getNodeClass(IntrospectNodeName);
 });
-
 
 registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
@@ -26,145 +50,326 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
         this.exportLevels = opt.exportLevels;
         this.siteBundleName = opt.siteBundleName;
         
+        this.langs = opt.langs;
+        
+        this.rootLevel = createLevel(this.root);
+        
     },
 
     make : function() {
 
-        this.createPrjStruct();
-
-    },
-
-    createPrjStruct : function() {
-
-        var _this = this,
-            prj = BEM.createLevel(this.root),
-            levels = prj.getItemsByIntrospection().filter(function(item) {
-                return item.tech === 'blocks' && ~_this.exportLevels.indexOf(item.block);
-            }),
-            decls = [];
-
-        levels.forEach(function(level) {
-            U.mergeDecls(decls,
-                BEM.createLevel(prj.getRelPathByObj(level, level.tech)).getDeclByIntrospection());
-        });
-
-        _this.createCtx(decls)
-            .then(function(ctx) {
-
-                console.log(require('sys').inspect(ctx, null, 99));
-                return;
+        var _this = this;
+        
+        this.getPrjStruct()
+            .then(function(decls) {
                 
-                // TODO: унести в отдельную (MagicNode?) ноду
-                var bundles = BEM.createLevel(prj.getRelPathByObj({ 'block' : _this.siteBundleName }, 'bundles')),
-                    prefix = bundles.getByObj({ 'block' : 'index' }),
-
-                    json = _this.getBemjson(prefix)
-                        .then(function(BEMJSON) {
-
-                            return BEMJSON.build({
-                                block: 'global',
-                                pageTitle: 'My page',
-                                pageName: 'index',
-                                decls: ctx
-                            });
-
-                        }),
-                    bemhtml = _this.getBemhtml(prefix);
-
-                return Q.all([bemhtml, json]).spread(function(bemhtml, json) {
-
-                    bundles.getTech('html').storeCreateResults(prefix, { 'html' : bemhtml.apply(json) }, true);
-
-                });
-
+                return Q.all[_this.langs.map(function(lang) {
+                    return _this.createSiteNodes(decls, lang);
+                })];
+                
             })
             .end();
+        
+    },
+    
+    getPrjStruct : function() {
+
+        var _this = this,
+            levels = this.rootLevel.getItemsByIntrospection().filter(function(item) {
+                return item.tech === 'blocks' && ~_this.exportLevels.indexOf(item.block);
+            }),
+            // {Object[]} описание экспортируемых уровней
+            decls = levels.reduce(function(decls, levelObj) {
+                
+                    var level = _this.rootLevel.getRelPathByObj(levelObj, levelObj.tech);
+                    createLevel(level).getDeclByIntrospection().forEach(function(decl) {
+                        
+                        var name = decl.name;
+                        
+                        decl.level = { name: level };
+                        (decls[name] || (decls[name] = [])).push(decl);
+                        
+                    });
+                    
+                    return decls;
+                    
+                }, {});
+            
+        return Q.shallow(decls);
 
     },
 
-    createCtx : function(decl) {
+    createSiteNodes : function(decl, lang) {
 
+        var nodes = [this.createIndexNode(decl, lang)];
+        
+        Object.keys(decl).forEach(function(name) {
+            nodes.push(this.createInnerNode(decl[name]));
+        }, this);
+        
+        // KILLME
+        // Inner page testing for `b-form-input` block
+//        nodes.push(this.createInnerNode(decl['b-form-button'], lang));
+        
+        return Q.all(nodes);
+
+    },
+    
+    
+    createIndexNode : function(decl, lang) {
+        
+        var _this = this,
+            blocksCache = {},
+            data = [],
+            site = this.__self.getSiteBundles(this);
+        
+        function forEachLevel(item) {
+            
+            var name = item.name,
+                level = createLevel(PATH.resolve(this.root, item.level.name)),
+                block = blocksCache[name]; 
+            
+            if(!block) {
+                // XXX: UNHARDCODEME
+                var url = [
+                        '/site.bundles', 
+                        site.getRelPathByObj({ block: 'catalogue', elem: name }, 'html')
+                    ].join('/');
+                
+                block = blocksCache[name] = { name: name, url: url };
+                
+                data.push(block);
+            }
+            
+            if(!item.techs)
+                return;
+                
+            var title = item.techs.filter(function(t) { return t.name === 'title.txt'; });
+            
+            if(title.length)
+                block.title = title.map(function(t) {
+                    
+                    // TODO: локализация технологий 
+                    var tech = t.name;
+                    return level
+                        .getTech(tech)
+                        .readAllContent(level.getByObj({ block: name }, tech)).then(function(data) {
+                            return data[tech];
+                        });
+                    
+                });
+            
+        }
+        
+        Object.keys(decl).forEach(function(name) {
+            
+            decl[name].forEach(forEachLevel, _this);
+            
+        });
+        
+        return Q.deep(data)
+            .then(this.storeBundleData.bind(this, 
+                    { block : 'index' }, { title : 'Библиотека блоков', lang : lang }));
+        
+    },
+    
+    createInnerNode : function(decls, lang) {
+        
         var _this = this;
+       
+        /**
+         * @param {Object} level
+         * @param {Object} node
+         * @param {String} tech
+         * @param {Promise * Object} data
+         * @returns {Object}
+         */
+        function collectNodeData(level, node, tech, data) {
+            
+            var levelPath = level.relPath;
+            
+            return Q.when(data, function(d) {
+                
+                var key, 
+                    content = '';
+                
+                switch(tech) {
+                
+                case 'title.txt':
+                    key = 'title';
+                    content = d[tech];
+                    break;
 
-        decl.forEach(function(obj) {
-            U.declForEach(obj, function(type, args, item) {
-
-                var bemEntity = {
-                        'block' : args[0]
-                    };
-
-                if(args.length > 1) {
-                    var fields = ['mod', 'mod-val'],
-                        i = 0;
-
-                    type.indexOf('elem') === 0 && (fields = ['elem'].concat(fields));
-
-                    while((bemEntity[fields[i]] = args[++i]) && i < args.length - 1);
+                case 'desc.md': 
+                    key = 'description';
+                    content = d[level.getTech(tech).getSuffixForLang(lang)];
+                    break;
+                
                 }
+                
+                if(key == null)
+                    return node;
+                
+                var f = node[key] || (node[key] = []);
+                
+                f.push({ level: levelPath, content: content });
+                
+                return node;
+                
+            });
+            
+        }
+        
+        /**
+         * Итератор по узлам декларации
+         * @param {Object[]} levels
+         * @param {String} typ
+         * @param {Array} args
+         * @param {Object} node
+         */ 
+        function walk(levels, typ, args, node) {
+            
+            var bemobj = declToObj(typ, args);
+            
+            if(!node.techs || !node.techs.length)
+                return;
+            
+            levels.forEach(function(level) {
+                
+                var prefix = level.getByObj(bemobj);
+                
+                node.techs.forEach(function(tech) {
+                    
+                    var id = tech.name,
+                        dataProc = ['get', id, 'data'].join('-');
+                    
+                    if(typeof _this[dataProc] === 'function') {
+                        
+                        // XXX: результат `getTech` кешируется в объекте уровня (?) 
+                        var techobj = level.getTech(id);
+                            
+                        collectNodeData(level, node, id, _this[dataProc](prefix, techobj)).end();
+                        
+                    }
+                    
+                });
+                
+            });
+            
+        }
+        
+        var root = this.root,
+            decl = decls.reduce(function(d, decl) {
+                
+                U.mergeDecls(d, [decl]);
+                
+                var md = d[0];
+                (md.levels || (md.levels = [])).push(decl.level);
+                
+                return d;
+                
+            }, []).pop(),
+        
+            levels = decl.levels.map(function(level) {
+                
+                var name = level.name;
+                
+                level = createLevel(PATH.resolve(root, name));
+                level.relPath = name;
+                
+                return level;
+                
+            });
+        
+        // XXX
+        decl.level = null;
+        delete decl.level;
+        
+        U.declForEach(decl, walk.bind(this, levels));
+        
+        return Q.deep(decl)
+            .then(function(decl) {
+                
+                var block = 'catalogue',
+                    name = decl.name;
 
-                var sep = '-',
-                    data;
+                return _this.storeBundleData({ block : block, elem : name }, 
+                        block, { title : name, lang : lang }, decl);
+                
+            });
+        
+    },
 
-                if(!item.techs)
-                    return;
+    'get-tech-data' : function(prefix, tech, item) {
 
-                item.techs.forEach(function(tech) {
+        return tech.readAllContent(prefix);
 
-                    var name = tech.name,
-                        techDataProc = ['get', name, 'data'].join(sep),
+    },
 
-                        data = typeof this[techDataProc] === 'function' ?
-                                this[techDataProc](bemEntity, name) : {};
+    'get-title.txt-data' : function(prefix, tech, item) {
 
-                    Q.when(data, function(data) {
-                        U.extend(item, data);
+        return this['get-tech-data'].apply(this, arguments);
+
+    },
+
+    'get-desc.md-data' : function(prefix, tech, item) {
+
+        return this['get-tech-data'].apply(this, arguments);
+
+    },
+    
+    /**
+     * Сохранить результат сборки страницы
+     * @param {Object} bundle БЭМ-объект бандла
+     * @param {String} [common = bundle.block] Название budle'а используемого на странице
+     * @param {Object} meta Информация о странице
+     * @param {String} meta.title Заголовок страницы 
+     * @param data Данные
+     * @returns
+     */
+    storeBundleData : function(bundle, common, meta, data) {
+        
+        var _this = this,
+            site = this.__self.getSiteBundles(this);
+        
+        if(!data) {
+            data = meta;
+            meta = common;
+            common = bundle.block;
+        }
+        
+        return _this.getTemplates(common).spread(function(BEMJSON, BEMHTML) {
+        
+            // TODO: унести в отдельную ноду
+            var prefix = site.getByObj(bundle),
+                json = BEMJSON.build({
+                        block: 'global',
+                        pageTitle: meta.title,
+                        pageName: common,
+                        data: data
                     });
 
-                }, _this);
+            // DEBUG:
+//            return site.getTech('json').storeCreateResults(
+//                    prefix, { 'json' : JSON.stringify(json, null, '  ') }, true);
+            return site.getTech('html').storeCreateResults(
+                    prefix, { 'html' : BEMHTML.apply(json) }, true);
 
-            });
         });
-
-        return Q.deep(decl);
-
+        
     },
-
-    'get-tech-data' : function(item, tech) {
-
-        // XXX
-        var level = BEM.createLevel(PATH.resolve(this.root, 'common.blocks')),
-            prefix = level.getByObj(item, tech),
-
-            techObj = level.getTech(tech);
-
-        return techObj.readAllContent(prefix).then(function(data) {
-            return data;
-        });
-
-    },
-
-    'get-title.txt-data' : function(item, tech) {
-
-        return this['get-tech-data'].apply(this, arguments).then(function(data) {
-            return { title : data[tech] };
-        });
-
-    },
-
-    'get-desc.txt-data' : function(item, tech) {
-
-        return this['get-tech-data'].apply(this, arguments).then(function(data) {
-            return { desc : data[tech] };
-        });
-
-    },
-
-    'get-desc.md-data' : function(item, tech) {
-
-        return this['get-tech-data'].apply(this, arguments).then(function(data) {
-            return { desc : data[tech] };
-        });
-
+    
+    getTemplates : function(bundle) {
+        
+        var site = this.__self.getSiteBundles(this),
+            
+            prefix = site.getByObj({ block: bundle }),
+            
+            bemjson = this.getBemjson(prefix),
+            bemhtml = this.getBemhtml(prefix);
+        
+        return Q.all([bemjson, bemhtml]);
+        
     },
 
     getOptimizedPrefix : function(prefix) {
@@ -176,17 +381,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
         var path = this.getOptimizedPrefix(prefix) + '.bemtree.js';
         return U.readFile(path).then(function(data) {
             
-            var ctx = {
-                'BEM': {
-                    'JSON': null
-                }
-            };
-            
-            require('vm').runInNewContext(data, ctx);
-            return ctx.BEM.JSON;
-            
-            // FIXME: ReferenceError: BEM is not defined
-//            return ( new Function('global', '"use strict";' + data + ';return BEM.JSON;') )();
+            return ( new Function('global', 'BEM', '"use strict";' + data + ';return BEM.JSON;') )();
             
         });
 
@@ -201,10 +396,16 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
 }, /** @lends Instrospect */{
 
-    createId : function(opt) {
-
-        return opt.id;
-
+    createId : function(o) {
+        return o.id;
+    },
+    
+    getSiteBundles : function(o) {
+        
+        return o._siteBundles || (
+                o._siteBundles = createLevel(
+                        o.rootLevel.getRelPathByObj({ 'block' : o.siteBundleName }, 'bundles')));
+        
     }
 
 });
