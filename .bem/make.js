@@ -10,7 +10,9 @@ var PATH = require('path'),
 
     EXPORT_LEVELS = ['common', 'desktop'],
 
-    SITE_BUNDLES = 'site';
+    SITE_BUNDLES = 'site',
+    
+    BEM_I18N_LANGS = ['ru'];
 
 
 MAKE.decl('Arch', {
@@ -29,7 +31,7 @@ MAKE.decl('Arch', {
             },
             'lib/bem-html' : {
                 type        : 'git',
-                url         : 'git://github.com/bem/bl-core-bemhtml.git'
+                url         : 'git://github.com/bem/bemhtml.git'
             },
             'lib/bem-json' : {
                 type        : 'git',
@@ -46,7 +48,8 @@ MAKE.decl('Arch', {
                 id : SITE_NODE_ID,
                 root : this.root,
                 exportLevels : EXPORT_LEVELS,
-                siteBundleName : SITE_BUNDLES
+                siteBundleName : SITE_BUNDLES,
+                langs : BEM_I18N_LANGS
             });
 
         // XXX: unhardcodeme
