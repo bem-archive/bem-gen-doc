@@ -4,8 +4,8 @@ BEM.JSON.decl('global', {
 
         var data = ctx.params();
 
-        ctx.tParam('decls', data.decls);
-        delete data.decls;
+        ctx.tParam('decls', data.data);
+        delete data.data;
 
         ctx.content({
                 block: 'page',
