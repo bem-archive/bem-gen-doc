@@ -1,0 +1,13 @@
+[%~ MACRO b_form_button__input(options) BLOCK ~%]
+    [%
+        SET attr.type = ' type="submit"';
+        SET attr.type = ' type="' _ options.type _ '"' IF options.type;
+
+        SET attr.name = '';
+        SET attr.name = ' name="' _ options.name _ '"' IF options.name;
+
+        SET attr.disabled = '';
+        SET attr.disabled = ' disabled="disabled"' IF options.disabled;
+    ~%]
+    <input class="b-form-button__input" value="[% options.value %]" hidefocus="true" [% attr.type %] [% attr.name %] [% attr.disabled %] />
+[%~ END ~%]
