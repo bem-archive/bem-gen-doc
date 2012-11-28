@@ -1,6 +1,11 @@
 var PATH = require('path'),
     BEM = require('bem'),
     Q = BEM.require('qq'),
+    MARKED = require('marked').setOptions({
+        gfm : true,
+        pedantic : true,
+        sanitize : true
+    }),
     registry = BEM.require('./nodesregistry'),
     
     createLevel = BEM.createLevel,
@@ -20,6 +25,7 @@ function inspect(s) {
  * @returns {Object}
  */
 function declToObj(typ, args) {
+    
     var bemobj = {},
         keys = ['block', 'mod', 'val'],
         len = args.length,
@@ -30,6 +36,7 @@ function declToObj(typ, args) {
     while( (bemobj[keys[i]] = args[i++]) && i < len );
     
     return bemobj;
+    
 }
 
 
@@ -241,7 +248,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
                 node.techs.forEach(function(tech) {
                     
                     var id = tech.name,
-                        dataProc = ['get', id, 'data'].join('-');
+                        dataProc = _this.getTechProcFnName(id);
                     
                     if(typeof _this[dataProc] === 'function') {
                         
@@ -299,6 +306,12 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
             });
         
     },
+    
+    getTechProcFnName : function(tech) {
+        
+        return ['get', tech, 'data'].join('-');
+        
+    },
 
     'get-tech-data' : function(prefix, tech, item) {
 
@@ -306,16 +319,22 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
     },
 
-    'get-title.txt-data' : function(prefix, tech, item) {
+    'get-title.txt-data' : function(prefix, tech) {
 
         return this['get-tech-data'].apply(this, arguments);
 
     },
 
-    'get-desc.md-data' : function(prefix, tech, item) {
+    'get-desc.md-data' : function(prefix, tech) {
 
         return this['get-tech-data'].apply(this, arguments);
 
+    },
+    
+    'get-examples-data' : function(prefix, tech) {
+        
+        return { 'examples' : tech.getPath(prefix) };
+        
     },
     
     /**
