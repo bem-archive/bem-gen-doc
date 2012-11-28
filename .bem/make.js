@@ -5,13 +5,11 @@
 var PATH = require('path'),
     introspectNodes = require('./nodes/introspect'),
 
-    INSTROSPECT_NODE_ID = 'introspect',
-    SITE_NODE_ID = 'site',
-
     EXPORT_LEVELS = ['common', 'desktop'],
 
+    SITE_NODE_ID = 'site',
     SITE_BUNDLES = 'site',
-    
+
     BEM_I18N_LANGS = ['ru'];
 
 
