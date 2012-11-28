@@ -1,4 +1,5 @@
 var PATH = require('path'),
+    FS = require('fs'),
     BEM = require('bem'),
     Q = BEM.require('qq'),
     MARKED = require('marked').setOptions({
@@ -54,12 +55,11 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
         this.__base.apply(this, arguments);
         
         this.root = opt.root;
-        this.exportLevels = opt.exportLevels;
-        this.siteBundleName = opt.siteBundleName;
         
+        this.levels = opt.exportLevels;
         this.langs = opt.langs;
         
-        this.rootLevel = createLevel(this.root);
+        this.path = createLevel(this.__self.createId(opt));
         
     },
 
@@ -82,13 +82,14 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
     getPrjStruct : function() {
 
         var _this = this,
-            levels = this.rootLevel.getItemsByIntrospection().filter(function(item) {
-                return item.tech === 'blocks' && ~_this.exportLevels.indexOf(item.block);
+            root = createLevel(this.root),
+            levels = root.getItemsByIntrospection().filter(function(item) {
+                return item.tech === 'blocks' && ~_this.levels.indexOf(item.block);
             }),
             // {Object[]} описание экспортируемых уровней
             decls = levels.reduce(function(decls, levelObj) {
                 
-                    var level = _this.rootLevel.getRelPathByObj(levelObj, levelObj.tech);
+                    var level = root.getRelPathByObj(levelObj, levelObj.tech);
                     createLevel(level).getDeclByIntrospection().forEach(function(decl) {
                         
                         var name = decl.name;
@@ -111,7 +112,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
         var nodes = [this.createIndexNode(decl, lang)];
         
         Object.keys(decl).forEach(function(name) {
-            nodes.push(this.createInnerNode(decl[name]));
+            nodes.push(this.createInnerNode(decl[name], lang));
         }, this);
         
         // KILLME
@@ -128,8 +129,11 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
         var _this = this,
             blocksCache = {},
             data = [],
-            site = this.__self.getSiteBundles(this);
+            site = this.path;
         
+        /**
+         * @this {Node}
+         */
         function forEachLevel(item) {
             
             var name = item.name,
@@ -182,7 +186,8 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
     
     createInnerNode : function(decls, lang) {
         
-        var _this = this;
+        var _this = this,
+            relativize = PATH.relative.bind(null, this.root);
        
         /**
          * @param {Object} level
@@ -209,7 +214,13 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
                 case 'desc.md': 
                     key = 'description';
-                    content = d[level.getTech(tech).getSuffixForLang(lang)];
+                    // TODO: move to `bemtree` & generate bemjson there from Markdown's AST
+                    content = MARKED(d[level.getTech(tech).getSuffixForLang(lang)]);
+                    break;
+                    
+                case 'examples':
+                    key = 'examples';
+                    content = relativize(d[tech]);
                     break;
                 
                 }
@@ -254,7 +265,9 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
                         
                         // XXX: результат `getTech` кешируется в объекте уровня (?) 
                         var techobj = level.getTech(id);
-                            
+                        
+                        // TODO
+//                        FS.existsSync(level.getPath(prefix, id)) && 
                         collectNodeData(level, node, id, _this[dataProc](prefix, techobj)).end();
                         
                     }
@@ -349,7 +362,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
     storeBundleData : function(bundle, common, meta, data) {
         
         var _this = this,
-            site = this.__self.getSiteBundles(this);
+            site = this.path;
         
         if(!data) {
             data = meta;
@@ -380,7 +393,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
     
     getTemplates : function(bundle) {
         
-        var site = this.__self.getSiteBundles(this),
+        var site = this.path,
             
             prefix = site.getByObj({ block: bundle }),
             
@@ -416,14 +429,10 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 }, /** @lends Instrospect */{
 
     createId : function(o) {
-        return o.id;
-    },
-    
-    getSiteBundles : function(o) {
         
-        return o._siteBundles || (
-                o._siteBundles = createLevel(
-                        o.rootLevel.getRelPathByObj({ 'block' : o.siteBundleName }, 'bundles')));
+        return createLevel(o.root)
+            .createTech('bundles')
+            .getPath(o.siteBundleName);
         
     }
 
