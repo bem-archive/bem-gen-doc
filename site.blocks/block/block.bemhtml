@@ -1,13 +1,5 @@
 block block {
 
-    default: {
-        applyCtx({
-            block: 'catalogue',
-            elem: 'item',
-            content: this.ctx
-        });
-    }
-
     content: [
         {
             elem: 'name',
@@ -17,14 +9,41 @@ block block {
             elem: 'title',
             content: this.ctx.title
         },
-        this.ctx.description,
-        this.ctx.content,
-        this.ctx.examples
+        (this.ctx.description && {
+                elem: 'description',
+                content: this.ctx.description
+            }),
+        this.ctx.examples,
+        this.ctx.content
     ]
 
     elem section {
 
         tag: 'h3'
+
+    }
+
+    elem description {
+
+        mix: { block: 'static-text' }
+
+    }
+
+    elem level {
+
+        tag: ''
+
+        content: [
+            { elem: 'note', content: this.ctx.name },
+            this.ctx.content
+        ]
+
+    }
+
+    elem note {
+
+        // TODO
+        default: null
 
     }
 

@@ -1,6 +1,9 @@
 .block
 {
     padding-left: 40px;
+    margin-right: 30%;
+
+    position: relative;
 }
 
 .block__name
@@ -8,5 +11,5 @@
     font-size: 22px;
     line-height: 1.45;
 
-    margin: 0 0 .6em -20px;
+    margin: 0 0 1.2em -20px;
 }

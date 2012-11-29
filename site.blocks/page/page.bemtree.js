@@ -18,7 +18,7 @@ BEM.JSON.decl('page', {
                 { elem : 'js', url: '//yandex.st/jquery/1.8.2/jquery.min.js' },
                 { elem : 'js', url: getTechPath(name, 'js') }
             ])
-            .content({ block: 'catalogue' });
+            .content({ block : 'catalogue' });
 
     }
 

@@ -1,0 +1,22 @@
+block menu {
+
+    elem item {
+
+        tag: 'span'
+
+        this.ctx.url {
+
+            default: {
+                applyCtx({
+                    block: 'link',
+                    mix: { block: 'menu', elem: 'item' },
+                    url: this.ctx.url,
+                    content: this.ctx.content
+                })
+            }
+
+        }
+
+    }
+
+}

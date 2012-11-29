@@ -25,7 +25,7 @@ function createBemjson(ctx, type) {
     obj.name = ctx.name;
     obj.title = ctx.title || [];
     obj.description = ctx.description || [];
-    
+
     ctx.url && (obj.url = ctx.url);
 
     var content = obj.content || (obj.content = []);
@@ -39,7 +39,7 @@ function createBemjson(ctx, type) {
     var elems = createBemjson(ctx.elems, 'elem');
     elems && [].push.apply(content, elems);
 
-    return obj
+    return obj;
 
 }
 
@@ -47,7 +47,24 @@ function createBemjson(ctx, type) {
 BEM.JSON.decl('catalogue', {
 
    onBlock : function(ctx) {
-       ctx.param('content', createBemjson(ctx.tParam('decls')));
+
+       var typ = ctx.mod('type'),
+           root = '/site.bundles/index/',
+           json = [];
+
+       typ === 'showcase' || json.push({
+               block: 'menu',
+               mix: { block: 'catalogue', elem: 'navigation' },
+               content: {
+                   elem: 'item',
+                   url: [root, 'index.html'].join(''),
+                   content: '← каталог'
+               }
+           });
+
+       json.push(createBemjson(ctx.tParam('decls')));
+
+       ctx.param('content', json);
    }
 
 });
