@@ -1,0 +1,10 @@
+.block__note
+{
+    color: #999;
+    font-size: 11px;
+
+    position: absolute;
+    left: 100px;
+
+    margin-left: 100%;
+}

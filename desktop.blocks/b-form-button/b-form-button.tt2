@@ -1,0 +1,71 @@
+[%
+    PROCESS 'blocks-desktop/b-form-button/click/b-form-button__click.tt2'
+          + 'blocks-desktop/b-form-button/input/b-form-button__input.tt2'
+    ;
+%]
+
+[% MACRO b_form_button(options) BLOCK %]
+    [%
+        SET class = 'b-form-button i-bem';
+        SET class = class _ ' ' _ options.class IF options.class;
+        SET class = class _ ' b-form-button_valign_' _ options.valign IF options.valign;
+        SET class = class _ ' b-form-button_size_' _ (options.item('size') || 's');
+        SET class = class _ ' b-form-button_theme_' _ (options.theme || 'grey-s');
+        SET class = class _ ' b-form-button_disabled_yes' IF options.disabled;
+        SET class = class _ ' b-form-button_focused_yes' IF options.focused;
+        SET class = class _ ' b-form-button_hovered_yes' IF options.hovered;
+        SET class = class _ ' b-form-button_pressed_yes' IF options.pressed;
+
+        SET attr.disabled = '';
+    %]
+    [% IF options.url %]
+        <a class="[% class %]" href="[% options.url %]" onclick="return {'b-form-button':{name:'b-form-button'}}" [% attr.disabled %]>
+            <i class="b-form-button__left"></i>[% ~%]
+            <span class="b-form-button__content">[% ~%]
+                <span class="b-form-button__text">[% ~%]
+                    [%~ options.text ~%]
+                </span>[% ~%]
+            </span>[% ~%]
+            [%~ b_form_button__click(options) ~%]
+        </a>[% ~%]
+    [% ELSE %]
+        <span class="[% class %]" onclick="return {'b-form-button':{name:'b-form-button'}}" [% attr.disabled %]>
+            <i class="b-form-button__left"></i>[% ~%]
+            <span class="b-form-button__content"> [% ~%]
+                <span class="b-form-button__text">[% ~%]
+                    [%~ options.text ~%]
+                </span>[% ~%]
+            </span>[% ~%]
+            [%~ b_form_button__input(options) ~%]
+        </span>[% ~%]
+    [% END %]
+[% END %]
+
+
+
+[% #----------------------------------------------------------------------# %]
+    [% IF 0 %]
+        [%
+            b_form_button({
+                text => 'Can not push it',
+                type => 'button',
+                disabled => 1
+            });
+        %]
+        [%
+            b_form_button({
+                name => 'save_settings',
+                text => 'Push me',
+                size => 'xl',
+                theme => 'blue-xl',
+                valign => 'middle'
+            });
+        %]
+        [%
+            b_form_button({
+                text => 'Yandex',
+                url => 'http://www.yandex.ru/'
+            });
+        %]
+    [% END %]
+[% #----------------------------------------------------------------------# %]

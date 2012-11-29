@@ -10,7 +10,8 @@ BEM.JSON.decl('page', {
     onBlock : function(ctx) {
 
         var params = ctx.params(),
-            name = params.name;
+            env = ctx.tParam('environ'),
+            name = env.name;
 
         ctx
             .param('assets', [
@@ -18,7 +19,7 @@ BEM.JSON.decl('page', {
                 { elem : 'js', url: '//yandex.st/jquery/1.8.2/jquery.min.js' },
                 { elem : 'js', url: getTechPath(name, 'js') }
             ])
-            .content({ block: 'catalogue' });
+            .content({ block : 'catalogue' });
 
     }
 
