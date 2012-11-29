@@ -49,7 +49,8 @@ BEM.JSON.decl('catalogue', {
    onBlock : function(ctx) {
 
        var typ = ctx.mod('type'),
-           root = '/site.bundles/index/',
+           env = ctx.tParam('environ'),
+           root = env['site-root'] + '/index/index.html',
            json = [];
 
        typ === 'showcase' || json.push({
@@ -57,7 +58,7 @@ BEM.JSON.decl('catalogue', {
                mix: { block: 'catalogue', elem: 'navigation' },
                content: {
                    elem: 'item',
-                   url: [root, 'index.html'].join(''),
+                   url: root,
                    content: '← каталог'
                }
            });

@@ -6,14 +6,14 @@ BEM.JSON.decl('global', {
             page = {
                 block: 'page',
                 title: data.pageTitle,
-                name: data.pageName,
                 mods: {}
             };
 
+        ctx.tParam('environ', data.environ || {});
         ctx.tParam('decls', data.data);
         delete data.data;
 
-        data.pageName === 'index' && (page.mods.type = 'index');
+        ctx.tParam('environ').name === 'index' && (page.mods.type = 'index');
 
         ctx.content(page);
 

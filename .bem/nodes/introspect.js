@@ -1,4 +1,5 @@
 var PATH = require('path'),
+    URL = require('url'),
     FS = require('fs'),
     BEM = require('bem'),
     Q = BEM.require('qq'),
@@ -143,11 +144,8 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
                 block = blocksCache[name];
 
             if(!block) {
-                // XXX: UNHARDCODEME
-                var url = [
-                        '/site.bundles',
-                        site.getRelPathByObj({ block: 'catalogue', elem: name }, 'html')
-                    ].join('/');
+                // XXX
+                var url = '/' + site.getRelPathByObj({ block: 'catalogue', elem: name }, 'html');
 
                 block = blocksCache[name] = { name: name, url: url };
 
@@ -189,7 +187,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
     createInnerNode : function(decls, lang) {
 
         var _this = this,
-            relativize = PATH.relative.bind(null, this.root);
+            relative = PATH.relative.bind(null, this.root);
 
         /**
          * @param {Object} level
@@ -222,7 +220,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
                 case 'examples':
                     key = 'examples';
-                    content = relativize(d[tech]);
+                    content = relative(d[tech]);
                     break;
 
                 }
@@ -376,16 +374,24 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
             // TODO: унести в отдельную ноду
             var prefix = site.getByObj(bundle),
+
+                SITE_ROOT = URL.resolve(PATH.relative(prefix, this.root), PATH.relative(this.root, site.dir)),
+
                 json = BEMJSON.build({
-                        block: 'global',
+                        block : 'global',
                         pageTitle: meta.title,
-                        pageName: common,
-                        data: data
+                        data: data,
+                        environ: {
+                            'id': 'site',
+                            'name': common,
+                            'site-root': SITE_ROOT
+                        }
                     });
 
             // DEBUG:
-//            return site.getTech('json').storeCreateResults(
+//            site.getTech('json').storeCreateResults(
 //                    prefix, { 'json' : JSON.stringify(json, null, '  ') }, true);
+
             return site.getTech('html').storeCreateResults(
                     prefix, { 'html' : BEMHTML.apply(json) }, true);
 

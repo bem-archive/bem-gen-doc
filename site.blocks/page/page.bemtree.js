@@ -10,7 +10,8 @@ BEM.JSON.decl('page', {
     onBlock : function(ctx) {
 
         var params = ctx.params(),
-            name = params.name;
+            env = ctx.tParam('environ'),
+            name = env.name;
 
         ctx
             .param('assets', [

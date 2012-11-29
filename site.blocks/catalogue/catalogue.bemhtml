@@ -14,9 +14,12 @@ block catalogue {
 
     elem item-name, this.ctx.url {
 
-        tag: 'a'
-
-        attrs: { href: this.ctx.url }
+        default: applyCtx({
+            block: 'link',
+            mix: { block: this.block, elem: this.elem },
+            url: this.environ['site-root'] + this.ctx.url,
+            content: this.ctx.content
+        })
 
     }
 
