@@ -1,0 +1,37 @@
+<!doctype html><html class="page__root"><head><meta charset="utf-8"/><title>headline</title><link rel="stylesheet" href="_catalogue.css"/><script src="//yandex.st/jquery/1.8.2/jquery.min.js"></script><script src="_catalogue.js"></script></head><body class="page"><div class="catalogue"><div class="menu catalogue__navigation"><a class="link menu__item" href="../../site.bundles/index/index.html">← каталог</a></div><div class="block"><div class="block__name">headline</div><div class="block__title">Заголовок</div><div class="block__description static-text"><p>Описывает (под-)заголовок раздела.
+
+</p>
+<h4>Пример использования</h4>
+<p>Для входного <code>BEMJSON</code>
+
+</p>
+<pre><code>// page.bemjson.js
+
+{
+    block: &#39;headline&#39;,
+    content: &#39;Узел как аномальная джетовая активность&#39;
+}
+
+</code></pre>
+<p>получим <code>HTML</code>
+
+</p>
+<pre><code>&lt;!-- page.html --&gt;
+&lt;h1 class=&quot;headline headline_level_1&quot;&gt;Узел как аномальная джетовая активность&lt;/h1&gt;
+</code></pre>
+</div><h3 class="headline headline_level_3">Модификаторы</h3><div class="block__mod"><h4 class="block__mod-name headline headline_level_4">level</h4><div class="block__mod-title">Уровень заголовка</div><p>Модификатор <code>level</code> задает уровень заголовка.
+
+</p>
+<pre><code>// page.bemjson.js
+{
+    block: &#39;headline&#39;,
+    mods: { level: 3 },
+    content: &#39;Примечание&#39;
+}
+
+&lt;!-- page.html --&gt;
+&lt;h3 class=&quot;headline headline_level_3&quot;&gt;Примечание&lt;/h3&gt;
+
+</code></pre>
+<p>Значение по-умолчанию — <strong>1</strong></p>
+<table class="block__mod-val-list"></table></div></div></div></body></html>
