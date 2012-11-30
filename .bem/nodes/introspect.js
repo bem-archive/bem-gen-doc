@@ -118,10 +118,6 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
             nodes.push(this.createInnerNode(decl[name], lang));
         }, this);
 
-        // KILLME
-        // Inner page testing for `b-form-input` block
-//        nodes.push(this.createInnerNode(decl['b-form-button'], lang));
-
         return Q.all(nodes);
 
     },
@@ -145,7 +141,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
             if(!block) {
                 // XXX
-                var url = '/' + site.getRelPathByObj({ block: 'catalogue', elem: name }, 'html');
+                var url = URL.resolve('/', site.getRelPathByObj({ block: 'catalogue', elem: name }, 'html'));
 
                 block = blocksCache[name] = { name: name, url: url };
 
@@ -190,6 +186,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
             relative = PATH.relative.bind(null, this.root);
 
         /**
+         * Процессор данных для технологий БЭМ-сущности
          * @param {Object} level
          * @param {Object} node
          * @param {String} tech
