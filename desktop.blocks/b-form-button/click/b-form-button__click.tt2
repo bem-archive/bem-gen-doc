@@ -1,3 +1,0 @@
-[% MACRO b_form_button__click(options) BLOCK %]
-    <i class="b-form-button__click"></i>
-[% END %]
