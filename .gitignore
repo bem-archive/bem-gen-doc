@@ -7,5 +7,5 @@ node_modules/
 lib/
 
 site.bundles/*/*
-!site.bundles/.bem
-!site.bundles/*/*.bemdecl.js
+!site.bundles/*/*.html
+!site.bundles/*/_*.css
