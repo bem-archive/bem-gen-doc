@@ -4,11 +4,14 @@ block block {
 
         !this._firstElem, default: {
             this._firstElem = this.ctx;
+
             applyCtx([
                 { block: 'headline', mods: { level: 3 }, content: 'Элементы' },
                 this.ctx
             ]);
         }
+
+        default: applyNext(this._isElem = true, this._firstMod = null)
 
         content: [
             {
@@ -24,6 +27,15 @@ block block {
             this.ctx.content
         ]
 
+    }
+
+    elem mod, this._isElem, !this._firstMod, default: {
+        this._firstMod = this.ctx;
+
+        applyCtx([
+            { block: 'headline', mods: { level: 5 }, content: 'Модификаторы элемента' },
+            this.ctx
+        ]);
     }
 
     elem elem-name {
