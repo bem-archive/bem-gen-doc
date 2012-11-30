@@ -5,7 +5,7 @@
 var PATH = require('path'),
     introspectNodes = require('./nodes/introspect'),
 
-    EXPORT_LEVELS = ['common', 'desktop'],
+    EXPORT_LEVELS = ['common', 'desktop', 'test'],
 
     SITE_NODE_ID = 'site',
     SITE_BUNDLES = 'site',
