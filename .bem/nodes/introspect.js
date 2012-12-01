@@ -1,19 +1,35 @@
+/**
+ * TODO: привести весь процесс сбоки к виду:
+ *
+ * create `lib/bem-machine` node
+ * create `site*` node (import `introspectNodes` from bem-machine)
+ * getPrjStruct()   -> [project structure] as {Object}
+ * createLevel()    -> site.bundles/.bem/level.js
+ * createBlocks()   -> bemdecl.js (index, catalogue)
+ * buildBlocks()    -> bemhtml.js, bemtree.js (index, catalogue)
+ * createHtml()     -> html
+ */
+
 var PATH = require('path'),
     URL = require('url'),
     FS = require('fs'),
     BEM = require('bem'),
     Q = BEM.require('qq'),
-    MARKED = require('marked').setOptions({
+    registry = BEM.require('./nodesregistry'),
+
+    marked = require('marked').setOptions({
         gfm : true,
         pedantic : true,
         sanitize : true
     }),
-    registry = BEM.require('./nodesregistry'),
 
     createLevel = BEM.createLevel,
     U = BEM.util,
 
-    IntrospectNodeName = exports.IntrospectNodeName = 'IntrospectNode';
+    IntrospectNodeName = exports.IntrospectNodeName = 'IntrospectNode',
+
+    // XXX: hardcode
+    OUTPUT_BUNDLE = 'site';
 
 
 function inspect(s) {
@@ -56,13 +72,15 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
         this.__base.apply(this, arguments);
 
         this.root = opt.root;
+        this.siteRoot = opt.siteRoot;
 
         this.levels = opt.exportLevels;
         this.langs = opt.langs;
 
-        this.path = createLevel(createLevel(opt.root)
+        // XXX: create level in `siteRoot`
+        this.path = createLevel(PATH.join(this.siteRoot, createLevel(opt.siteRoot)
             .createTech('bundles')
-            .getPath(opt.siteBundleName));
+            .getPath(OUTPUT_BUNDLE)));
 
     },
 
@@ -70,41 +88,56 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
         var _this = this;
 
-        this.getPrjStruct()
+        return _this.getPrjStruct()
             .then(function(decls) {
 
                 return Q.all(_this.langs.map(function(lang) {
                         return _this.createSiteNodes(decls, lang);
                     }));
 
-            })
-            .end();
+            });
 
     },
 
     getPrjStruct : function() {
 
-        var _this = this,
-            root = createLevel(this.root),
-            levels = root.getItemsByIntrospection().filter(function(item) {
-                return item.tech === 'blocks' && ~_this.levels.indexOf(item.block);
-            }),
-            // {Object[]} описание экспортируемых уровней
-            decls = levels.reduce(function(decls, levelObj) {
+        // TODO: KISS
+//        var _this = this,
+//            root = createLevel(this.root),
+//            levels = root.getItemsByIntrospection().filter(function(item) {
+//                return item.tech === 'blocks' && ~_this.levels.indexOf(item.block);
+//            }),
+//            // {Object[]} описание экспортируемых уровней
+//            decls = levels.reduce(function(decls, levelObj) {
+//
+//                    var level = root.getRelPathByObj(levelObj, levelObj.tech);
+//                    createLevel(level).getDeclByIntrospection().forEach(function(decl) {
+//
+//                        var name = decl.name;
+//
+//                        decl.level = { name: level };
+//                        (decls[name] || (decls[name] = [])).push(decl);
+//
+//                    });
+//
+//                    return decls;
+//
+//                }, {});
 
-                    var level = root.getRelPathByObj(levelObj, levelObj.tech);
-                    createLevel(level).getDeclByIntrospection().forEach(function(decl) {
+        var decls = this.levels.reduce(function(decls, level) {
 
-                        var name = decl.name;
+                createLevel(level).getDeclByIntrospection().forEach(function(decl) {
 
-                        decl.level = { name: level };
-                        (decls[name] || (decls[name] = [])).push(decl);
+                    var name = decl.name;
 
-                    });
+                    decl.level = { name: level };
+                    (decls[name] || (decls[name] = [])).push(decl);
 
-                    return decls;
+                });
 
-                }, {});
+                return decls;
+
+            }, {});
 
         return Q.shallow(decls);
 
@@ -212,7 +245,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
                 case 'desc.md':
                     key = 'description';
                     // TODO: move to `bemtree` & generate bemjson there from Markdown's AST
-                    content = MARKED(d[level.getTech(tech).getSuffixForLang(lang)]);
+                    content = marked(d[level.getTech(tech).getSuffixForLang(lang)]);
                     break;
 
                 case 'examples':
