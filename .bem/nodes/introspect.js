@@ -14,8 +14,13 @@ var PATH = require('path'),
     URL = require('url'),
     FS = require('fs'),
     BEM = require('bem'),
+    WRENCH = require('wrench'),
     Q = BEM.require('qq'),
-    registry = BEM.require('./nodesregistry'),
+    LOGGER = require('bem/lib/logger'),
+    registry = require('bem/lib/nodesregistry'),
+
+    BundlesLevelNodeName = BEM.require('./nodes/level').BundlesLevelNodeName,
+    BundleNodeName = BEM.require('./nodes/bundle').BundleNodeName,
 
     marked = require('marked').setOptions({
         gfm : true,
@@ -77,6 +82,8 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
         this.levels = opt.exportLevels;
         this.langs = opt.langs;
 
+        this.sets = opt.sets;
+
         // XXX: create level in `siteRoot`
         this.path = createLevel(PATH.join(this.siteRoot, createLevel(opt.siteRoot)
             .createTech('bundles')
@@ -94,6 +101,11 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
                 return Q.all(_this.langs.map(function(lang) {
                         return _this.createSiteNodes(decls, lang);
                     }));
+
+            })
+            .then(function() {
+
+//                LOGGER.info(_this.ctx.arch.toString());
 
             });
 
@@ -155,7 +167,6 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
     },
 
-
     createIndexNode : function(decl, lang) {
 
         var _this = this,
@@ -216,7 +227,8 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
     createInnerNode : function(decls, lang) {
 
         var _this = this,
-            relative = PATH.relative.bind(null, this.root);
+            relative = PATH.relative.bind(null, this.root),
+            examples = {};
 
         /**
          * Процессор данных для технологий БЭМ-сущности
@@ -250,7 +262,7 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
                 case 'examples':
                     key = 'examples';
-                    content = relative(d[tech]);
+                    content = collectNodeExamples(level, d[tech]);
                     break;
 
                 }
@@ -265,6 +277,21 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
                 return node;
 
             });
+
+        }
+
+        /**
+         * Коллектор кеша с примерами
+         * @param level
+         * @param path
+         * @returns
+         */
+        function collectNodeExamples(level, path) {
+
+            var p = PATH.relative(level.dir, path);
+            (examples[p] || (examples[p] = [])).push({ level: level, path: path });
+
+            return path;
 
         }
 
@@ -337,6 +364,50 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
         U.declForEach(decl, walk.bind(this, levels));
 
+        Q.shallow(examples).then(function(decl) {
+
+            var sets = PATH.join(_this.path.dir, 'examples');
+
+            WRENCH.mkdirSyncRecursive(sets);
+
+            function makeLevel(path, base) {
+
+                var opts = {
+                        outputDir : PATH.dirname(path),
+                        // XXX: hardcode
+                        level : PATH.join(this.root, '.bem/levels/examples'),
+                        force : true
+                    },
+                    names = [ PATH.basename(path) ];
+
+                return BEM.api.create.level(opts, { names: names });
+
+            }
+
+            Object.keys(decl).forEach(function(k) {
+
+                var exampleSet = decl[k];
+                exampleSet.forEach(function(example) {
+
+                    var level = example.level,
+                        path = example.path,
+                        setsPath = PATH.join(sets, PATH.relative(level.dir, path));
+
+                    WRENCH.mkdirSyncRecursive(setsPath);
+                    WRENCH.copyDirSyncRecursive(path, setsPath);
+
+                    makeLevel(setsPath, path).then(function() {
+                        _this.createExampleNode(level, setsPath);
+                    })
+                    .done();
+
+                });
+
+            });
+
+        })
+        .end();
+
         return Q.deep(decl)
             .then(function(decl) {
 
@@ -347,6 +418,23 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
                         block, { title : name, lang : lang }, decl);
 
             });
+
+    },
+
+    createExampleNode : function(level, path) {
+
+        // TODO:
+//        var set = this.sets[PATH.relative(this.root, level.dir)];
+
+        var arch = this.ctx.arch,
+            node = new (registry.getNodeClass('ExamplesLevel'))({
+                root    : this.siteRoot,
+                level   : createLevel(path)
+            });
+
+        arch.setNode(node, arch.getParents(this));
+
+        return node.getId();
 
     },
 
@@ -419,8 +507,8 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
                     });
 
             // DEBUG:
-//            site.getTech('json').storeCreateResults(
-//                    prefix, { 'json' : JSON.stringify(json, null, '  ') }, true);
+            site.getTech('json').storeCreateResults(
+                    prefix, { 'json' : JSON.stringify(json, null, '  ') }, true);
 
             return site.getTech('html').storeCreateResults(
                     prefix, { 'html' : BEMHTML.apply(json) }, true);
@@ -468,6 +556,47 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
 
     createId : function(o) {
         return o.id;
+    }
+
+});
+
+
+registry.decl('ExamplesLevel', BundlesLevelNodeName, {
+
+    itemNodeClassName : 'ExampleNode'
+
+});
+
+
+registry.decl('ExampleNode', BundleNodeName, {
+
+    getTechs : function() {
+
+        return [
+            'bemjson.js',
+            'bemdecl.js',
+            'deps.js',
+            'bemhtml',
+            'css',
+            'ie.css',
+            'js',
+            'html'
+        ];
+
+    },
+
+    getLevels : function() {
+
+        return ([
+                'lib/bem-bl/blocks-common',
+                'lib/bem-bl/blocks-desktop',
+                'desktop.blocks'
+            ])
+            .map(function(level) {
+                return PATH.resolve(this.root, level);
+            }, this)
+            .concat([PATH.resolve(this.root, PATH.dirname(this.getNodePrefix()), 'blocks')]);
+
     }
 
 });
