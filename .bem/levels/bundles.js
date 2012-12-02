@@ -17,7 +17,7 @@ exports.getTechs = function() {
         'deps.js'       : 'deps.js',
         'js'            : 'js-i',
         'css'           : 'css',
-        
+
         'bemhtml'       : pjoin(BEMHTML_TECHS, 'bemhtml.js'),
         'html'          : pjoin(BEMBL_TECHS, 'html'),
 
