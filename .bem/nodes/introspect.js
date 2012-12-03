@@ -29,6 +29,7 @@ var PATH = require('path'),
     }),
 
     createLevel = BEM.createLevel,
+    newLevel = BEM.api.create.level,
     U = BEM.util,
 
     IntrospectNodeName = exports.IntrospectNodeName = 'IntrospectNode',
@@ -99,7 +100,9 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
             .then(function(decls) {
 
                 return Q.all(_this.langs.map(function(lang) {
+
                         return _this.createSiteNodes(decls, lang);
+
                     }));
 
             })
@@ -291,7 +294,14 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
             var p = PATH.relative(level.dir, path);
             (examples[p] || (examples[p] = [])).push({ level: level, path: path });
 
-            return path;
+            var relative = PATH.relative.bind(null, level.dir),
+                example = createLevel(path);
+
+            return example.getItemsByIntrospection().filter(function(item) {
+                return item.tech === 'bemjson.js';
+            }).map(function(item) {
+                return relative(example.getByObj(item));
+            });
 
         }
 
@@ -375,12 +385,12 @@ registry.decl(IntrospectNodeName, 'Node', /** @lends Instrospect.prototype */{
                 var opts = {
                         outputDir : PATH.dirname(path),
                         // XXX: hardcode
-                        level : PATH.join(this.root, '.bem/levels/examples'),
+                        level : PATH.join(base, '.bem/level.js'),
                         force : true
                     },
                     names = [ PATH.basename(path) ];
 
-                return BEM.api.create.level(opts, { names: names });
+                return newLevel(opts, { names: names });
 
             }
 
