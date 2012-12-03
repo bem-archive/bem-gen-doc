@@ -40,6 +40,31 @@ block block {
 
     }
 
+    elem examples {
+
+        this._.isArray(this.ctx.content), content: {
+            this.ctx.content.forEach(function(e) {
+                apply(this.ctx.content = e);
+            });
+        }
+
+        content: {
+            elem: 'example',
+            url: this.ctx.content + '.html'
+        }
+
+    }
+
+    elem 'example' {
+
+        tag: 'iframe'
+
+        attrs: {
+            src: this.environ['site-root'] + '/examples/' + this.ctx.url
+        }
+
+    }
+
     elem note {
 
         // TODO

@@ -32,6 +32,9 @@ BEM.JSON.decl('block', {
         isArray(params.description) &&
             ctx.param('description', this._getDescription(params.description), true);
 
+        isArray(params.examples) &&
+            ctx.param('examples', this._getExamples(params.examples), true);
+
     },
 
     _getTitle : function(ctx) {
@@ -56,6 +59,20 @@ BEM.JSON.decl('block', {
         }).map(function(c) {
             return {
                 elem: 'level',
+                name: c.level,
+                content: c.content
+            };
+        });
+
+    },
+
+    _getExamples : function(ctx) {
+
+        return ctx.filter(function(c) {
+            return c.content;
+        }).map(function(c) {
+            return {
+                elem: 'examples',
                 name: c.level,
                 content: c.content
             };
