@@ -580,6 +580,10 @@ registry.decl('ExamplesLevel', BundlesLevelNodeName, {
 
 registry.decl('ExampleNode', BundleNodeName, {
 
+    /**
+     * FIXME: hardcode
+     * @returns {Array}
+     */
     getTechs : function() {
 
         return [
@@ -595,6 +599,10 @@ registry.decl('ExampleNode', BundleNodeName, {
 
     },
 
+    /**
+     * FIXME: hardcode
+     * @returns
+     */
     getLevels : function() {
 
         return ([
