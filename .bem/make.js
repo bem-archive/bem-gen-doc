@@ -1,26 +1,11 @@
 /*global MAKE:true */
 
-"use strict";
-
 var PATH = require('path'),
     LOGGER = require('bem/lib/logger'),
-    introspectNodes = require('./nodes/introspect'),
 
-    EXPORT_LEVELS = ['common.blocks', 'desktop.blocks', 'test.blocks'],
+    siteNodes = require('./nodes/site'),
 
-    SITE_NODE_ID = 'site',
-    SITE_BUNDLES = 'site',
-    SITE_SETS = {
-        'desktop.blocks' : {
-            'examples' : [
-                'bem-bl/blocks-common',
-                'bem-bl/blocks-desktop',
-                'desktop.blocks'
-            ]
-        }
-    },
-
-    BEM_I18N_LANGS = ['ru'];
+    SITE_NODE_ID = 'site';
 
 
 MAKE.decl('Arch', {
@@ -52,54 +37,15 @@ MAKE.decl('Arch', {
 
     createCustomNodes : function(common, libs, blocks, bundles) {
 
-        var node = new (MAKE.getNodeClass('SiteNode'))({
+        var node = new siteNodes.SiteNode({
             id : SITE_NODE_ID,
-            root : this.root,
             arch : this.arch
         });
 
-        // XXX: unhardcodeme
-        this.arch.setNode(node).addParents('site.bundles*', node);
+        this.arch.setNode(node);
 
         return node.alterArch();
-    }
 
-});
-
-
-MAKE.decl('SiteNode', 'Node', {
-
-    __constructor : function(o) {
-
-        this.__base.apply(this, arguments);
-
-        this.root = o.root;
-        this.arch = o.arch;
-
-    },
-
-    alterArch : function() {
-
-        var site = new introspectNodes.IntrospectNode({
-                id : SITE_NODE_ID + '*',
-                root : this.root,
-                exportLevels : EXPORT_LEVELS,
-                siteBundleName : SITE_BUNDLES,
-                sets : SITE_SETS,
-                langs : BEM_I18N_LANGS
-            }),
-            arch = this.arch;
-
-        arch.setNode(site, this.getId());
-
-        return site.getId();
-
-    }
-
-}, {
-
-    createId : function(o) {
-        return o.id;
     }
 
 });
