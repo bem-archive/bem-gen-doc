@@ -5,8 +5,10 @@ var PATH = require('path'),
 
     siteNodes = require('./nodes/site'),
 
-    SITE_NODE_ID = 'site';
+    /** {String} директория, куда складываем библиотеки */
+    LIB_ROOT = 'lib',
 
+    SITE_NODE_ID = 'site';
 
 MAKE.decl('Arch', {
 
@@ -16,22 +18,35 @@ MAKE.decl('Arch', {
 
     getLibraries : function() {
 
-        return {
-            'lib/bem-bl' : {
-                type        : 'git',
-                url         : 'git://github.com/bem/bem-bl.git',
-                treeish     : '0.3'
+        /** Псевдо-репозиторий известных библиотек */
+        var repo = {
+                'bem-bl' : {
+                    type        : 'git',
+                    url         : 'git://github.com/bem/bem-bl.git',
+                    treeish     : '0.3'
+                },
+                'bem-html' : {
+                    type        : 'git',
+                    url         : 'git://github.com/bem/bemhtml.git'
+                },
+                'bem-json' : {
+                    type        : 'git',
+                    url         : 'git://github.com/delfrrr/bem-json.git',
+                    npmPackages : false
+                }
             },
-            'lib/bem-html' : {
-                type        : 'git',
-                url         : 'git://github.com/bem/bemhtml.git'
-            },
-            'lib/bem-json' : {
-                type        : 'git',
-                url         : 'git://github.com/delfrrr/bem-json.git',
-                npmPackages : false
-            }
-        };
+            /** какие библиотеки подключать на проект */
+            libs = ['bem-bl', 'bem-html', 'bem-json'],
+            /** {Function} */
+            join = PATH.join;
+
+        // возвращаем список необходимых библиотек
+        return libs.reduce(function(enabled, lib) {
+
+            repo[lib] && (enabled[join(LIB_ROOT, lib)] = repo[lib]);
+            return enabled;
+
+        }, {});
 
     },
 
