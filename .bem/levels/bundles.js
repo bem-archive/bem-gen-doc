@@ -19,9 +19,9 @@ exports.getTechs = function() {
         'css'           : 'css',
 
         'bemhtml'       : pjoin(BEMHTML_TECHS, 'bemhtml.js'),
-        'html'          : pjoin(BEMBL_TECHS, 'html'),
 
-        'bemtree.js'    : pjoin(PRJ_TECHS, 'bemtree.js')
+        'bemtree.js'    : pjoin(PRJ_TECHS, 'bemtree.js'),
+        'html'          : pjoin(PRJ_TECHS, 'html')
     };
 
 };
@@ -29,3 +29,21 @@ exports.getTechs = function() {
 // Do not create any techs files during bundle creation by default
 exports.defaultTechs = [];
 
+// Level naming scheme
+exports['get-elem'] = function(block, elem) {
+    return [block, elem].join('/');
+};
+
+exports['match-elem'] = function(path) {
+    var m = this.matchRe(),
+        match = (new RegExp([ '^(' + m + ')',
+            '(' + m + ')(.*?)$'].join('/'))).exec(path);
+
+    if (!match) return false;
+
+    return {
+        block: match[1],
+        elem: match[2],
+        suffix: match[3]
+    };
+};
