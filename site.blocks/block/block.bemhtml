@@ -1,0 +1,75 @@
+block block {
+
+    content: [
+        {
+            elem: 'name',
+            content: this.ctx.name
+        },
+        {
+            elem: 'title',
+            content: this.ctx.title
+        },
+        (this.ctx.description && {
+                elem: 'description',
+                content: this.ctx.description
+            }),
+        this.ctx.examples,
+        this.ctx.content
+    ]
+
+    elem section {
+
+        tag: 'h3'
+
+    }
+
+    elem description {
+
+        mix: { block: 'static-text' }
+
+    }
+
+    elem level {
+
+        tag: ''
+
+        content: [
+            { elem: 'note', content: this.ctx.name },
+            this.ctx.content
+        ]
+
+    }
+
+    elem examples {
+
+        this._.isArray(this.ctx.content), content: {
+            this.ctx.content.forEach(function(e) {
+                apply(this.ctx.content = e);
+            });
+        }
+
+        content: {
+            elem: 'example',
+            url: this.ctx.content + '.html'
+        }
+
+    }
+
+    elem 'example' {
+
+        tag: 'iframe'
+
+        attrs: {
+            src: this.environ['site-root'] + '/examples/' + this.ctx.url
+        }
+
+    }
+
+    elem note {
+
+        // TODO
+        default: null
+
+    }
+
+}

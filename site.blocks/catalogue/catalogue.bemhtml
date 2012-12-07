@@ -1,0 +1,41 @@
+block catalogue {
+
+    mod type showcase {
+
+        default: applyNext(this._isShowCase = true)
+
+    }
+
+    elem item {
+
+        tag: 'section'
+
+    }
+
+    elem item-name, this.ctx.url {
+
+        default: applyCtx({
+            block: 'link',
+            mix: { block: this.block, elem: this.elem },
+            url: this.environ['site-root'] + this.ctx.url,
+            content: this.ctx.content
+        })
+
+    }
+
+}
+
+block block, this._isShowCase, default: {
+
+    var ctx = this.ctx;
+
+    applyCtx({
+        block: 'catalogue',
+        elem: 'item',
+        content: [
+            { elem: 'item-name', url: ctx.url, content: ctx.name },
+            { elelm: 'item-title', content: ctx.title }
+        ]
+    });
+
+}

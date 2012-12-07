@@ -1,0 +1,16 @@
+.catalogue__item
+{
+    padding: 20px 0;
+}
+
+.catalogue__item .block__name
+{
+    font-size: 100%;
+
+    margin-left: 0;
+}
+
+.catalogue__item .block__title
+{
+    font-size: 13px;
+}

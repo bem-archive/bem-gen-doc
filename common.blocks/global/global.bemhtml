@@ -1,0 +1,25 @@
+this._start, !this.environ: {
+
+    this.environ = {};
+
+    apply();
+
+}
+
+
+block global {
+
+    tag: ''
+
+    default: {
+
+        var params = this.ctx.environ,
+            env = this.environ;
+
+        for(p in params) params.hasOwnProperty(p) && (env[p] = params[p]);
+
+        applyNext();
+
+    }
+
+}
