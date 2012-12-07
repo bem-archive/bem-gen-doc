@@ -12,7 +12,6 @@ var PATH = require('path'),
     createLevel = BEM.createLevel,
     U = BEM.util,
 
-
     OutputNodeName = exports.OutputNodeName = 'OutputNode',
     IndexNodeName = exports.IndexNodeName = 'IndexNode',
     CatalogueItemNodeName = exports.CatalogueItemNodeName = 'CatalogueItemNode';
@@ -52,25 +51,41 @@ registry.decl(OutputNodeName, BemCreateNode, {
 
     __constructor : function(o) {
 
+        this._level = o.level;
         this.__base.apply(this, arguments);
-        this.info = o.info;
 
+    },
+
+    isValid : function() {
+        return Q.resolve(0);
     },
 
     make : function() {
 
         var _this = this;
 
+        // FIXME: hack
+        this.level = createLevel(PATH.resolve(this.root, this._level));
+
         return this.getMeta()
             .then(function(meta) {
+                return _this.createBundle(meta);
+            });
 
-                return _this.tranlateMeta(meta);
+    },
 
+    createBundle : function(meta) {
+
+        var _this = this,
+            level = this.level,
+            path = this.tech.getPath(level.getByObj(this.item));
+
+        return this.tranlateMeta(meta)
+            .then(function(data) {
+                return _this.storeDataBundle(path, data);
             })
             .then(function(data) {
-
-                return _this.storeBundleData(data);
-
+                return _this.storeResultBundle(_this.item);
             });
 
     },
@@ -92,62 +107,64 @@ registry.decl(OutputNodeName, BemCreateNode, {
 
     },
 
+    storeDataBundle : function(path, data) {
+
+        U.mkdirp(PATH.dirname(path));
+        return U.writeFileIfDiffers(path, JSON.stringify(data, null, '  '));
+
+    },
+
     /**
      * Сохранить результат сборки страницы
-     * @param {String} [common = bundle.block] Название CommonBundle'а используемого на странице
-     * @param {Object} data Данные
+     *
+     * TODO: унести в технологию
+     *
+     * @param {Object} item
      * @returns
      */
-    storeBundleData : function(common, data) {
+    storeResultBundle : function(item) {
 
         var _this = this,
-            site = this.level,
-            bundle = this.item,
-            info = this.getBundleInfo();
+            level = this.level,
+            // FIXME: при холодном старте `level.getTech` не найдет технологию из уровня
+            tech = level.getTech('html'),
+            prefix = level.getByObj(item);
 
-        if(!data) {
-            data = common;
-            common = bundle.block;
-        }
+        return this.getDataCtx(prefix)
+            .then(function(data) {
 
-        return _this.getTemplates(common).spread(function(BEMJSON, BEMHTML) {
+                return _this.getResource(_this.item)
+                    .spread(function(BEMJSON, BEMHTML) {
 
-            // TODO: унести в отдельную ноду
-            var prefix = site.getByObj(bundle),
+                        // TODO: унести в отдельную ноду
+                        var bundlePrefix = level.getByObj(_this.item),
+                            SITE_ROOT = URL.resolve(
+                                PATH.relative(bundlePrefix, _this.root), PATH.relative(_this.root, level.dir)),
 
-                SITE_ROOT = URL.resolve(PATH.relative(prefix, this.root), PATH.relative(this.root, site.dir)),
+                            json = BEMJSON.build({
+                                    block : 'global',
+                                    pageTitle: _this.item.block,
+                                    data: data,
+                                    environ: {
+                                        'id': 'site',
+                                        'name': _this.item.block,
+                                        'site-root': SITE_ROOT
+                                    }
+                                });
 
-                json = BEMJSON.build({
-                        block : 'global',
-                        pageTitle: info.title,
-                        data: data,
-                        environ: {
-                            'id': 'site',
-                            'name': common,
-                            'site-root': SITE_ROOT
-                        }
+                        return U.writeFile(tech.getPath(prefix), BEMHTML.apply(json));
+
                     });
 
-            // DEBUG:
-            site.getTech('json').storeCreateResults(
-                    prefix, { 'json' : JSON.stringify(json, null, '  ') }, true);
-
-            return site.getTech('html').storeCreateResults(
-                    prefix, { 'html' : BEMHTML.apply(json) }, true);
-
-        });
+            });
 
     },
 
-    getBundleInfo : function() {
-        return this.info;
-    },
-
-    getTemplates : function(bundle) {
+    getResource : function(item) {
 
         var site = this.level,
 
-            prefix = site.getByObj({ block: bundle }),
+            prefix = site.getByObj(item),
 
             bemjson = this.getBemjson(prefix),
             bemhtml = this.getBemhtml(prefix);
@@ -163,11 +180,10 @@ registry.decl(OutputNodeName, BemCreateNode, {
     getBemjson : function(prefix) {
 
         var path = this.getOptimizedPrefix(prefix) + '.bemtree.js';
-        return U.readFile(path).then(function(data) {
-
-            return ( new Function('global', 'BEM', '"use strict";' + data + ';return BEM.JSON;') )();
-
-        });
+        return U.readFile(path)
+            .then(function(data) {
+                return ( new Function('global', 'BEM', '"use strict";' + data + ';return BEM.JSON;') )();
+            });
 
     },
 
@@ -175,6 +191,16 @@ registry.decl(OutputNodeName, BemCreateNode, {
 
         var path = this.getOptimizedPrefix(prefix) + '.bemhtml.js';
         return Q.resolve(require(path).BEMHTML);
+
+    },
+
+    getDataCtx : function(prefix) {
+
+        var path = prefix + '.data.json';
+        return U.readFile(path)
+            .then(function(data) {
+                return JSON.parse(data);
+            });
 
     }
 
@@ -211,7 +237,7 @@ registry.decl(IndexNodeName, OutputNodeName, {
             if(!block) {
                 // FIXME: hardcode
                 var url = URL.resolve('/',
-                        siteroot.getRelPathByObj({ block: this.item.block, elem: name }, 'html'));
+                        siteroot.getRelPathByObj({ block: 'catalogue', elem: name }, 'html'));
 
                 block = _cache[name] = { name: name, url: url };
 
@@ -249,12 +275,30 @@ exports.__defineGetter__(CatalogueItemNodeName, function() {
  */
 registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
-    tranlateMeta : function(meta) {
+    createBundle : function(meta) {
 
-        var _this = this;
-        return Object.keys(meta).map(function(name) {
-                return _this.translateMetaLeaf(meta[name]);
-            }, this);
+        var _this = this,
+            level = this.level;
+
+        return Q.all(Object.keys(meta).map(function(name) {
+
+            var item = {
+                    block : _this.item.block,
+                    elem : name
+                },
+                path;
+
+            path = _this.tech.getPath(level.getByObj(item));
+
+            return _this.translateMeta(meta[name])
+                .then(function(data) {
+                    return _this.storeDataBundle(path, data);
+                })
+                .then(function(data) {
+                    return _this.storeResultBundle(item);
+                });
+
+        }));
 
     },
 
@@ -308,7 +352,7 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
     },
 
-    translateMetaLeaf : function(meta) {
+    translateMeta : function(meta) {
 
         var _this = this,
             examples = {};

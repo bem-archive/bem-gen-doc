@@ -81,27 +81,30 @@ registry.decl(NodeName, 'Node', {
 
     },
 
+    /**
+     * FIXME: BemCreateNode нельзя инициализировать из Arch, если output-уровень еще не создан
+     */
     createOutputNode : function(bundles, intraspector) {
 
         var index = new outputNodes.IndexNode({
                 root : this.root,
                 level : PATH.join(this.root, this.output),
-                techName : 'html',
+                techName : 'data.json',
                 item : { block : 'index' },
                 info : { title : 'Библиотека блоков' }
             }),
             catalogue = new outputNodes.CatalogueItemNode({
                 root : this.root,
                 level : PATH.join(this.root, this.output),
-                techName : 'html',
+                techName : 'data.json',
                 item : { block : 'catalogue' },
                 info : { title : 'Библиотека блоков' }
             });
 
-        this.arch.setNode(catalogue, this.getId(), bundles, intraspector);
-        this.arch.setNode(index, this.getId(), bundles, intraspector);
-
-        return [index.getId(), catalogue.getId()];
+        return [index, catalogue].map(function(node) {
+            this.arch.setNode(node, this.getId(), bundles, intraspector);
+            return this.getId();
+        }, this);
 
     }
 
