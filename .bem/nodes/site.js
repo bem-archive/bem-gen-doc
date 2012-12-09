@@ -32,6 +32,9 @@ registry.decl(NodeName, 'Node', {
         // FIXME: hardcode
         this.output = 'release';
 
+        this.levels = o.levels;
+        this.langs = o.langs;
+
     },
 
     alterArch : function() {
@@ -67,8 +70,8 @@ registry.decl(NodeName, 'Node', {
         var node = new IntrospectNode({
             root : this.root,
             // FIXME: hardcode
-            paths : ['common.blocks', 'desktop.blocks'],
-            lands : ['ru']
+            paths : this.levels,
+            lands : this.langs,
         });
 
         this.arch.setNode(node, this.getId());

@@ -75,7 +75,8 @@ registry.decl(NodeName, 'Node', {
                 { 'block': 'page' },
                 { 'block': 'catalogue' },
                 { 'block': 'block' }
-            ]
+            ],
+            'examples' : []
         })[bundle];
 
     },

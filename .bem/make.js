@@ -54,7 +54,8 @@ MAKE.decl('Arch', {
 
         var node = new siteNodes.SiteNode({
             id : SITE_NODE_ID,
-            arch : this.arch
+            arch : this.arch,
+            levels : ['common.blocks', 'desktop.blocks']
         });
 
         this.arch.setNode(node);
