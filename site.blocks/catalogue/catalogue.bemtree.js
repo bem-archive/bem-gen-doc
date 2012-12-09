@@ -25,6 +25,7 @@ function createBemjson(ctx, type) {
     obj.name = ctx.name;
     obj.title = ctx.title || [];
     obj.description = ctx.description || [];
+    obj.examples = ctx.examples || [];
 
     ctx.url && (obj.url = ctx.url);
 

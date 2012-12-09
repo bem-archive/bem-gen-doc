@@ -1,17 +1,14 @@
 /*global MAKE:true */
 
-"use strict";
-
 var PATH = require('path'),
-    introspectNodes = require('./nodes/introspect'),
+    LOGGER = require('bem/lib/logger'),
 
-    EXPORT_LEVELS = ['common', 'desktop', 'test'],
+    siteNodes = require('./nodes/site'),
 
-    SITE_NODE_ID = 'site',
-    SITE_BUNDLES = 'site',
+    /** {String} директория, куда складываем библиотеки */
+    LIB_ROOT = 'lib',
 
-    BEM_I18N_LANGS = ['ru'];
-
+    SITE_NODE_ID = 'site';
 
 MAKE.decl('Arch', {
 
@@ -21,39 +18,49 @@ MAKE.decl('Arch', {
 
     getLibraries : function() {
 
-        return {
-            'lib/bem-bl' : {
-                type        : 'git',
-                url         : 'git://github.com/bem/bem-bl.git',
-                treeish     : '0.3'
+        /** Псевдо-репозиторий известных библиотек */
+        var repo = {
+                'bem-bl' : {
+                    type        : 'git',
+                    url         : 'git://github.com/bem/bem-bl.git',
+                    treeish     : '0.3'
+                },
+                'bem-html' : {
+                    type        : 'git',
+                    url         : 'git://github.com/bem/bemhtml.git'
+                },
+                'bem-json' : {
+                    type        : 'git',
+                    url         : 'git://github.com/delfrrr/bem-json.git',
+                    npmPackages : false
+                }
             },
-            'lib/bem-html' : {
-                type        : 'git',
-                url         : 'git://github.com/bem/bemhtml.git'
-            },
-            'lib/bem-json' : {
-                type        : 'git',
-                url         : 'git://github.com/delfrrr/bem-json.git',
-                npmPackages : false
-            }
-        };
+            /** какие библиотеки подключать на проект */
+            libs = ['bem-bl', 'bem-html', 'bem-json'],
+            /** {Function} */
+            join = PATH.join;
+
+        // возвращаем список необходимых библиотек
+        return libs.reduce(function(enabled, lib) {
+
+            repo[lib] && (enabled[join(LIB_ROOT, lib)] = repo[lib]);
+            return enabled;
+
+        }, {});
 
     },
 
     createCustomNodes : function(common, libs, blocks, bundles) {
 
-        var site = new introspectNodes.IntrospectNode({
-                id : SITE_NODE_ID,
-                root : this.root,
-                exportLevels : EXPORT_LEVELS,
-                siteBundleName : SITE_BUNDLES,
-                langs : BEM_I18N_LANGS
-            });
+        var node = new siteNodes.SiteNode({
+            id : SITE_NODE_ID,
+            arch : this.arch,
+            levels : ['common.blocks', 'desktop.blocks']
+        });
 
-        // XXX: unhardcodeme
-        this.arch.setNode(site).addParents('site.bundles*', site);
+        this.arch.setNode(node);
 
-        return site.getId();
+        return node.alterArch();
 
     }
 
