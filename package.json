@@ -5,7 +5,8 @@
   "dependencies": {
     "bem": "git://github.com/bem/bem-tools.git#introspect",
     "wrench": "~1.4.4",
-    "marked": "~0.2.5"
+    "marked": "~0.2.5",
+    "shmakowiki": "*"
   },
   "repository": {
     "type": "git",
