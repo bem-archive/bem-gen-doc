@@ -4,6 +4,8 @@ var PATH = require('path'),
     LOGGER = require('bem/lib/logger'),
     registry = require('bem/lib/nodesregistry'),
 
+    SHMAKOWIKI = require('shmakowiki'),
+
     BemCreateNode = require('bem/lib/nodes/create').BemCreateNode,
     IntrospectNodeName = require('./introspect').IntrospectNodeName,
 
@@ -98,19 +100,13 @@ registry.decl(OutputNodeName, BemCreateNode, {
         // stub method
     },
 
-    getItemTechData : function(level, item, tech) {
-
-        return level.getTech(tech).readAllContent(level.getByObj(item, tech))
-            .then(function(data) {
-                return data[tech];
-            });
-
-    },
-
     storeDataBundle : function(path, data) {
 
         U.mkdirp(PATH.dirname(path));
-        return U.writeFileIfDiffers(path, JSON.stringify(data, null, '  '));
+        return U.writeFileIfDiffers(path, JSON.stringify(data, null, '  '))
+            .then(function() {
+                return data;
+            });
 
     },
 
@@ -202,7 +198,54 @@ registry.decl(OutputNodeName, BemCreateNode, {
                 return JSON.parse(data);
             });
 
-    }
+    },
+
+    /**
+     * @param {Object} level
+     * @param {Object} item
+     * @param {String} tech
+     * @returns
+     */
+    getItemTechData : function(level, item, tech) {
+
+        var prefix = level.getByObj(item, tech),
+            tobj = level.getTech(tech),
+            /** {Function} */
+            getTechDataFn = ['get', tech, 'data'].join('-');
+
+        if(typeof this[getTechDataFn] !== 'function')
+            return null;
+
+        return this[getTechDataFn](prefix, tobj);
+
+    },
+
+    'get-tech-data' : function(prefix, tech) {
+
+        return tech.readAllContent(prefix)
+            .then(function(data) {
+                // FIXME: hardcode :(
+                return data[tech.getSuffixes()[0]];
+            });
+
+    },
+
+    'get-title.txt-data' : function(prefix, tech) {
+        return this['get-tech-data'].apply(this, arguments);
+    },
+
+    'get-desc.md-data' : function(prefix, tech) {
+        return this['get-tech-data'].apply(this, arguments);
+    },
+
+    'get-desc.wiki-data' : function(prefix, tech) {
+        return this['get-tech-data'].apply(this, arguments);
+    },
+
+//    'get-examples-data' : function(prefix, tech) {
+//        return Q.resolve(tech.getPath(prefix));
+//    },
+
 
 });
 
@@ -236,8 +279,8 @@ registry.decl(IndexNodeName, OutputNodeName, {
 
             if(!block) {
                 // FIXME: hardcode
-                var url = URL.resolve('/',
-                        siteroot.getRelPathByObj({ block: 'catalogue', elem: name }, 'html'));
+                var url = URL.resolve(
+                        '/', siteroot.getRelPathByObj({ block: 'catalogue', elem: name }, 'html'));
 
                 block = _cache[name] = { name: name, url: url };
 
@@ -253,9 +296,7 @@ registry.decl(IndexNodeName, OutputNodeName, {
         }
 
         Object.keys(meta).forEach(function(name) {
-
             meta[name].forEach(forEachLevel, _this);
-
         });
 
         return Q.deep(data);
@@ -292,13 +333,49 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
             return _this.translateMeta(meta[name])
                 .then(function(data) {
+                    // сохраняем `data.json`
                     return _this.storeDataBundle(path, data);
                 })
+//                .then(function(data) {
+//                    _this.createBundleExamples(data);
+//                    return data;
+//                })
                 .then(function(data) {
+                    // сохраняем `html`
                     return _this.storeResultBundle(item);
                 });
 
         }));
+
+    },
+
+    createBundleExamples : function(data) {
+
+        function forEachItem(data) {
+
+            if(Array.isArray(data)) {
+                data.forEach(function(item) {
+                    return forEachItem(item);
+                });
+                return;
+            } else if(data == null) {
+                return;
+            }
+
+            Object.keys(data).forEach(function(key) {
+
+                if(~['elem', 'mods', 'vals'].indexOf(key)) {
+                    forEachItem(data[key]);
+                }
+
+                if(key === 'examples')
+                    console.log('111',data[key]);
+
+            });
+
+        }
+
+        return forEachItem(data);
 
     },
 
@@ -312,7 +389,11 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
      */
     collectTechData : function(level, node, tech, data) {
 
-        var levelPath = level.relPath;
+        if(!data)
+            return node;
+
+        var _this = this,
+            levelPath = level.relPath;
 
         return Q.when(data, function(d) {
 
@@ -323,19 +404,25 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
             case 'title.txt':
                 key = 'title';
-                content = d[tech];
+                content = d;
                 break;
 
             case 'desc.md':
                 key = 'description';
                 // TODO: move to `bemtree` & generate bemjson there from Markdown's AST
-                content = marked(d[level.getTech(tech).getSuffixForLang(lang)]);
+                //content = marked(d[level.getTech(tech).getSuffixForLang(lang)]);
                 break;
 
-//            case 'examples':
-//                key = 'examples';
-//                content = collectNodeExamples(level, d[tech]);
-//                break;
+            case 'desc.wiki':
+                key = 'description';
+                // TODO: move to node
+                content = SHMAKOWIKI.shmakowikiToHtml(d);
+                break;
+
+            case 'examples':
+                key = 'examples';
+                content = _this.collectNodeExamples(level, d);
+                break;
 
             }
 
@@ -352,35 +439,34 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
     },
 
+    /**
+     * Коллектор кеша с примерами
+     *
+     * TODO: примеры
+     *
+     * @param level
+     * @param path
+     * @returns
+     */
+    collectNodeExamples : function(level, path) {
+
+        var relative = PATH.relative.bind(null, level.dir),
+            example = createLevel(path);
+
+        return example
+            .getItemsByIntrospection()
+            .filter(function(item) {
+                // FIXME: hardcoded example source tech
+                return item.tech === 'bemjson.js';
+            }).map(function(item) {
+                return relative(example.getByObj(item));
+            });
+
+    },
+
     translateMeta : function(meta) {
 
-        var _this = this,
-            examples = {};
-
-        /**
-         * Коллектор кеша с примерами
-         *
-         * TODO: примеры
-         *
-         * @param level
-         * @param path
-         * @returns
-         */
-//        function collectNodeExamples(level, path) {
-//
-//            var p = PATH.relative(level.dir, path);
-//            (examples[p] || (examples[p] = [])).push({ level: level, path: path });
-//
-//            var relative = PATH.relative.bind(null, level.dir),
-//                example = createLevel(path);
-//
-//            return example.getItemsByIntrospection().filter(function(item) {
-//                return item.tech === 'bemjson.js';
-//            }).map(function(item) {
-//                return relative(example.getByObj(item));
-//            });
-//
-//        }
+        var _this = this;
 
         /**
          * Итератор по узлам декларации
@@ -401,7 +487,7 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
                 node.techs.forEach(function(tech) {
 
                     tech = tech.name;
-                    _this.collectTechData(level, node, _this.getItemTechData(level, bemobj, tech));
+                    _this.collectTechData(level, node, tech, _this.getItemTechData(level, bemobj, tech));
 
                 });
 
@@ -423,7 +509,7 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
             levels = decl.levels.map(function(level) {
 
-                var name = level.name;
+                var name = level.path;
 
                 level = createLevel(PATH.resolve(root, name));
                 level.relPath = name;
