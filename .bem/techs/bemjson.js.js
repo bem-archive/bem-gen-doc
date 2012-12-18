@@ -8,14 +8,14 @@ exports.baseTechName = 'js';
 exports.techMixin = {
 
     getBuildSuffixes : function() {
-        return ['bemtree.js'];
+        return ['bemjson.js'];
     },
 
     getBuildResult : function(prefixes, suffix, outputDir, outputName) {
 
         var _this = this;
         return this.__base.apply(this, arguments).then(function(res) {
-            res.unshift(_this.getBemjsonCore(outputDir))
+            res.unshift(_this.getBemjsonCore(outputDir));
             return res;
         });
 
@@ -23,6 +23,10 @@ exports.techMixin = {
 
     getBemjsonCore : function(outputDir) {
         return this.getBuildResultChunk(PATH.relative(outputDir, BEMJSON_CORE));
+    },
+
+    getDependencies : function() {
+        return ['bemdecl.js'];
     }
 
 }
