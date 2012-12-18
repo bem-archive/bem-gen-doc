@@ -11,6 +11,7 @@ BEM.JSON.decl('global', {
 
         ctx.tParam('environ', data.environ || {});
         ctx.tParam('decls', data.data);
+        // XXX
         delete data.data;
 
         ctx.tParam('environ').name === 'index' && (page.mods.type = 'index');

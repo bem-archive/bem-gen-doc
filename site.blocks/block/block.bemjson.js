@@ -24,16 +24,19 @@ BEM.JSON.decl('block', {
      */
     _onParams : function(ctx) {
 
-        var params = ctx.params();
+        var params = ctx.params(),
+            paramsMapper = {
+                'title'         : this._getTitle,
+                'description'   : this._getDescription,
+                'examples'      : this._getExamples
+            };
 
-        isArray(params.title) &&
-            ctx.param('title', this._getTitle(params.title), true);
+        Object.keys(paramsMapper).forEach(function(key) {
 
-        isArray(params.description) &&
-            ctx.param('description', this._getDescription(params.description), true);
+            isArray(params[key]) &&
+                ctx.param(key, paramsMapper[key](params[key]), true);
 
-        isArray(params.examples) &&
-            ctx.param('examples', this._getExamples(params.examples), true);
+        });
 
     },
 

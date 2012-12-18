@@ -1,5 +1,3 @@
-/**_*/
-
 BEM.JSON.decl({ name : 'page', modName : 'type', modVal : 'index' }, {
 
     onBlock : function(ctx) {
