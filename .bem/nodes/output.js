@@ -175,7 +175,7 @@ registry.decl(OutputNodeName, BemCreateNode, {
 
     getBemjson : function(prefix) {
 
-        var path = this.getOptimizedPrefix(prefix) + '.bemtree.js';
+        var path = this.getOptimizedPrefix(prefix) + '.bemjson.js';
         return U.readFile(path)
             .then(function(data) {
                 return ( new Function('global', 'BEM', '"use strict";' + data + ';return BEM.JSON;') )();

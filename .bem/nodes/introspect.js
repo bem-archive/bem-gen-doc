@@ -1,3 +1,7 @@
+/**
+ * @module nodes/introspect
+ */
+
 var PATH = require('path'),
     BEM = require('bem'),
     LOGGER = require('bem/lib/logger'),
@@ -15,8 +19,11 @@ var PATH = require('path'),
     NODE_ID = 'site-introspect*';
 
 
-exports.__defineGetter__(IntrospectNodeName, function() {
-    return registry.getNodeClass(IntrospectNodeName);
+/** @exports IntrospectNode */
+Object.defineProperty(exports, IntrospectNodeName, {
+    'get' : function() {
+        return registry.getNodeClass(IntrospectNodeName);
+    }
 });
 
 

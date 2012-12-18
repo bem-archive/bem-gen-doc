@@ -1,10 +1,14 @@
+/**
+ * @module nodes/site
+ */
+
 var PATH = require('path'),
     BEM = require('bem'),
     LOGGER = require('bem/lib/logger'),
     registry = require('bem/lib/nodesregistry'),
 
     outputNodes = require('./output'),
-    SiteBundlesNode= require('./build').SiteBundlesNode,
+    SiteBundlesNode= require('./build').MachineBundlesNode,
     IntrospectNode = require('./introspect').IntrospectNode,
 
     Q = BEM.require('q'),
@@ -12,8 +16,11 @@ var PATH = require('path'),
     NodeName = exports.SiteNodeName = 'SiteNode';
 
 
-exports.__defineGetter__(NodeName, function() {
-    return registry.getNodeClass(NodeName);
+/** @exports SiteNode */
+Object.defineProperty(exports, NodeName, {
+    'get' : function() {
+        return registry.getNodeClass(NodeName);
+    }
 });
 
 
@@ -69,7 +76,6 @@ registry.decl(NodeName, 'Node', {
 
         var node = new IntrospectNode({
             root : this.root,
-            // FIXME: hardcode
             paths : this.levels,
             lands : this.langs,
         });

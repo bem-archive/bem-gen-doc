@@ -3,23 +3,26 @@ var PATH = require('path'),
     LOGGER = require('bem/lib/logger'),
     registry = require('bem/lib/nodesregistry'),
 
-    BundlesLevelNode = require('bem/lib/nodes/level').BundlesLevelNode,
+    BundlesLevelNode = require('./level').MachineBundlesLevelNode,
 
     Q = BEM.require('q'),
     QFS = BEM.require('q-fs'),
     MKDIRP = BEM.require('mkdirp'),
 
-    NodeName = exports.NodeName = 'SiteBundlesNode',
+    NodeName = 'MachineBundlesNode',
 
     createLevel = BEM.createLevel,
     U = BEM.util,
 
-    // {String}
-    NODE_ID = 'site-bundles*';
+    /** {String} */
+    NODE_ID = 'machine-bundles';
 
 
-exports.__defineGetter__(NodeName, function() {
-    return registry.getNodeClass(NodeName);
+/** @exports SiteBundlesNode */
+Object.defineProperty(exports, NodeName, {
+    'get' : function() {
+        return registry.getNodeClass(NodeName);
+    }
 });
 
 
@@ -187,7 +190,7 @@ registry.decl(NodeName, 'Node', {
 }, {
 
     createId : function(o) {
-        return NODE_ID;
+        return NODE_ID + '*';
     }
 
 });
