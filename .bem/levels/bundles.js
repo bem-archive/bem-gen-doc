@@ -18,9 +18,8 @@ exports.getTechs = function() {
         'js'            : 'js-i',
         'css'           : 'css',
 
-        'bemhtml'       : pjoin(BEMHTML_TECHS, 'bemhtml.js'),
-
-        'bemtree.js'    : pjoin(PRJ_TECHS, 'bemtree.js'),
+        'bemhtml.js'    : pjoin(BEMHTML_TECHS, 'bemhtml'),
+        'bemjson.js'    : pjoin(PRJ_TECHS, 'bemjson.js'),
         'html'          : pjoin(PRJ_TECHS, 'html')
     };
 

@@ -11,15 +11,15 @@ var PATH = require('path'),
 exports.getTechs = function() {
     return {
             'title.txt' : 'title.txt',
-            
+
             'css'       : 'css',
             'js'        : 'js',
             'examples'  : 'bem/lib/techs/examples.js',
             'priv.js'   : 'priv.js',
-            
+
             'bemhtml'   : pjoin(BEMHTML_TECHS, 'bemhtml'),
             'desc.md'   : pjoin(PRJ_TECHS, 'desc.md'),
-            'bemtree.js': pjoin(PRJ_TECHS, 'bemtree.js')
+            'bemjson.js': pjoin(PRJ_TECHS, 'bemjson.js')
         };
 };
 
