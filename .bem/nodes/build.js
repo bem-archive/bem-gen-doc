@@ -1,3 +1,7 @@
+/**
+ * @module nodes/build
+ */
+
 var PATH = require('path'),
     BEM = require('bem'),
     LOGGER = require('bem/lib/logger'),
@@ -9,7 +13,7 @@ var PATH = require('path'),
     QFS = BEM.require('q-fs'),
     MKDIRP = BEM.require('mkdirp'),
 
-    NodeName = 'MachineBundlesNode',
+    BundlesNodeName = exports.BundlesNodeName = 'MachineBundlesNode',
 
     createLevel = BEM.createLevel,
     U = BEM.util,
@@ -18,10 +22,10 @@ var PATH = require('path'),
     NODE_ID = 'machine-bundles';
 
 
-/** @exports SiteBundlesNode */
-Object.defineProperty(exports, NodeName, {
+/** @exports MachineBundlesNode */
+Object.defineProperty(exports, BundlesNodeName, {
     'get' : function() {
-        return registry.getNodeClass(NodeName);
+        return registry.getNodeClass(BundlesNodeName);
     }
 });
 
@@ -29,7 +33,7 @@ Object.defineProperty(exports, NodeName, {
 /**
  * @namespace
  */
-registry.decl(NodeName, 'Node', {
+registry.decl(BundlesNodeName, 'Node', {
 
     __constructor : function(o) {
 

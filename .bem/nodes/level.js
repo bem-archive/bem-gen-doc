@@ -5,24 +5,23 @@
 var BEM = require('bem'),
     registry = require('bem/lib/nodesregistry'),
     BundlesLevelNode = require('bem/lib/nodes/level').BundlesLevelNode,
-
     BundleNodeName = require('./bundle').BundleNodeName,
 
     _ = BEM.require('underscore'),
 
-    LevelNodeName = exports.LevelNodeName = 'MachineBundlesLevelNode',
+    BundlesLevelNodeName = exports.BundlesLevelNodeName = 'MachineBundlesLevelNode',
     U = BEM.util;
 
 
 /** @exports MachineBundlesLevelNode */
-Object.defineProperty(exports, LevelNodeName, {
+Object.defineProperty(exports, BundlesLevelNodeName, {
     'get' : function() {
-        return registry.getNodeClass(LevelNodeName);
+        return registry.getNodeClass(BundlesLevelNodeName);
     }
 });
 
 
-registry.decl(LevelNodeName, BundlesLevelNode, {
+registry.decl(BundlesLevelNodeName, BundlesLevelNode, {
 
     itemNodeClassName : BundleNodeName,
 
