@@ -18,7 +18,7 @@ exports.techMixin = {
 
     getBemjson : function(prefix) {
 
-        var path = this.getPath(this.getOptimizedPrefix(prefix), 'bemtree.js');
+        var path = this.getPath(this.getOptimizedPrefix(prefix), 'bemjson.js');
         return U.readFile(path)
             .then(function(data) {
                 return ( new Function('global', 'BEM', '"use strict";' + data + ';return BEM.JSON;') )();
@@ -68,7 +68,7 @@ exports.techMixin = {
     },
 
     getDependencies : function() {
-        return ['bemtree.js', 'bemhtml', 'data.json'];
+        return ['bemjson.js', 'bemhtml.js'];
     }
 
 };
