@@ -1,10 +1,12 @@
 var BEM = require('bem'),
     PATH = require('path'),
 
+    environ = require('../environ'),
+
     Q = BEM.require('q'),
     U = BEM.util,
 
-    LIB_ROOT = PATH.resolve(__dirname, '../../lib');
+    LIB_ROOT = environ.LIB_ROOT;
 
 
 exports.getBaseTechPath = require.resolve(PATH.join(LIB_ROOT, 'bem-bl/blocks-common/i-bem/bem/techs/html.js'));

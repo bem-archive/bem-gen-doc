@@ -39,11 +39,21 @@ registry.decl(BundlesNodeName, 'Node', {
 
         this.__base.apply(this, arguments);
 
-        /** {String} project root */
+        /**
+         * Project root
+         * @type String
+         */
         this.root = o.root;
-        /** {String} site root */
+
+        /**
+         * Site root
+         * @type String
+         */
         this.path = o.path;
-        /** {Array} */
+
+        /**
+         * @type Array
+         */
         this.levels = o.levels;
 
     },

@@ -4,34 +4,22 @@
 
 var PATH = require('path'),
     BEM = require('bem'),
-    LOGGER = require('bem/lib/logger'),
 
     registry = require('bem/lib/nodesregistry'),
     BundlesLevelNodeName = require('bem/lib/nodes/level').BundlesLevelNodeName,
     BundleNodeName = require('bem/lib/nodes/bundle').BundleNodeName,
+    environ = require('../environ'),
+
     Q = BEM.require('q'),
 
-    /** @type Function */
     createLevel = BEM.createLevel,
-    /** @type Function */
+    log = require('../util').log,
     U = BEM.util,
 
     ExamplesNodeName = exports.ExamplesNodeName = 'MachineExamplesNode',
 
     // FIXME: hardcode
-    NODE_ID = 'examples*',
-
-    /**
-     * @type Function
-     * @params {Any}
-     */
-    log = function() {
-        /** @type Function */
-        var inspect = require('util').inspect;
-        [].slice.call(arguments).forEach(function(o) {
-            console.log(inspect(o, false, null));
-        });
-    };
+    NODE_ID = 'examples*';
 
 
 Object.defineProperty(exports, ExamplesNodeName, {
@@ -49,12 +37,10 @@ registry.decl(ExamplesNodeName, 'Node', {
 
         this.root = o.root;
 
-        /** где искать примеры */
+        /** Где искать примеры */
         this.levels = o.levels;
-        /** куда складывать примеры */
-        //this.output = o.output;
-        // FIXME: hardcode
-        this.output = PATH.join('release', 'examples');
+        /** Куда складывать примеры */
+        this.output = o.output;
 
     },
 
@@ -80,9 +66,7 @@ registry.decl(ExamplesNodeName, 'Node', {
     },
 
     getOutputPath : function() {
-
         return PATH.resolve(this.root, this.output);
-
     },
 
     getBaseOutputLevel : function() {
@@ -147,7 +131,7 @@ registry.decl(ExamplesNodeName, 'Node', {
                         var src = level.getPathByObj(item, item.tech),
                             desc = outLevel.getPathByObj(item, item.tech);
 
-                        return _this._storeExampleToDesc(src, desc);
+                        return _this.storeExampleToDesc(src, desc);
 
                     }));
 
@@ -155,7 +139,7 @@ registry.decl(ExamplesNodeName, 'Node', {
 
     },
 
-    _storeExampleToDesc : function(src, desc) {
+    storeExampleToDesc : function(src, desc) {
 
         U.mkdirp(PATH.dirname(desc));
 

@@ -1,6 +1,9 @@
 var PATH = require('path'),
 
-    BEMJSON_ROOT = PATH.resolve(__dirname, '../../lib/bem-json/i-bem/__json'),
+    environ = require('../environ'),
+
+//    BEMJSON_ROOT = PATH.resolve(__dirname, '../../lib/bem-json/i-bem/__json'),
+    BEMJSON_ROOT = PATH.join(environ.getLibPath('bem-json'), 'i-bem/__json'),
     BEMJSON_CORE = PATH.join(BEMJSON_ROOT, 'i-bem__json.js');
 
 exports.baseTechName = 'js';
@@ -29,4 +32,4 @@ exports.techMixin = {
         return ['bemdecl.js'];
     }
 
-}
+};
