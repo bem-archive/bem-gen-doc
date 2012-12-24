@@ -1,5 +1,7 @@
 block example {
 
+    js: true
+
     content: [
         {
             elem: 'title',
