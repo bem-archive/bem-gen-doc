@@ -9,3 +9,5 @@ lib/
 site.bundles/*/*
 !site.bundles/.bem
 !site.bundles/*/*.bemdecl.js
+
+release
