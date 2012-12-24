@@ -1,0 +1,15 @@
+block b-text {
+
+    tag: ''
+
+    ~['h1', 'h2', 'h3', 'h4', 'h5'].indexOf(this.elem) {
+
+        default: applyCtx({
+            block: 'headline',
+            mods: { level: this.elem.charAt(1) },
+            content: this.ctx.content
+        })
+
+    }
+
+}

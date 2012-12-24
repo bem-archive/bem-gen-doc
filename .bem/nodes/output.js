@@ -469,7 +469,7 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
             case 'desc.wiki':
                 key = 'description';
                 // TODO: move to node
-                content = SHMAKOWIKI.shmakowikiToHtml(d);
+                content = SHMAKOWIKI.shmakowikiToBemjson(d);
                 break;
 
             case 'examples':

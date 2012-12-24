@@ -1,0 +1,20 @@
+.b-text__ol
+{
+    margin: 0.5em 0 1em 1.2em;
+    padding: 0;
+}
+
+.b-text__ol .b-text__li
+{
+    background: none;
+
+    list-style-type: decimal;
+
+    padding-left: 0.3em;
+    margin-left: 2em;
+}
+
+/* :( */
+.b-text__ol .b-text__li .b-text__ol .b-text__li{
+    margin-left:0;
+}

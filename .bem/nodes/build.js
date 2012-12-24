@@ -83,17 +83,20 @@ registry.decl(BundlesNodeName, 'Node', {
 
         return ({
             'index' : [
-                { 'block': 'global' },
-                { 'block': 'page', mods: { type: 'index' } },
-                { 'block': 'catalogue', mods: { type: 'showcase' } },
-                { 'block': 'catalogue', elems: ['item'] },
-                { 'block': 'block' }
+                { 'block' : 'global' },
+                { 'block' : 'page', mods : { type : 'index' } },
+                { 'block' : 'catalogue', mods : { type : 'showcase' } },
+                { 'block' : 'catalogue', elems : ['item'] },
+                { 'block' : 'block' }
             ],
             'catalogue' : [
-                { 'block': 'global' },
-                { 'block': 'page' },
-                { 'block': 'catalogue' },
-                { 'block': 'block' }
+                { 'block' : 'global' },
+                { 'block' : 'page' },
+                { 'block' : 'catalogue' },
+                { 'block' : 'block' },
+                { 'block' : 'example' },
+                { 'block' : 'b-text' },
+                { 'block' : 'b-link' }
             ],
             'examples' : []
         })[bundle];
