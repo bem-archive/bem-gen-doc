@@ -1,6 +1,6 @@
 ({
     mustDeps: [
-        { block: 'bemhtml' }
+        { block: 'i-bem', elem: 'html' }
     ],
     shouldDeps: [
         { elem: 'assets' }
