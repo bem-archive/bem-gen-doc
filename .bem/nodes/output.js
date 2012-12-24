@@ -223,7 +223,7 @@ registry.decl(OutputNodeName, BemCreateNode, {
         if(typeof this[getTechDataFn] !== 'function')
             return null;
 
-        return this[getTechDataFn](prefix, tobj, level);
+        return this[getTechDataFn](prefix, tobj);
 
     },
 
@@ -249,33 +249,45 @@ registry.decl(OutputNodeName, BemCreateNode, {
         return this['get-tech-data'].apply(this, arguments);
     },
 
-    'get-examples-data' : function(prefix, tech, level) {
+    'get-examples-data' : function(prefix, tech) {
 
         // FIXME: hardcode
         var _this = this,
+            exampleLevel = createLevel(tech.getPath(prefix)),
             outLevel = createLevel(PATH.join(this.level.dir, 'examples')),
-            examples = [];
+            cache = {};
 
-        createLevel(tech.getPath(prefix)).getItemsByIntrospection()
+        exampleLevel.getItemsByIntrospection()
             .forEach(function(item) {
+
+                var key = U.bemKey(item),
+                    source = (cache[key] || (cache[key] = {}));
 
                 switch(item.tech) {
 
                 case 'title.txt':
-                    break;
+                    source.title = _this.getItemTechData(exampleLevel, item, item.tech);
+                    return;
 
                 case 'bemjson.js':
                     var level = createLevel(PATH.join(outLevel.dir,
                             PATH.basename(prefix) + '.examples')),
                         path = level.getByObj(item);
-                    return examples.push(PATH.relative(outLevel.dir, path));
+                    source.url = PATH.relative(outLevel.dir, path);
+                    return;
 
                 }
 
             });
 
-        return Q.all(examples);
-//        return Q.resolve(tech.getPath(prefix));
+        return Q.all(Object.keys(cache).map(function(key) {
+
+            return Q.shallow(cache[key], function(item) {
+                return item;
+            });
+
+        }));
+
     },
 
 
@@ -388,6 +400,7 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
     },
 
     // TODO
+    /*
     createBundleExamples : function(data) {
 
         function forEachItem(data) {
@@ -417,6 +430,7 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
         return forEachItem(data);
 
     },
+    */
 
     /**
      * Процессор данных для технологий БЭМ-сущности
