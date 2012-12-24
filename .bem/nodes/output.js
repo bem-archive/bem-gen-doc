@@ -216,7 +216,7 @@ registry.decl(OutputNodeName, BemCreateNode, {
         if(typeof this[getTechDataFn] !== 'function')
             return null;
 
-        return this[getTechDataFn](prefix, tobj);
+        return this[getTechDataFn](prefix, tobj, level);
 
     },
 
@@ -242,9 +242,34 @@ registry.decl(OutputNodeName, BemCreateNode, {
         return this['get-tech-data'].apply(this, arguments);
     },
 
-//    'get-examples-data' : function(prefix, tech) {
+    'get-examples-data' : function(prefix, tech, level) {
+
+        // FIXME: hardcode
+        var _this = this,
+            outLevel = createLevel(PATH.join(this.level.dir, 'examples')),
+            examples = [];
+
+        createLevel(tech.getPath(prefix)).getItemsByIntrospection()
+            .forEach(function(item) {
+
+                switch(item.tech) {
+
+                case 'title.txt':
+                    break;
+
+                case 'bemjson.js':
+                    var level = createLevel(PATH.join(outLevel.dir,
+                            PATH.basename(prefix) + '.examples')),
+                        path = level.getByObj(item);
+                    return examples.push(PATH.relative(outLevel.dir, path));
+
+                }
+
+            });
+
+        return Q.all(examples);
 //        return Q.resolve(tech.getPath(prefix));
-//    },
+    },
 
 
 });
@@ -349,6 +374,7 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
     },
 
+    // TODO
     createBundleExamples : function(data) {
 
         function forEachItem(data) {
@@ -369,7 +395,7 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
                 }
 
                 if(key === 'examples')
-                    console.log('111',data[key]);
+                    console.log('111', data[key]);
 
             });
 
@@ -421,7 +447,8 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
             case 'examples':
                 key = 'examples';
-                content = _this.collectNodeExamples(level, d);
+                content = d;
+//                content = _this.collectNodeExamples(level, d);
                 break;
 
             }

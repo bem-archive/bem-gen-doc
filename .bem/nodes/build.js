@@ -43,6 +43,8 @@ registry.decl(BundlesNodeName, 'Node', {
         this.root = o.root;
         /** {String} site root */
         this.path = o.path;
+        /** {Array} */
+        this.levels = o.levels;
 
     },
 
@@ -148,7 +150,8 @@ registry.decl(BundlesNodeName, 'Node', {
 
         var node = new BundlesLevelNode({
                 root : this.root,
-                level : bundleLevelNode
+                level : bundleLevelNode,
+                levels : this.levels
             });
 
         arch.setNode(node, arch.getParents(this), this.getId());

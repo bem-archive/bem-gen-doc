@@ -10,6 +10,7 @@ var PATH = require('path'),
     outputNodes = require('./output'),
     SiteBundlesNode= require('./build').MachineBundlesNode,
     IntrospectNode = require('./introspect').IntrospectNode,
+    ExamplesNode = require('./examples').MachineExamplesNode,
 
     Q = BEM.require('q'),
 
@@ -53,6 +54,9 @@ registry.decl(NodeName, 'Node', {
                 return _this.createOutputNode(bundles, intraspector);
             })
             .then(function() {
+                return _this.createExamplesNode();
+            })
+            .then(function() {
                 LOGGER.info(_this.arch.toString());
                 return _this.arch;
             });
@@ -62,8 +66,9 @@ registry.decl(NodeName, 'Node', {
     createSiteBundlesNode : function() {
 
         var node = new SiteBundlesNode({
-            root : this.root,
-            path : this.output
+            root    : this.root,
+            path    : this.output,
+            levels  : this.levels
         });
 
         this.arch.setNode(node, this.getId());
@@ -88,6 +93,15 @@ registry.decl(NodeName, 'Node', {
 
     createExamplesNode : function() {
 
+        var node = new ExamplesNode({
+            root : this.root,
+            levels : this.levels
+        });
+
+        this.arch.setNode(node, this.getId());
+
+        return node.getId();
+
     },
 
     /**
@@ -110,10 +124,10 @@ registry.decl(NodeName, 'Node', {
                 info : { title : 'Библиотека блоков' }
             });
 
-        return [index, catalogue].map(function(node) {
+        return Q.all([index, catalogue].map(function(node) {
             this.arch.setNode(node, this.getId(), bundles, intraspector);
             return this.getId();
-        }, this);
+        }, this));
 
     }
 

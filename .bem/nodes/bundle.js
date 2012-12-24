@@ -22,6 +22,12 @@ Object.defineProperty(exports, BundleNodeName, {
 
 registry.decl(BundleNodeName, BundleNode, {
 
+    __constructor : function(o) {
+
+        this.__base.apply(this, arguments);
+
+    },
+
     getTechs : function() {
 
         return [
@@ -35,7 +41,7 @@ registry.decl(BundleNodeName, BundleNode, {
 
     },
 
-    getLevels : function() {
+    getLevels : function(tech) {
 
         return [
                 'lib/bem-html/common.blocks',
@@ -50,6 +56,17 @@ registry.decl(BundleNodeName, BundleNode, {
     'create-bemjson.js-node' : function(tech, bundleNode, magicNode) {
         return this.createDefaultTechNode.apply(this, arguments);
     },
+
+    /*
+    'create-meta.tree-node' : function(tech, bundleNode, magicNode) {
+        return return this.setBemBuildNode(
+                tech,
+                this.level.resolveTech(tech),
+                this.getBundlePath('deps..js'),
+                bundleNode,
+                magicNode);
+    },
+    */
 
     'create-bemjson.js-optimizer-node' : function() {
         return this['create-js-optimizer-node'].apply(this, arguments);
