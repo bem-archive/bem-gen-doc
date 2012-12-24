@@ -3,6 +3,7 @@
  */
 
 var PATH = require('path'),
+    FS = require('fs'),
     BEM = require('bem'),
     URL = require('url'),
     LOGGER = require('bem/lib/logger'),
@@ -253,9 +254,15 @@ registry.decl(OutputNodeName, BemCreateNode, {
 
         // FIXME: hardcode
         var _this = this,
-            exampleLevel = createLevel(tech.getPath(prefix)),
+            path = tech.getPath(prefix);
+
+        if(!FS.existsSync(path))
+            return;
+
+        var exampleLevel = createLevel(path),
             outLevel = createLevel(PATH.join(this.level.dir, 'examples')),
             cache = {};
+
 
         exampleLevel.getItemsByIntrospection()
             .forEach(function(item) {
@@ -452,6 +459,9 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
             var key,
                 content = '';
+
+            if(d == null)
+                return;
 
             switch(tech) {
 
