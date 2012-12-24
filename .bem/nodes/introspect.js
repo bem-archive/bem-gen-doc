@@ -40,9 +40,9 @@ registry.decl(IntrospectNodeName, 'Node', {
         this.__base.apply(this, arguments);
 
         this.root = o.root;
-        /** {String[]} */
+        /** @type String[] */
         this.paths = o.paths;
-        /** {String[]} */
+        /** @type String[] */
         this.langs = o.langs;
 
     },
@@ -52,9 +52,7 @@ registry.decl(IntrospectNodeName, 'Node', {
         var _this = this;
         return this.getStruct()
             .then(function(struct) {
-
                 return _this.writeMeta(struct);
-
             });
 
     },

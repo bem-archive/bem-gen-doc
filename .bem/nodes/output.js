@@ -1,3 +1,7 @@
+/**
+ * @module nodes/output
+ */
+
 var PATH = require('path'),
     BEM = require('bem'),
     URL = require('url'),
@@ -20,7 +24,7 @@ var PATH = require('path'),
 
 
 /**
- * Convert decl naming `elem, [block, elem]` to obj
+ * Convert decl naming `elem, [block, elem]` to BEM-obj
  * @param {String} typ
  * @param {Array} args
  * @returns {Object}
@@ -41,8 +45,11 @@ function declToObj(typ, args) {
 }
 
 
-registry.__defineGetter__(OutputNodeName, function() {
-    return registry.getNodeClass(OutputNodeName);
+/** @exports OutputNode */
+Object.defineProperty(exports, OutputNodeName, {
+    'get' : function() {
+        return registry.getNodeClass(OutputNodeName);
+    }
 });
 
 
@@ -275,8 +282,11 @@ registry.decl(OutputNodeName, BemCreateNode, {
 });
 
 
-exports.__defineGetter__(IndexNodeName, function() {
-    return registry.getNodeClass(IndexNodeName);
+/** @examples IndexNode */
+Object.defineProperty(exports, IndexNodeName, {
+    'get' : function() {
+        return registry.getNodeClass(IndexNodeName);
+    }
 });
 
 
@@ -331,8 +341,11 @@ registry.decl(IndexNodeName, OutputNodeName, {
 });
 
 
-exports.__defineGetter__(CatalogueItemNodeName, function() {
-    return registry.getNodeClass(CatalogueItemNodeName);
+/** @examples CatalogueItemNode */
+Object.defineProperty(exports, CatalogueItemNodeName, {
+    'get' : function() {
+        return registry.getNodeClass(CatalogueItemNodeName);
+    }
 });
 
 
@@ -448,7 +461,6 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
             case 'examples':
                 key = 'examples';
                 content = d;
-//                content = _this.collectNodeExamples(level, d);
                 break;
 
             }
@@ -463,31 +475,6 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
             return node;
 
         });
-
-    },
-
-    /**
-     * Коллектор кеша с примерами
-     *
-     * TODO: примеры
-     *
-     * @param level
-     * @param path
-     * @returns
-     */
-    collectNodeExamples : function(level, path) {
-
-        var relative = PATH.relative.bind(null, level.dir),
-            example = createLevel(path);
-
-        return example
-            .getItemsByIntrospection()
-            .filter(function(item) {
-                // FIXME: hardcoded example source tech
-                return item.tech === 'bemjson.js';
-            }).map(function(item) {
-                return relative(example.getByObj(item));
-            });
 
     },
 

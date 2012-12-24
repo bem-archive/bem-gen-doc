@@ -39,6 +39,8 @@ registry.decl(NodeName, 'Node', {
 
         // FIXME: hardcode
         this.output = 'release';
+        // FIXME: hardcode
+        this.examples = PATH.join(this.output, 'examples');
 
         this.levels = o.levels;
         this.langs = o.langs;
@@ -95,6 +97,7 @@ registry.decl(NodeName, 'Node', {
 
         var node = new ExamplesNode({
             root : this.root,
+            output : this.examples,
             levels : this.levels
         });
 

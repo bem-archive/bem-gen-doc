@@ -29,6 +29,10 @@ registry.decl(BundlesLevelNodeName, BundlesLevelNode, {
         return ['bemdecl.js'];
     },
 
+    /**
+     * @returns
+     * @override
+     */
     scanLevelItems : function() {
 
         return _.uniq(

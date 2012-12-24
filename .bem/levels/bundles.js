@@ -1,14 +1,15 @@
 var PATH = require('path'),
     BEM = require('bem'),
+    environ = require('../environ'),
 
-    pjoin = PATH.join,
-    presolve = PATH.resolve.bind(null, __dirname),
+    join = PATH.join,
+    resolve = PATH.resolve.bind(null, __dirname),
 
-    LIB_ROOT = presolve('../../lib'),
+    LIB_ROOT = environ.LIB_ROOT,
 
-    PRJ_TECHS = presolve('../techs'),
-    BEMHTML_TECHS = pjoin(LIB_ROOT, 'bem-html/.bem/techs'),
-    BEMBL_TECHS = pjoin(LIB_ROOT, 'bem-bl/blocks-common/i-bem/bem/techs');
+    PRJ_TECHS = resolve('../techs'),
+    BEMHTML_TECHS = join(environ.getLibPath('bem-html'), '.bem/techs'),
+    BEMBL_TECHS = join(environ.getLibPath('bem-bl'), 'blocks-common/i-bem/bem/techs');
 
 exports.getTechs = function() {
 
@@ -18,9 +19,10 @@ exports.getTechs = function() {
         'js'            : 'js-i',
         'css'           : 'css',
 
-        'bemhtml.js'    : pjoin(BEMHTML_TECHS, 'bemhtml'),
-        'bemjson.js'    : pjoin(PRJ_TECHS, 'bemjson.js'),
-        'html'          : pjoin(PRJ_TECHS, 'html')
+        'bemhtml.js'    : join(BEMHTML_TECHS, 'bemhtml'),
+        'bemjson.js'    : join(PRJ_TECHS, 'bemjson.js'),
+        'html'          : join(PRJ_TECHS, 'html')
+        //'examples'      : join(PRJ_TECHS, 'examples')
     };
 
 };

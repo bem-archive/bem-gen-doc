@@ -3,10 +3,10 @@
 var PATH = require('path'),
     LOGGER = require('bem/lib/logger'),
 
-    siteNodes = require('./nodes/site'),
+    environ = require('./environ'),
 
-    /** {String} директория, куда складываем библиотеки */
-    LIB_ROOT = 'lib',
+    siteNodes = require('./nodes/site'),
+    examplesNodes = require('./nodes/examples'),
 
     SITE_NODE_ID = 'site';
 
@@ -18,7 +18,9 @@ MAKE.decl('Arch', {
 
     getLibraries : function() {
 
-        /** Псевдо-репозиторий известных библиотек */
+        /**
+         * Псевдо-репозиторий известных библиотек
+         */
         var repo = {
                 'bem-bl' : {
                     type        : 'git',
@@ -35,15 +37,17 @@ MAKE.decl('Arch', {
                     npmPackages : false
                 }
             },
-            /** какие библиотеки подключать на проект */
+            /**
+             * Список библиотек которые нужно подключить в проект
+             */
             libs = ['bem-bl', 'bem-html', 'bem-json'],
-            /** {Function} */
-            join = PATH.join;
+            /** @type Function */
+            getLibRelPath = environ.getLibRelPath;
 
         // возвращаем список необходимых библиотек
         return libs.reduce(function(enabled, lib) {
 
-            repo[lib] && (enabled[join(LIB_ROOT, lib)] = repo[lib]);
+            repo[lib] && (enabled[getLibRelPath(lib)] = repo[lib]);
             return enabled;
 
         }, {});
@@ -52,10 +56,12 @@ MAKE.decl('Arch', {
 
     createCustomNodes : function(common, libs, blocks, bundles) {
 
+        var levels = ['common.blocks', 'desktop.blocks', 'test.blocks'];
+
         var node = new siteNodes.SiteNode({
             id : SITE_NODE_ID,
             arch : this.arch,
-            levels : ['common.blocks', 'desktop.blocks']
+            levels : levels
         });
 
         this.arch.setNode(node);
@@ -65,42 +71,3 @@ MAKE.decl('Arch', {
     }
 
 });
-
-
-MAKE.decl('BundleNode', {
-
-    getTechs : function() {
-
-        return [
-            'bemdecl.js',
-            'deps.js',
-            'bemhtml',
-            'bemtree.js',
-            'css',
-            'js'
-        ];
-
-    },
-
-    getLevels : function() {
-
-        return [
-                'lib/bem-html/common.blocks',
-                'common.blocks',
-                'site.blocks'
-            ].map(function(path) {
-                return PATH.resolve(this.root, path);
-            }, this);
-
-    },
-
-    'create-bemtree.js-node' : function(tech, bundleNode, magicNode) {
-        return this.createDefaultTechNode.apply(this, arguments);
-    },
-
-    'create-bemtree.js-optimizer-node' : function() {
-        return this['create-js-optimizer-node'].apply(this, arguments);
-    }
-
-});
-

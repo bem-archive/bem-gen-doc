@@ -1,12 +1,13 @@
 var PATH = require('path'),
+    environ = require('../environ'),
 
-    pjoin = PATH.join,
-    presolve = PATH.resolve.bind(null, __dirname),
+    join = PATH.join,
+    resolve = PATH.resolve.bind(null, __dirname),
 
-    LIB_ROOT = presolve('../../lib'),
+    LIB_ROOT = environ.LIB_ROOT,
 
-    PRJ_TECHS = presolve('../techs'),
-    BEMBL_TECHS = pjoin(LIB_ROOT, 'bem-bl/blocks-common/i-bem/bem/techs');
+    PRJ_TECHS = resolve('../techs'),
+    BEMBL_TECHS = join(environ.getLibPath('bem-bl'), 'blocks-common/i-bem/bem/techs');
 
 
 exports.baseLevelPath = require.resolve('./bundles.js');
@@ -19,8 +20,8 @@ exports.getTechs = function() {
         'bemjson.js'    : '',
         'title.txt'     : '',
 
-        'bemhtml.js'    : pjoin(BEMBL_TECHS, 'bemhtml'),
-        'html'          : pjoin(BEMBL_TECHS, 'html')
+        'bemhtml.js'    : join(BEMBL_TECHS, 'bemhtml'),
+        'html'          : join(BEMBL_TECHS, 'html')
     });
 
 };
