@@ -1,0 +1,24 @@
+block example {
+
+    content: [
+        {
+            elem: 'title',
+            content: this.ctx.title
+        },
+        {
+            elem: 'live',
+            url: this.ctx.url
+        }
+    ]
+
+    elem live {
+
+        tag: 'iframe'
+
+        attrs: {
+            src: this.environ['site-root'] + '/examples/' + this.ctx.url
+        }
+
+    }
+
+}

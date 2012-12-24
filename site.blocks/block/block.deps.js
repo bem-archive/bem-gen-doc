@@ -3,6 +3,7 @@
         { block: 'static-text' },
         { block: 'menu' },
         { block: 'catalogue', elem: 'navigation' },
-        { elem: 'note' }
+        { block: 'example' },
+        { elem: 'note' },
     ]
 })

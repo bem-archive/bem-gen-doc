@@ -56,18 +56,7 @@ block block {
         }
 
         this._.isSimple(this.ctx.content), content: {
-            elem: 'example',
-            url: this.ctx.content + '.html'
-        }
-
-    }
-
-    elem 'example' {
-
-        tag: 'iframe'
-
-        attrs: {
-            src: this.environ['site-root'] + '/examples/' + this.ctx.url
+            this.ctx.content;
         }
 
     }
