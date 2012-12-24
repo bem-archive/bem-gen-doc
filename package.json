@@ -1,0 +1,16 @@
+{
+  "name": "bem-machine",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "bem": "git://github.com/bem/bem-tools.git#introspect",
+    "marked": "~0.2.5",
+    "shmakowiki": "~0.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bem/bem-machine"
+  },
+  "author": "Vladimir Varankin <nek.narqo@gmail.com>",
+  "licenses": "MIT"
+}
