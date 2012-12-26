@@ -79,7 +79,7 @@ BEM.JSON.decl('block', {
                 name: c.level,
                 content: c.content.map(function(item) {
                         item.block = 'example';
-                        item.url = item.url + '.html';
+                        item.url && (item.url = item.url + '.html');
                         return item;
                     })
             };

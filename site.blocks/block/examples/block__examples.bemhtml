@@ -1,0 +1,24 @@
+block block {
+
+    elem examples {
+
+        this._.isArray(this.ctx.content), content: {
+            var ctx = this.ctx,
+                i = 0,
+                l = ctx.content.length,
+                r = [];
+
+            while(i < l) {
+                r.push(apply(this.ctx.content = ctx.content[i++]));
+            }
+
+            return r;
+        }
+
+        this._.isSimple(this.ctx.content), content: {
+            this.ctx.content;
+        }
+
+    }
+
+}

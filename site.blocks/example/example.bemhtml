@@ -1,5 +1,7 @@
 block example {
 
+    default, !this.ctx.url: null
+
     js: true
 
     content: [
