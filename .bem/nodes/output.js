@@ -263,7 +263,6 @@ registry.decl(OutputNodeName, BemCreateNode, {
             outLevel = createLevel(PATH.join(this.level.dir, 'examples')),
             cache = {};
 
-
         exampleLevel.getItemsByIntrospection()
             .forEach(function(item) {
 
