@@ -16,43 +16,7 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp : /^.+?\.bundles$/,
 
-    getLibraries : function() {
-
-        /**
-         * Псевдо-репозиторий известных библиотек
-         */
-        var repo = {
-                'bem-bl' : {
-                    type        : 'git',
-                    url         : 'git://github.com/bem/bem-bl.git',
-                    treeish     : '0.3'
-                },
-                'bem-html' : {
-                    type        : 'git',
-                    url         : 'git://github.com/bem/bemhtml.git'
-                },
-                'bem-json' : {
-                    type        : 'git',
-                    url         : 'git://github.com/delfrrr/bem-json.git',
-                    npmPackages : false
-                }
-            },
-            /**
-             * Список библиотек которые нужно подключить в проект
-             */
-            libs = ['bem-bl', 'bem-html', 'bem-json'],
-            /** @type Function */
-            getLibRelPath = environ.getLibRelPath;
-
-        // возвращаем список необходимых библиотек
-        return libs.reduce(function(enabled, lib) {
-
-            repo[lib] && (enabled[getLibRelPath(lib)] = repo[lib]);
-            return enabled;
-
-        }, {});
-
-    },
+    libraries : ['bem-bl', 'bem-html', 'bem-json'],
 
     createCustomNodes : function(common, libs, blocks, bundles) {
 

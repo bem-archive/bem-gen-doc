@@ -46,4 +46,51 @@ var PATH = require('path'),
      */
     getLibRelPath = exports.getLibRelPath = function(lib) {
         return relative(PRJ_ROOT, getLibPath(lib));
+    },
+
+    /**
+     * Список изветсных библиотек блоков
+     * @exports getLibraries
+     * @return Object
+     */
+    getLibraries = exports.getLibraries = function() {
+        return require('./conf/current').libraries;
     };
+
+
+require('bem/lib/nodesregistry').decl('Arch', {
+
+    /**
+     * Задает список необходимых библиотек
+     * @param {Array} libs Массив идентификаторов необходимых библиотек
+     * @return {Object}
+     */
+    useLibraries : function(libs) {
+
+        var repo = getLibraries();
+
+        return libs.reduce(function(enabled, lib) {
+
+            if(repo[lib] == null)
+                throw new Error('Library ' + lib + ' is not registered!');
+
+            enabled[getLibRelPath(lib)] = repo[lib];
+            return enabled;
+
+        }, {});
+
+    },
+
+    /**
+     * @returns {Object}
+     * @override
+     */
+    getLibraries : function() {
+
+        var libs = this.libraries;
+        return Array.isArray(libs)?
+                this.useLibraries(libs) : libs;
+
+    }
+
+});
