@@ -9,8 +9,8 @@ var BEM = require('bem'),
     LIB_ROOT = environ.LIB_ROOT;
 
 
-exports.getBaseTechPath = require.resolve(PATH.join(LIB_ROOT, 'bem-bl/blocks-common/i-bem/bem/techs/html.js'));
-
+exports.getBaseTechPath = require.resolve(
+        environ.getLibPath('bem-bl', 'blocks-common/i-bem/bem/techs/html.js'));
 
 exports.techMixin = {
 
@@ -61,7 +61,6 @@ exports.techMixin = {
     getCreateResult : function(path, suffix, vars) {
 
         var prefix = vars.Prefix;
-        console.log(prefix);
         return this.getHtml(
             this.getBemhtml(prefix),
             this.getBemjson(prefix),

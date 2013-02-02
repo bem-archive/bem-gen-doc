@@ -7,15 +7,14 @@ var PATH = require('path'),
     LIB_ROOT = environ.LIB_ROOT,
 
     PRJ_TECHS = resolve('../techs'),
-    BEMBL_TECHS = join(environ.getLibPath('bem-bl'), 'blocks-common/i-bem/bem/techs');
+    BEMBL_TECHS = environ.getLibPath('bem-bl', 'blocks-common/i-bem/bem/techs');
 
 
 exports.baseLevelPath = require.resolve('./bundles.js');
 
-
 exports.getTechs = function() {
 
-    return require('BEM').util.extend(this.__base() || {}, {
+    return require('bem').util.extend(this.__base() || {}, {
         'blocks'        : '',
         'bemjson.js'    : '',
         'title.txt'     : '',
