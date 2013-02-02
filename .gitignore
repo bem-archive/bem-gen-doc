@@ -4,10 +4,6 @@
 .bem/cache
 .bem/snapshots
 node_modules/
-lib/
-
-site.bundles/*/*
-!site.bundles/.bem
-!site.bundles/*/*.bemdecl.js
-
+vendor
 release
+
