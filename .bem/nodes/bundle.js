@@ -5,7 +5,7 @@
 var PATH = require('path'),
     BEM = require('bem'),
     registry = require('bem/lib/nodesregistry'),
-    BundleNode = require('bem/lib/nodes/bundle').BundleNode,
+    BundleNode = require('bem/lib/nodes/bundle').BundleNodeName,
 
     environ = require('../environ'),
 
@@ -46,12 +46,10 @@ registry.decl(BundleNodeName, BundleNode, {
 
     getLevels : function(tech) {
 
-        var siteLevels = ['common.blocks', 'site.blocks'].map(function(level) {
-                return join(environ.PRJ_ROOT, level);
-            }),
-            bemblLevel = ['blocks-common', 'blocks-desktop'].map(function(level) {
-                return join(environ.getLibPath('bem-bl'), level);
-            });
+        var siteLevels = ['common.blocks', 'site.blocks']
+                .map(join.bind(null, environ.PRJ_ROOT)),
+            bemblLevel = ['blocks-common', 'blocks-desktop']
+                .map(environ.getLibPath.bind(null, 'bem-bl'));
 
         return bemblLevel.concat(siteLevels);
 

@@ -4,7 +4,7 @@
 
 var BEM = require('bem'),
     registry = require('bem/lib/nodesregistry'),
-    BundlesLevelNode = require('bem/lib/nodes/level').BundlesLevelNode,
+    BundlesLevelNode = require('bem/lib/nodes/level').BundlesLevelNodeName,
     BundleNodeName = require('./bundle').BundleNodeName,
 
     _ = BEM.require('underscore'),

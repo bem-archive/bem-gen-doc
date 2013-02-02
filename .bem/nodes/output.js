@@ -11,7 +11,7 @@ var PATH = require('path'),
 
     SHMAKOWIKI = require('shmakowiki'),
 
-    BemCreateNode = require('bem/lib/nodes/create').BemCreateNode,
+    BemCreateNode = require('bem/lib/nodes/create').BemCreateNodeName,
     IntrospectNodeName = require('./introspect').IntrospectNodeName,
 
     Q = BEM.require('qq'),

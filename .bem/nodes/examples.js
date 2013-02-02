@@ -245,8 +245,8 @@ registry.decl('MachineExampleNode', BundleNodeName, {
     getLevels : function() {
 
         return ([
-                'lib/bem-bl/blocks-common',
-                'lib/bem-bl/blocks-desktop',
+                'vendor/bem-bl/blocks-common',
+                'vendor/bem-bl/blocks-desktop',
                 'desktop.blocks'
             ])
             .map(function(level) {
