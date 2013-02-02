@@ -1,11 +1,15 @@
-var PATH = require('path'),
+var BEM = require('bem'),
+    PATH = require('path'),
+
+    /** @const */
+    __root = getGlobalRoot(),
 
     /** @type Function */
     join = PATH.join,
     /** @type Function */
     relative = PATH.relative,
     /** @type Function */
-    resolve = PATH.resolve.bind(null, __dirname),
+    resolve = PATH.resolve.bind(null, __root),
 
     /**
      * Путь до корня проекта
@@ -19,7 +23,7 @@ var PATH = require('path'),
      * @type String
      * @exports LIB_DIR
      */
-    LIB_DIR = exports.LIB_DIR = 'lib',
+    LIB_DIR = exports.LIB_DIR = 'vendor',
 
     /**
      * Путь до корня хранилища библиотек
@@ -29,68 +33,57 @@ var PATH = require('path'),
     LIB_ROOT = exports.LIB_ROOT = join(PRJ_ROOT, LIB_DIR),
 
     /**
+     * Имя директории с .bem-конфигами
+     * @type String
+     * @exports CONF_DIR
+     */
+    CONF_DIR = exports.CONF_DIR = 'configs',
+
+    /**
+     * Путь до директории с .bem-конфигами
+     * @type String
+     * @exports CONF_ROOT
+     */
+    CONF_ROOT = exports.CONF_ROOT = resolve(CONF_DIR),
+
+    /**
+     * «Текущая» конфигурация
+     * @exports getConf
+     * @returns {Object}
+     */
+    getConf = exports.getConf = function() {
+        return require(join(CONF_ROOT, 'current'));
+    },
+
+    /**
      * Абсолютный путь до библиотеки `lib`
      * @exports getLibPath
-     * @param {String} id библиотеки
+     * @param {String} lib id библиотеки
+     * @param {String} [...path]
      * @returns {String}
      */
-    getLibPath = exports.getLibPath = function(lib) {
-        return join(LIB_ROOT, lib);
+    getLibPath = exports.getLibPath = function() {
+        var args = [].splice.call(arguments, 0);
+        return join.apply(null, [LIB_ROOT].concat(args));
     },
 
     /**
      * Путь до библиотеки `lib` относительно корня проекта
      * @exports getLibRelPath
-     * @param {String} id библиотеки
+     * @param {String} lib id библиотеки
+     * @param {String} [...path]
      * @returns {String}
      */
-    getLibRelPath = exports.getLibRelPath = function(lib) {
-        return relative(PRJ_ROOT, getLibPath(lib));
-    },
-
-    /**
-     * Список изветсных библиотек блоков
-     * @exports getLibraries
-     * @return Object
-     */
-    getLibraries = exports.getLibraries = function() {
-        return require('./conf/current').libraries;
+    getLibRelPath = exports.getLibRelPath = function() {
+        return relative(PRJ_ROOT, getLibPath.apply(null, arguments));
     };
 
-
-require('bem/lib/nodesregistry').decl('Arch', {
-
-    /**
-     * Задает список необходимых библиотек
-     * @param {Array} libs Массив идентификаторов необходимых библиотек
-     * @return {Object}
-     */
-    useLibraries : function(libs) {
-
-        var repo = getLibraries();
-
-        return libs.reduce(function(enabled, lib) {
-
-            if(repo[lib] == null)
-                throw new Error('Library ' + lib + ' is not registered!');
-
-            enabled[getLibRelPath(lib)] = repo[lib];
-            return enabled;
-
-        }, {});
-
-    },
-
-    /**
-     * @returns {Object}
-     * @override
-     */
-    getLibraries : function() {
-
-        var libs = this.libraries;
-        return Array.isArray(libs)?
-                this.useLibraries(libs) : libs;
-
+function getGlobalRoot() {
+    var root = BEM.require('./env').getEnv('__root_level_dir');
+    if(!root) {
+        BEM.require('./logger').warn('[environ] variable "__root_level_dir" is not set properly');
+        root = __dirname;
     }
 
-});
+    return root;
+}

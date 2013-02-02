@@ -1,5 +1,3 @@
-var relative = require('path').relative.bind(null, __dirname);
-
 module.exports = {
 
     libraries : {

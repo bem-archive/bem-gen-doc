@@ -1,14 +1,12 @@
 /*global MAKE:true */
 
-var PATH = require('path'),
-    LOGGER = require('bem/lib/logger'),
+require('./nodes/arch');
 
-    environ = require('./environ'),
-
-    siteNodes = require('./nodes/site'),
+var siteNodes = require('./nodes/site'),
     examplesNodes = require('./nodes/examples'),
 
     SITE_NODE_ID = 'site';
+
 
 MAKE.decl('Arch', {
 
@@ -23,12 +21,14 @@ MAKE.decl('Arch', {
         var levels = ['common.blocks', 'desktop.blocks', 'test.blocks'];
 
         var node = new siteNodes.SiteNode({
-            id : SITE_NODE_ID,
+            id   : SITE_NODE_ID,
             arch : this.arch,
             levels : levels
         });
 
         this.arch.setNode(node);
+
+        libs && this.arch.addChildren(node, libs);
 
         return node.alterArch();
 
