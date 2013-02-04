@@ -112,20 +112,18 @@ registry.decl(NodeName, 'Node', {
      */
     createOutputNode : function(bundles, intraspector) {
 
-        var index = new outputNodes.IndexNode({
+        var outputNodeFactory = function(nodeClass, name) {
+            return new nodeClass({
                 root : this.root,
                 level : PATH.join(this.root, this.output),
                 techName : 'data.json',
-                item : { block : 'index' },
-                info : { title : 'Библиотека блоков' }
-            }),
-            catalogue = new outputNodes.CatalogueItemNode({
-                root : this.root,
-                level : PATH.join(this.root, this.output),
-                techName : 'data.json',
-                item : { block : 'catalogue' },
+                item : { block : name },
                 info : { title : 'Библиотека блоков' }
             });
+        }.bind(this);
+
+        var index = outputNodeFactory(outputNodes.IndexNode, 'index'),
+            catalogue = outputNodeFactory(outputNodes.CatalogueItemNode, 'catalogue');
 
         return Q.all([index, catalogue].map(function(node) {
             this.arch.setNode(node, this.getId(), bundles, intraspector);
