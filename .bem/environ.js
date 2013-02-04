@@ -35,7 +35,7 @@ var PATH = require('path'),
      * @type String
      * @exports LIB_DIR
      */
-    LIB_DIR = exports.LIB_DIR = 'vendor',
+    LIB_DIR = exports.LIB_DIR = '.',
 
     /**
      * Путь до корня хранилища библиотек
