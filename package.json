@@ -1,11 +1,13 @@
 {
   "name": "bem-gen-doc",
-  "version": "0.0.2",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
-    "bem": "git://github.com/bem/bem-tools.git#introspect",
     "marked": "~0.2.5",
     "shmakowiki": "~0.4.0"
+  },
+  "devDependencies": {
+    "bem": "git://github.com/bem/bem-tools.git#introspect"
   },
   "repository": {
     "type": "git",
