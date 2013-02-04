@@ -14,9 +14,7 @@ var PATH = require('path'),
     createLevel = BEM.createLevel,
     U = BEM.util,
 
-    IntrospectNodeName = exports.IntrospectNodeName = 'IntrospectNode',
-
-    NODE_ID = 'site-introspect*';
+    IntrospectNodeName = exports.IntrospectNodeName = 'IntrospectNode';
 
 
 /** @exports IntrospectNode */
@@ -79,26 +77,21 @@ registry.decl(IntrospectNodeName, 'Node', {
     },
 
     getMetaPath : function() {
-
         return this.__self.getMetaPath(this);
-
     },
 
     readMeta : function() {
-
         return this.__self.readMeta(this);
     },
 
     writeMeta : function(meta) {
-
         return this.__self.writeMeta(this, meta);
-
     }
 
 }, {
 
     createId : function(o) {
-        return NODE_ID;
+        return 'site-introspect*';
     },
 
     getMetaPath : function(o) {

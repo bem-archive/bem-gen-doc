@@ -392,10 +392,6 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
                     // сохраняем `data.json`
                     return _this.storeDataBundle(path, data);
                 })
-//                .then(function(data) {
-//                    _this.createBundleExamples(data);
-//                    return data;
-//                })
                 .then(function(data) {
                     // сохраняем `html`
                     return _this.storeResultBundle(item);
@@ -404,39 +400,6 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
         }));
 
     },
-
-    // TODO
-    /*
-    createBundleExamples : function(data) {
-
-        function forEachItem(data) {
-
-            if(Array.isArray(data)) {
-                data.forEach(function(item) {
-                    return forEachItem(item);
-                });
-                return;
-            } else if(data == null) {
-                return;
-            }
-
-            Object.keys(data).forEach(function(key) {
-
-                if(~['elem', 'mods', 'vals'].indexOf(key)) {
-                    forEachItem(data[key]);
-                }
-
-                if(key === 'examples')
-                    console.log('111', data[key]);
-
-            });
-
-        }
-
-        return forEachItem(data);
-
-    },
-    */
 
     /**
      * Процессор данных для технологий БЭМ-сущности

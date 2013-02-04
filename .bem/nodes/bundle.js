@@ -26,9 +26,7 @@ Object.defineProperty(exports, BundleNodeName, {
 registry.decl(BundleNodeName, BundleNode, {
 
     __constructor : function(o) {
-
         this.__base.apply(this, arguments);
-
     },
 
     getTechs : function() {
@@ -46,12 +44,12 @@ registry.decl(BundleNodeName, BundleNode, {
 
     getLevels : function(tech) {
 
-        var siteLevels = ['common.blocks', 'site.blocks']
-                .map(join.bind(null, environ.PRJ_ROOT)),
-            bemblLevel = ['blocks-common', 'blocks-desktop']
-                .map(environ.getLibPath.bind(null, 'bem-bl'));
+        var bemblLevels = ['blocks-common', 'blocks-desktop']
+                .map(environ.getLibPath.bind(null, 'bem-bl')),
+            siteLevels = ['common.blocks', 'site.blocks']
+                .map(join.bind(null, environ.PRJ_ROOT));
 
-        return bemblLevel.concat(siteLevels);
+        return bemblLevels.concat(siteLevels);
 
     },
 

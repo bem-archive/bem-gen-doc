@@ -16,10 +16,7 @@ var PATH = require('path'),
     BundlesNodeName = exports.BundlesNodeName = 'MachineBundlesNode',
 
     createLevel = BEM.createLevel,
-    U = BEM.util,
-
-    /** {String} */
-    NODE_ID = 'machine-bundles';
+    U = BEM.util;
 
 
 /** @exports MachineBundlesNode */
@@ -59,19 +56,15 @@ registry.decl(BundlesNodeName, 'Node', {
     },
 
     getPath : function() {
-
         return PATH.resolve(this.root, this.path);
-
     },
 
     /**
-     * FIXME: hardcode
+     * Базовый конфиг для уровня бандлов сайта
      * @returns {String}
      */
     getSiteRootProto : function() {
-
         return PATH.resolve(__dirname, '../levels/bundles.js');
-
     },
 
     /**
@@ -188,21 +181,15 @@ registry.decl(BundlesNodeName, 'Node', {
 
             })
             .then(function() {
-
                 // FIXME: hardcode
                 return Q.all(['index', 'catalogue'].map(_this.createSiteBundle, _this));
-
             })
             .then(function() {
-
                 return ctx.arch.withLock(_this.createSiteBundlesNode, _this);
-
             })
             .then(function() {
-
                 LOGGER.info(ctx.arch.toString());
                 return ctx.arch;
-
             });
 
     }
@@ -210,7 +197,7 @@ registry.decl(BundlesNodeName, 'Node', {
 }, {
 
     createId : function(o) {
-        return NODE_ID + '*';
+        return 'machine-bundles*';
     }
 
 });
