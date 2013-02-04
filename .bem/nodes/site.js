@@ -8,9 +8,11 @@ var PATH = require('path'),
     registry = require('bem/lib/nodesregistry'),
 
     outputNodes = require('./output'),
-    SiteBundlesNode= require('./build').MachineBundlesNode,
+
+    SiteBundlesNode = require('./build').MachineBundlesNode,
     IntrospectNode = require('./introspect').IntrospectNode,
     ExamplesNode = require('./examples').MachineExamplesNode,
+//    SetsNode = require('./sets').SetsNode,
 
     Q = BEM.require('q'),
 
@@ -106,6 +108,19 @@ registry.decl(NodeName, 'Node', {
         return node.getId();
 
     },
+
+    /*
+    createExamplesNode : function() {
+
+        return new SetsNode({
+                root : this.root,
+                arch : this.arch,
+                levels : this.levels
+            })
+            .alterArch(this.getId());
+
+    },
+    */
 
     /**
      * FIXME: BemCreateNode нельзя инициализировать из Arch, если output-уровень еще не создан

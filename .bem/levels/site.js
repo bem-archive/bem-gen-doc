@@ -1,6 +1,7 @@
 var BEM = require('bem'),
     PATH = require('path'),
 
+    environ = require('../environ'),
     join = PATH.join,
 
     PRJ_TECHS = PATH.resolve(__dirname, '../techs');
@@ -11,8 +12,8 @@ exports.getTechs = function() {
 
     return BEM.util.extend(this.__base() || {}, {
 
-        'bemjson.js'    : join(PRJ_TECHS, 'bemjson.js'),
-        'html'          : join(PRJ_TECHS, 'html')
+        'bemjson.js' : join(PRJ_TECHS, 'bemjson.js'),
+        'html'       : join(PRJ_TECHS, 'html')
 
     });
 
