@@ -2,10 +2,14 @@
 
 require('./nodes/arch');
 
-var siteNodes = require('./nodes/site'),
-    examplesNodes = require('./nodes/examples'),
+try {
+    var siteNodes = require('./nodes/site');
+} catch(e) {
+    if(e.code !== 'MODULE_NOT_FOUND')
+        throw e;
 
-    SITE_NODE_ID = 'site';
+    siteNodes = false;
+}
 
 
 MAKE.decl('Arch', {
@@ -18,10 +22,13 @@ MAKE.decl('Arch', {
 
     createCustomNodes : function(common, libs, blocks, bundles) {
 
+        if(siteNodes === false)
+            return;
+
         var levels = ['common.blocks', 'desktop.blocks', 'test.blocks'];
 
         var node = new siteNodes.SiteNode({
-            id   : SITE_NODE_ID,
+            id   : 'site',
             arch : this.arch,
             levels : levels
         });
