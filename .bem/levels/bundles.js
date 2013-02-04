@@ -6,7 +6,6 @@ var PATH = require('path'),
     resolve = PATH.resolve.bind(null, __dirname),
 
     PRJ_TECHS = resolve('../techs'),
-    BEMHTML_TECHS = environ.getLibPath('bem-html', '.bem/techs'),
     BEMBL_TECHS = environ.getLibPath('bem-bl', 'blocks-common/i-bem/bem/techs');
 
 exports.getTechs = function() {
@@ -28,22 +27,3 @@ exports.getTechs = function() {
 
 // Do not create any techs files during bundle creation by default
 exports.defaultTechs = [];
-
-// Level naming scheme
-exports['get-elem'] = function(block, elem) {
-    return [block, elem].join('/');
-};
-
-exports['match-elem'] = function(path) {
-    var m = this.matchRe(),
-        match = (new RegExp([ '^(' + m + ')',
-            '(' + m + ')(.*?)$'].join('/'))).exec(path);
-
-    if (!match) return false;
-
-    return {
-        block: match[1],
-        elem: match[2],
-        suffix: match[3]
-    };
-};
