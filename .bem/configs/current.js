@@ -15,7 +15,12 @@ module.exports = {
             type        : 'git',
             url         : 'git://github.com/delfrrr/bem-json.git',
             npmPackages : false
-        }
+        },
+        'bem-pr' : {
+            type        : 'git',
+            url         : 'git://github.com/narqo/bem-pr.git',
+            npmPackages : false
+        },
 
     }
 
