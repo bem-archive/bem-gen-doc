@@ -64,7 +64,7 @@ registry.decl(BundlesNodeName, 'Node', {
      * @returns {String}
      */
     getSiteRootProto : function() {
-        return PATH.resolve(__dirname, '../levels/bundles.js');
+        return PATH.resolve(__dirname, '../levels/site.js');
     },
 
     /**
