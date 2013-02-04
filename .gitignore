@@ -7,3 +7,7 @@ node_modules/
 vendor
 release
 
+*.bundles
+!*.bundles/.bem
+!*.bundles/*/*.bemdecl.js
+
