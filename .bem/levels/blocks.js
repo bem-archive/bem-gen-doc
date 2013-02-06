@@ -9,18 +9,18 @@ var PATH = require('path'),
 
 
 exports.getTechs = function() {
+
     return {
-            'title.txt' : 'title.txt',
+        'title.txt'  : 'title.txt',
+        'css'        : 'css',
+        'js'         : 'js',
+        'priv.js'    : 'priv.js',
 
-            'css'       : 'css',
-            'js'        : 'js',
-//            'examples'  : 'bem/lib/techs/examples.js',
-            'priv.js'   : 'priv.js',
+        'bemhtml'    : join(BEMBL_TECHS, 'bemhtml'),
 
-            'bemhtml'   : join(BEMBL_TECHS, 'bemhtml'),
+        'examples'   : '',
+        'desc.md'    : join(PRJ_TECHS, 'desc.md'),
+        'bemjson.js' : join(PRJ_TECHS, 'bemjson.js')
+    };
 
-            'examples'  : '', //join(PRJ_TECHS, 'examples'),
-            'desc.md'   : join(PRJ_TECHS, 'desc.md'),
-            'bemjson.js': join(PRJ_TECHS, 'bemjson.js')
-        };
 };
