@@ -116,7 +116,8 @@ registry.decl(ExamplesNodeName, 'Node', {
 
         level = createLevel(level.getPathByObj(bemitem, bemitem.tech));
 
-        return this.makeLevel(outPath, level.dir, true)
+        // FIXME: hardcode
+        return this.makeLevel(outPath, PATH.join(this.root, '.bem/leves/bundles.js'), true)
             .then(function() {
 
                 outLevel = createLevel(outPath);
