@@ -17,15 +17,12 @@ MAKE.decl('Arch', {
 
         var levels = ['common.blocks', 'desktop.blocks', 'test.blocks'];
 
-        var node = new siteNodes.SiteNode({
-            id   : 'site',
-            arch : this.arch,
-            levels : levels
-        });
-
-        this.arch.setNode(node, null, libs);
-
-        return node.alterArch();
+        return new siteNodes.SiteNode({
+                id   : 'site',
+                arch : this.arch,
+                levels : levels
+            })
+            .alterArch(null, libs);
 
     }
 

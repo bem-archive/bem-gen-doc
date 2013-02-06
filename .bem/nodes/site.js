@@ -9,6 +9,8 @@ var PATH = require('path'),
 
     outputNodes = require('./output'),
 
+    nodes = BEM.require('./nodes/node'),
+
     SiteBundlesNode = require('./build').MachineBundlesNode,
     IntrospectNode = require('./introspect').IntrospectNode,
     ExamplesNode = require('./examples').MachineExamplesNode,
@@ -30,7 +32,7 @@ Object.defineProperty(exports, NodeName, {
 /**
  * @namespace
  */
-registry.decl(NodeName, 'Node', {
+registry.decl(NodeName, nodes.NodeName, {
 
     __constructor : function(o) {
 
@@ -49,25 +51,40 @@ registry.decl(NodeName, 'Node', {
 
     },
 
-    alterArch : function() {
+    alterArch : function(parent, children) {
 
         var _this = this;
+        return Q.when(_this.createCommonSiteNode.call(_this, parent))
+            .then(function(common) {
+                parent && (common = [common].concat(parent));
 
-        return Q.all([this.createSiteBundlesNode(), this.createIntrospectNode()])
-            .then(function(bundles, intraspector) {
-                return _this.createOutputNode(bundles, intraspector);
+                return Q.all([
+                    common,
+                    _this.createSiteBundlesNode(common, children),
+                    _this.createIntrospectNode(common, children)
+                ]);
+            })
+            .spread(_this.createOutputNode.bind(_this))
+            .then(function(common) {
+                return _this.createExamplesNode(common, children);
             })
             .then(function() {
-                return _this.createExamplesNode();
-            })
-            .then(function() {
-                LOGGER.info(_this.arch.toString());
+//                LOGGER.info(_this.arch.toString());
                 return _this.arch;
             });
 
     },
 
-    createSiteBundlesNode : function() {
+    createCommonSiteNode : function(parent) {
+
+        var node = new nodes.Node('site');
+        this.arch.setNode(node, parent);
+
+        return node.getId();
+
+    },
+
+    createSiteBundlesNode : function(parent, children) {
 
         var node = new SiteBundlesNode({
             root    : this.root,
@@ -75,13 +92,13 @@ registry.decl(NodeName, 'Node', {
             levels  : this.levels
         });
 
-        this.arch.setNode(node, this.getId());
+        this.arch.setNode(node, parent, children);
 
         return node.getId();
 
     },
 
-    createIntrospectNode : function() {
+    createIntrospectNode : function(parent, children) {
 
         var node = new IntrospectNode({
             root : this.root,
@@ -89,13 +106,13 @@ registry.decl(NodeName, 'Node', {
             lands : this.langs,
         });
 
-        this.arch.setNode(node, this.getId());
+        this.arch.setNode(node, parent, children);
 
         return node.getId();
 
     },
 
-    createExamplesNode : function() {
+    createExamplesNode : function(parent, children) {
 
         var node = new ExamplesNode({
             root : this.root,
@@ -103,7 +120,7 @@ registry.decl(NodeName, 'Node', {
             levels : this.levels
         });
 
-        this.arch.setNode(node, this.getId());
+        this.arch.setNode(node, parent, children);
 
         return node.getId();
 
@@ -125,7 +142,7 @@ registry.decl(NodeName, 'Node', {
     /**
      * FIXME: BemCreateNode нельзя инициализировать из Arch, если output-уровень еще не создан
      */
-    createOutputNode : function(bundles, intraspector) {
+    createOutputNode : function(parent, bundles, intraspector) {
 
         var outputNodeFactory = function(nodeClass, name) {
             return new nodeClass({
@@ -141,16 +158,13 @@ registry.decl(NodeName, 'Node', {
             catalogue = outputNodeFactory(outputNodes.CatalogueItemNode, 'catalogue');
 
         return Q.all([index, catalogue].map(function(node) {
-            this.arch.setNode(node, this.getId(), bundles, intraspector);
-            return this.getId();
-        }, this));
+                this.arch.setNode(node, parent, bundles, intraspector);
+                return node;
+            }, this))
+            .then(function() {
+                return parent;
+            });
 
-    }
-
-}, {
-
-    createId : function(o) {
-        return o.id;
     }
 
 });
