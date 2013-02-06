@@ -2,14 +2,7 @@
 
 require('./nodes/arch');
 
-try {
-    var siteNodes = require('./nodes/site');
-} catch(e) {
-    if(e.code !== 'MODULE_NOT_FOUND')
-        throw e;
-
-    siteNodes = false;
-}
+var siteNodes = require('./nodes/site');
 
 
 MAKE.decl('Arch', {
@@ -20,10 +13,7 @@ MAKE.decl('Arch', {
 
     libraries : ['bem-bl', 'bem-json', 'bem-pr'],
 
-    createCustomNodes : function(common, libs, blocks, bundles) {
-
-        if(siteNodes === false)
-            return;
+    createCustomNodes : function(common, libs) {
 
         var levels = ['common.blocks', 'desktop.blocks', 'test.blocks'];
 
@@ -33,9 +23,7 @@ MAKE.decl('Arch', {
             levels : levels
         });
 
-        this.arch.setNode(node);
-
-        libs && this.arch.addChildren(node, libs);
+        this.arch.setNode(node, null, libs);
 
         return node.alterArch();
 
