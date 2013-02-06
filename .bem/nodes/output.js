@@ -250,6 +250,18 @@ registry.decl(OutputNodeName, BemCreateNode, {
         return this['get-tech-data'].apply(this, arguments);
     },
 
+    'get-i18n.title.txt-data' : function(prefix, tech) {
+        return this['get-title.txt-data'].apply(this, arguments);
+    },
+
+    'get-i18n.desc.md-data' : function(prefix, tech) {
+        return this['get-desc.md-data'].apply(this, arguments);
+    },
+
+    'get-i18n.desc.wiki-data' : function(prefix, tech) {
+        return this['get-desc.wiki-data'].apply(this, arguments);
+    },
+
     'get-examples-data' : function(prefix, tech) {
 
         // FIXME: hardcode
@@ -428,17 +440,20 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
             switch(tech) {
 
             case 'title.txt':
+            case 'i18n.title.txt':
                 key = 'title';
                 content = d;
                 break;
 
             case 'desc.md':
+            case 'i18n.desc.md':
                 key = 'description';
                 // TODO: move to `bemtree` & generate bemjson there from Markdown's AST
                 //content = marked(d[level.getTech(tech).getSuffixForLang(lang)]);
                 break;
 
             case 'desc.wiki':
+            case 'i18n.desc.wiki':
                 key = 'description';
                 // TODO: move to node
                 content = SHMAKOWIKI.shmakowikiToBemjson(d);
