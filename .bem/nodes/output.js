@@ -10,6 +10,7 @@ var PATH = require('path'),
     registry = require('bem/lib/nodesregistry'),
 
     SHMAKOWIKI = require('shmakowiki'),
+    MD = require('marked').setOptions({ gfm : true, pedantic : false, sanitize : false }),
 
     BemCreateNode = require('bem/lib/nodes/create').BemCreateNodeName,
     IntrospectNodeName = require('./introspect').IntrospectNodeName,
@@ -449,7 +450,7 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
             case 'i18n.desc.md':
                 key = 'description';
                 // TODO: move to `bemtree` & generate bemjson there from Markdown's AST
-                //content = marked(d[level.getTech(tech).getSuffixForLang(lang)]);
+                content = MD(d);
                 break;
 
             case 'desc.wiki':
