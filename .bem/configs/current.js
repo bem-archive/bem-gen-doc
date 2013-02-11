@@ -1,5 +1,5 @@
 module.exports = {
 
-    libraries : require('../repo')
+    libraries : require('../repo.db')
 
 };
