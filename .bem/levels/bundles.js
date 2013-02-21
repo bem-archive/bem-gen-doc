@@ -11,12 +11,15 @@ var PATH = require('path'),
 exports.getTechs = function() {
 
     return {
+        'blocks'        : '',
         'bemjson.js'    : '',
+
         'bemdecl.js'    : 'bemdecl.js',
         'deps.js'       : 'deps.js',
         'js'            : 'js-i',
         'css'           : 'css',
 
+        'html'          : join(BEMBL_TECHS, 'html'),
         'bemhtml.js'    : join(BEMBL_TECHS, 'bemhtml')
     };
 

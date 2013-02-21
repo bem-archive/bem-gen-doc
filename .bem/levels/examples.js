@@ -1,4 +1,5 @@
 var PATH = require('path'),
+    BEM = require('bem'),
     environ = require('../environ'),
 
     join = PATH.join,
@@ -10,7 +11,7 @@ var PATH = require('path'),
 
 exports.getTechs = function() {
 
-    return require('bem').util.extend(require('./bundles.js').getTechs(), {
+    return BEM.util.extend(require('./bundles.js').getTechs(), {
         'blocks'        : '',
         'bemjson.js'    : '',
         'title.txt'     : '',
