@@ -31,8 +31,8 @@ exports['match-elem'] = function(path) {
     if (!match) return false;
 
     return {
-        block: match[1],
-        elem: match[2],
-        suffix: match[3]
+        block  : match[1],
+        elem   : match[2],
+        suffix : match[3]
     };
 };
