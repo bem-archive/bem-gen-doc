@@ -40,6 +40,10 @@ module.exports = {
     'bl-controls' : {
         type     : 'git',
         url      : 'git://github.com/bem/bl-controls.git'
+    },
+    'bem-yana' : {
+        type     : 'git',
+        url      : 'git://github.com/narqo/bem-yana.git'
     }
 
 };
