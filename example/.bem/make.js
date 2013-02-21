@@ -12,7 +12,7 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp : /^.+?\.bundles$/,
 
-    libraries : ['bem-bl', 'bem-json', 'bem-pr'],
+//    libraries : ['bem-bl', 'bem-json', 'bem-pr'],
 
     createCustomNodes : function(common, libs) {
 
@@ -50,7 +50,7 @@ MAKE.decl('MachineExampleNode', {
 
         levels.push(PATH.resolve(environ.PRJ_ROOT, 'common.blocks'));
 
-        levels.push([
+        levels.concat([
             'desktop.blocks',
             'test.blocks'
         ].map(PATH.resolve.bind(this.root)));
