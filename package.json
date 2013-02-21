@@ -13,6 +13,6 @@
     "type": "git",
     "url": "git://github.com/bem/bem-gen-doc"
   },
-  "author": "Vladimir Varankin <nek.narqo@gmail.com>",
+  "author": "Vladimir Varankin <varankinv@yandex-team.ru> (http://github.com/narqo)",
   "licenses": "MIT"
 }
