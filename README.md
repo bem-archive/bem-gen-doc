@@ -4,6 +4,8 @@ BEM-GEN-DOC
 **bem-gen-doc** is a documentation generator which converts documentation of BEM-library's items
 (blocks, elements or modifiers) into HTML website.
 
+_This project is still under the heavy development_
+
 Requirements
 ------------
 
