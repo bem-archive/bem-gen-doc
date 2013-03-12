@@ -57,20 +57,23 @@ registry.decl(IntrospectNodeName, 'Node', {
 
     getStruct : function() {
 
-        var decls = this.paths.reduce(function(decls, level) {
+        var root = this.root,
+            decls = this.paths.reduce(function(decls, level) {
 
-            createLevel(level).getDeclByIntrospection().forEach(function(decl) {
+                var levelPath = PATH.resolve(root, level);
 
-                var name = decl.name;
+                createLevel(levelPath).getDeclByIntrospection().forEach(function(decl) {
 
-                decl.level = { path: level };
-                (decls[name] || (decls[name] = [])).push(decl);
+                    var name = decl.name;
 
-            });
+                    decl.level = { path: level };
+                    (decls[name] || (decls[name] = [])).push(decl);
 
-            return decls;
+                });
 
-        }, {});
+                return decls;
+
+            }, {});
 
         return Q.shallow(decls);
 
