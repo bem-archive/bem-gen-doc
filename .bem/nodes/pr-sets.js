@@ -74,7 +74,7 @@ registry.decl(ExamplesNodeName, nodes.NodeName, {
 
     createId : function() {
         // XXX: hardcode
-        return 'examples*';
+        return 'machine-examples*';
     }
 
 });

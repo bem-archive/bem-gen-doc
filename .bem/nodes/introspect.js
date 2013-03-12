@@ -91,7 +91,7 @@ registry.decl(IntrospectNodeName, 'Node', {
 }, {
 
     createId : function(o) {
-        return 'site-introspect*';
+        return 'machine-introspect*';
     },
 
     getMetaPath : function(o) {
