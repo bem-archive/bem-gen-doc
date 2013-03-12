@@ -16,7 +16,7 @@ exports.getTechs = function() {
         'bemjson.js'    : '',
         'title.txt'     : '',
 
-        'bemhtml.js'    : join(BEMBL_TECHS, 'bemhtml'),
+        'bemhtml'       : join(BEMBL_TECHS, 'bemhtml'),
         'html'          : join(BEMBL_TECHS, 'html')
     });
 
