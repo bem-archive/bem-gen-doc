@@ -25,6 +25,7 @@ MAKE.decl('Arch', {
         return new siteNodes.SiteNode({
                 id   : 'site',
                 arch : this.arch,
+                root : this.root,
                 levels : levels
             })
             .alterArch(null, libs);
