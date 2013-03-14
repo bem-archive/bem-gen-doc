@@ -125,19 +125,6 @@ registry.decl(NodeName, nodes.NodeName, {
 
     },
 
-    /*
-    createExamplesNode : function() {
-
-        return new SetsNode({
-                root : this.root,
-                arch : this.arch,
-                levels : this.levels
-            })
-            .alterArch(this.getId());
-
-    },
-    */
-
     /**
      * FIXME: BemCreateNode нельзя инициализировать из Arch, если output-уровень еще не создан
      */
