@@ -13,8 +13,7 @@ var PATH = require('path'),
 
     SiteBundlesNode = require('./build').MachineBundlesNode,
     IntrospectNode = require('./introspect').IntrospectNode,
-    ExamplesNode = require('./examples').MachineExamplesNode,
-//    SetsNode = require('./sets').SetsNode,
+    ExamplesNode = require('./pr-sets').MachineExamplesNode,
 
     Q = BEM.require('q'),
 
@@ -43,8 +42,6 @@ registry.decl(NodeName, nodes.NodeName, {
 
         // FIXME: hardcode
         this.output = 'release';
-        // FIXME: hardcode
-        this.examples = PATH.join(this.output, 'examples');
 
         this.levels = o.levels;
         this.langs = o.langs;
@@ -65,8 +62,8 @@ registry.decl(NodeName, nodes.NodeName, {
                 ]);
             })
             .spread(_this.createOutputNode.bind(_this))
-            .then(function(common) {
-                return _this.createExamplesNode(common, children);
+            .spread(function(common, bundle) {
+                return _this.createExamplesNode(common, bundle, children);
             })
             .then(function() {
 //                LOGGER.info(_this.arch.toString());
@@ -112,32 +109,21 @@ registry.decl(NodeName, nodes.NodeName, {
 
     },
 
-    createExamplesNode : function(parent, children) {
+    createExamplesNode : function(common, bundles, children) {
+        var arch = this.arch,
+            node = new ExamplesNode({
+                root : this.root,
+                output : this.output,
+                sources : this.levels
+            });
 
-        var node = new ExamplesNode({
-            root : this.root,
-            output : this.examples,
-            levels : this.levels
-        });
+        arch.setNode(node, common, bundles);
 
-        this.arch.setNode(node, parent, children);
+        children && arch.addChildren(node, children);
 
         return node.getId();
 
     },
-
-    /*
-    createExamplesNode : function() {
-
-        return new SetsNode({
-                root : this.root,
-                arch : this.arch,
-                levels : this.levels
-            })
-            .alterArch(this.getId());
-
-    },
-    */
 
     /**
      * FIXME: BemCreateNode нельзя инициализировать из Arch, если output-уровень еще не создан
@@ -162,7 +148,7 @@ registry.decl(NodeName, nodes.NodeName, {
                 return node;
             }, this))
             .then(function() {
-                return parent;
+                return [parent, bundles];
             });
 
     }

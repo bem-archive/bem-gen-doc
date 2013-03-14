@@ -1,4 +1,5 @@
 /**
+ * THIS MODULES IS DEPRECATED, USE `pr-examples.js`
  * @module nodes/examples
  */
 

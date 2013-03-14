@@ -7,6 +7,8 @@ var PATH = require('path'),
     LOGGER = require('bem/lib/logger'),
     registry = require('bem/lib/nodesregistry'),
 
+    createNodes = require('bem/lib/nodes/create'),
+
     BundlesLevelNode = require('./level').MachineBundlesLevelNode,
 
     Q = BEM.require('q'),
@@ -145,6 +147,35 @@ registry.decl(BundlesNodeName, 'Node', {
 
     },
 
+    /**
+     * @param name
+     * @returns {Function}
+     */
+    createSiteSetsNode : function(name) {
+
+        var ctx = this.ctx;
+
+        return function() {
+
+            var arch = ctx.arch,
+                level = this.getSiteRoot(),
+                tech = 'sets',
+                item = { block : name, tech : tech },
+
+                node = new createNodes.BemCreateNode({
+                    root     : this.root,
+                    level    : level,
+                    item     : item,
+                    techName : tech
+                });
+
+            arch.setNode(node, arch.getParents(this));
+
+            return node.getId();
+        };
+
+    },
+
     createSiteBundlesNode : function() {
 
         var arch = this.ctx.arch,
@@ -183,6 +214,9 @@ registry.decl(BundlesNodeName, 'Node', {
             .then(function() {
                 // FIXME: hardcode
                 return Q.all(['index', 'catalogue'].map(_this.createSiteBundle, _this));
+            })
+            .then(function() {
+                return ctx.arch.withLock(_this.createSiteSetsNode('examples'), _this);
             })
             .then(function() {
                 return ctx.arch.withLock(_this.createSiteBundlesNode, _this);

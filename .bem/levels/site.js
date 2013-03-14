@@ -13,7 +13,8 @@ exports.getTechs = function() {
     return BEM.util.extend(this.__base() || {}, {
 
         'bemjson.js' : join(PRJ_TECHS, 'bemjson.js'),
-        'html'       : join(PRJ_TECHS, 'html')
+        'html'       : join(PRJ_TECHS, 'html'),
+        'sets'       : join(PRJ_TECHS, 'sets')
 
     });
 

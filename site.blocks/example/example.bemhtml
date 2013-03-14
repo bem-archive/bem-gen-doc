@@ -20,7 +20,7 @@ block example {
         tag: 'iframe'
 
         attrs: {
-            src: this.environ['site-root'] + '/examples/' + this.ctx.url
+            src: this.environ['site-root'] + '/examples/examples.sets/' + this.ctx.url
         }
 
     }
