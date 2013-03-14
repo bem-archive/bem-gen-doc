@@ -12,7 +12,7 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp : /^.+?\.bundles$/,
 
-//    libraries : ['bem-bl', 'bem-json', 'bem-pr'],
+    libraries : ['bem-bl', 'bem-json', 'bem-pr'],
 
     createCustomNodes : function(common, libs) {
 
@@ -25,6 +25,7 @@ MAKE.decl('Arch', {
         return new siteNodes.SiteNode({
                 id   : 'site',
                 arch : this.arch,
+                root : this.root,
                 levels : levels
             })
             .alterArch(null, libs);
@@ -33,32 +34,32 @@ MAKE.decl('Arch', {
 
 });
 
-MAKE.decl('MachineExampleNode', {
 
-    /**
-     * FIXME: hardcode
-     * @returns {Array}
-     */
+MAKE.decl('ExampleNode', {
+
+    getTechs : function() {
+        return [
+            'bemjson.js',
+            'bemdecl.js',
+            'deps.js',
+            'bemhtml',
+            'css',
+            'js',
+            'html'
+            ];
+    },
+
     getLevels : function() {
-
-        var levels = [
-                 'bem-bl/blocks-common',
-                 'bem-bl/blocks-desktop'
-             ]
-            .map(PATH.join.bind(null, environ.LIB_ROOT));
-
-
-        levels.push(PATH.resolve(environ.PRJ_ROOT, 'common.blocks'));
-
-        levels.concat([
-            'desktop.blocks',
-            'test.blocks'
-        ].map(PATH.resolve.bind(this.root)));
-
-        levels.push(PATH.resolve(this.root, PATH.dirname(this.getNodePrefix()), 'blocks'));
-
-        return levels;
-
+        return [
+                'blocks-common',
+                'blocks-desktop'
+            ].map(environ.getLibPath.bind(null, 'bem-bl'))
+            .concat([
+                '../common.blocks',
+                'desktop.blocks',
+                'test.blocks',
+                this.rootLevel.getTech('blocks').getPath(this.getSourceNodePrefix())
+            ].map(PATH.resolve.bind(null, this.root)));
     }
 
 });

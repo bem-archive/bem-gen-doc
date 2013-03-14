@@ -273,7 +273,7 @@ registry.decl(OutputNodeName, BemCreateNode, {
             return;
 
         var exampleLevel = createLevel(path),
-            outLevel = createLevel(PATH.join(this.level.dir, 'examples')),
+            outLevel = createLevel(this.level.getPathByObj({ block : 'example' }, 'sets')),
             cache = {};
 
         exampleLevel.getItemsByIntrospection()
@@ -313,7 +313,7 @@ registry.decl(OutputNodeName, BemCreateNode, {
 });
 
 
-/** @examples IndexNode */
+/** @exports IndexNode */
 Object.defineProperty(exports, IndexNodeName, {
     'get' : function() {
         return registry.getNodeClass(IndexNodeName);
@@ -372,7 +372,7 @@ registry.decl(IndexNodeName, OutputNodeName, {
 });
 
 
-/** @examples CatalogueItemNode */
+/** @exports CatalogueItemNode */
 Object.defineProperty(exports, CatalogueItemNodeName, {
     'get' : function() {
         return registry.getNodeClass(CatalogueItemNodeName);

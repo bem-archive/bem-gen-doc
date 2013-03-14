@@ -1,19 +1,16 @@
 var PATH = require('path'),
-    ENV = require('bem/lib/env'),
     GLOBAL_ROOT_NAME = '__root_level_dir';
 
 // XXX: `__root_level_dir` должна быть установлена только один раз
-//ENV.getEnv(GLOBAL_ROOT_NAME) ||
-//  ENV.setEnv(GLOBAL_ROOT_NAME, PATH.dirname(__dirname));
-
 // FIXME: подумать, как обойтись без `env`
 process.env[GLOBAL_ROOT_NAME] ||
     (process.env[GLOBAL_ROOT_NAME] = PATH.dirname(__dirname));
 
 
-var environ = require('../environ');
+var environ = require('../environ'),
+    registry = require('bem/lib/nodesregistry');
 
-require('bem/lib/nodesregistry').decl('Arch', {
+registry.decl('Arch', {
 
     /**
      * Задает список необходимых библиотек
@@ -24,14 +21,15 @@ require('bem/lib/nodesregistry').decl('Arch', {
 
         // список изветсных библиотек блоков
         var repo = environ.getConf().libraries,
-            getLibRelPath = environ.getLibRelPath;
+            relative = PATH.relative.bind(null, this.root),
+            getLibPath = environ.getLibPath;
 
         return libs.reduce(function(enabled, lib) {
 
             if(repo[lib] == null)
                 throw new Error('Library ' + lib + ' is not registered!');
 
-            enabled[getLibRelPath(lib)] = repo[lib];
+            enabled[relative(getLibPath(lib))] = repo[lib];
             return enabled;
 
         }, {});
@@ -47,6 +45,24 @@ require('bem/lib/nodesregistry').decl('Arch', {
         var libs = this.libraries;
         return Array.isArray(libs)?
                 this.useLibraries(libs) : libs;
+
+    },
+
+    /**
+     * @returns {Array}
+     * @override
+     */
+    createBlockLibrariesNodes : function() {
+
+        var libs = this.__base.apply(this, arguments),
+            libsNodeName = environ.LIB_DIR;
+
+        if(libsNodeName && libsNodeName !== '.') {
+            var node = new (registry.getNodeClass('Node'))(libsNodeName);
+            this.arch.setNode(node, null, libs);
+        }
+
+        return libs;
 
     }
 
