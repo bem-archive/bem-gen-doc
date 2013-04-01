@@ -4,10 +4,11 @@
   "private": true,
   "dependencies": {
     "marked": "~0.2.5",
-    "shmakowiki": "~0.4.0"
+    "shmakowiki": "~0.4.0",
+    "mkdirp": "~0.3.5"
   },
   "devDependencies": {
-    "bem": "git://github.com/bem/bem-tools.git#introspect"
+    "bem": "~0.5.20"
   },
   "repository": {
     "type": "git",
