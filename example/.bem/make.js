@@ -1,10 +1,10 @@
 /*global MAKE:true */
 
 require('../../.bem/nodes/arch');
+require('../../.bem/nodes');
 
 var PATH = require('path'),
-    environ = require('../../.bem/environ'),
-    siteNodes = require('../../.bem/nodes/site');
+    environ = require('../../.bem/environ');
 
 MAKE.decl('Arch', {
 
@@ -12,24 +12,15 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp : /^.+?\.bundles$/,
 
-    libraries : ['bem-bl', 'bem-json', 'bem-pr'],
+    libraries : ['bem-bl', 'bem-json', 'bem-pr']
 
-    createCustomNodes : function(common, libs) {
+});
 
-        /**
-         * A set of levels to build site from
-         * @type Array
-         */
-        var levels = ['../common.blocks', 'desktop.blocks', 'test.blocks'];
 
-        return new siteNodes.SiteNode({
-                id   : 'site',
-                arch : this.arch,
-                root : this.root,
-                levels : levels
-            })
-            .alterArch(null, libs);
+MAKE.decl('GenDocNode', {
 
+    getSources : function() {
+        return ['../common.blocks', 'desktop.blocks', 'test.blocks'];
     }
 
 });
