@@ -13,7 +13,7 @@ var PATH = require('path'),
 
     SiteBundlesNode = require('./build').MachineBundlesNode,
     IntrospectNode = require('./introspect').IntrospectNode,
-    ExamplesNode = require('./pr-sets').MachineExamplesNode,
+    ExamplesNode = require('./sets').MachineExamplesNode,
 
     Q = BEM.require('q'),
 
@@ -84,10 +84,10 @@ registry.decl(NodeName, nodes.NodeName, {
     createSiteBundlesNode : function(parent, children) {
 
         var node = new SiteBundlesNode({
-            root    : this.root,
-            path    : this.output,
-            levels  : this.levels
-        });
+                root    : this.root,
+                path    : this.output,
+                levels  : this.levels
+            });
 
         this.arch.setNode(node, parent, children);
 
