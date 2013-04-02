@@ -4,6 +4,7 @@
 
 var PATH = require('path'),
     BEM = require('bem'),
+    MKDIRP = require('mkdirp'),
     LOGGER = require('bem/lib/logger'),
     registry = require('bem/lib/nodesregistry'),
 
@@ -13,7 +14,6 @@ var PATH = require('path'),
 
     Q = BEM.require('q'),
     QFS = BEM.require('q-fs'),
-    MKDIRP = BEM.require('mkdirp'),
 
     BundlesNodeName = exports.BundlesNodeName = 'MachineBundlesNode',
 
