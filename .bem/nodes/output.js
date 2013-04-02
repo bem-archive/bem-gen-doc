@@ -4,8 +4,9 @@
 
 var PATH = require('path'),
     FS = require('fs'),
-    BEM = require('bem'),
     URL = require('url'),
+    BEM = require('bem'),
+    MKDIRP = require('mkdirp'),
     LOGGER = require('bem/lib/logger'),
     registry = require('bem/lib/nodesregistry'),
 
@@ -111,8 +112,8 @@ registry.decl(OutputNodeName, BemCreateNode, {
 
     storeDataBundle : function(path, data) {
 
-        U.mkdirp(PATH.dirname(path));
-        return U.writeFileIfDiffers(path, JSON.stringify(data, null, '  '))
+        MKDIRP.sync(PATH.dirname(path));
+        return U.writeFileIfDiffers(path, JSON.stringify(data, null, 2))
             .then(function() {
                 return data;
             });
