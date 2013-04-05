@@ -545,4 +545,3 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
     }
 
 });
-
