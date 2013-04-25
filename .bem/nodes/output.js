@@ -483,7 +483,8 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
     translateMeta : function(meta) {
 
-        var _this = this;
+        var _this = this,
+            defers = [];
 
         /**
          * Итератор по узлам декларации
@@ -500,14 +501,12 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
                 return;
 
             levels.forEach(function(level) {
-
                 node.techs.forEach(function(tech) {
+                    var data = _this.getItemTechData(level, bemobj, tech.name);
+                    defers.push(data);
 
-                    tech = tech.name;
-                    _this.collectTechData(level, node, tech, _this.getItemTechData(level, bemobj, tech));
-
+                    _this.collectTechData(level, node, tech.name, data);
                 });
-
             });
 
         }
@@ -541,7 +540,7 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
 
         U.declForEach(decl, walk.bind(this, levels));
 
-        return Q.deep(decl);
+        return Q.all(defers).then(function() { return decl });
     }
 
 });
