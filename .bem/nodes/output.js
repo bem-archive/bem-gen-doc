@@ -92,7 +92,7 @@ registry.decl(OutputNodeName, BemCreateNode, {
             level = this.level,
             path = this.tech.getPath(level.getByObj(this.item));
 
-        return this.tranlateMeta(meta)
+        return this.translateMeta(meta)
             .then(function(data) {
                 return _this.storeDataBundle(path, data);
             })
@@ -106,7 +106,7 @@ registry.decl(OutputNodeName, BemCreateNode, {
         return registry.getNodeClass(IntrospectNodeName).readMeta(this);
     },
 
-    tranlateMeta : function() {
+    translateMeta : function() {
         // stub method
     },
 
@@ -327,7 +327,7 @@ Object.defineProperty(exports, IndexNodeName, {
  */
 registry.decl(IndexNodeName, OutputNodeName, {
 
-    tranlateMeta : function(meta) {
+    translateMeta : function(meta) {
 
         var _this = this,
             /** кеш обработанных блоков */
