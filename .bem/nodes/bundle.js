@@ -45,9 +45,13 @@ registry.decl(BundleNodeName, BundleNode, {
     getLevels : function(tech) {
 
         var bemblLevels = ['blocks-common', 'blocks-desktop']
-                .map(environ.getLibPath.bind(null, 'bem-bl')),
+                .map(function(level) {
+                    return environ.getLibPath('bem-bl', level);
+                }),
             siteLevels = ['common.blocks', 'site.blocks']
-                .map(join.bind(null, environ.PRJ_ROOT));
+                .map(function(level) {
+                    return join(environ.PRJ_ROOT, level);
+                });
 
         return bemblLevels.concat(siteLevels);
 
