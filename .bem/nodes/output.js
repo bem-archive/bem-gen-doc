@@ -6,7 +6,6 @@ var PATH = require('path'),
     FS = require('fs'),
     URL = require('url'),
     BEM = require('bem'),
-//    MKDIRP = require('mkdirp'),
     LOGGER = require('bem/lib/logger'),
     registry = require('bem/lib/nodesregistry'),
 
@@ -135,7 +134,7 @@ registry.decl(OutputNodeName, BemCreateNode, {
      * TODO: унести в технологию
      *
      * @param {Object} item
-     * @returns
+     * @returns {Promise}
      */
     storeResultBundle : function(item) {
 
@@ -223,7 +222,7 @@ registry.decl(OutputNodeName, BemCreateNode, {
      * @param {Object} level
      * @param {Object} item
      * @param {String} tech
-     * @returns
+     * @returns {*}
      */
     getItemTechData : function(level, item, tech) {
 
@@ -317,8 +316,7 @@ registry.decl(OutputNodeName, BemCreateNode, {
 
         }));
 
-    },
-
+    }
 
 });
 
