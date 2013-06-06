@@ -1,7 +1,12 @@
 /*global MAKE:true */
 
 require('../../.bem/nodes/arch');
-require('../../.bem/nodes');
+
+try {
+    require('../../.bem/nodes');
+} catch(e) {
+    // FIXME: first-run problem
+}
 
 var PATH = require('path'),
     environ = require('../../.bem/environ');
@@ -41,16 +46,21 @@ MAKE.decl('ExampleNode', {
     },
 
     getLevels : function() {
-        return [
-                'blocks-common',
-                'blocks-desktop'
-            ].map(environ.getLibPath.bind(null, 'bem-bl'))
-            .concat([
-                '../common.blocks',
-                'desktop.blocks',
-                'test.blocks',
-                this.rootLevel.getTech('blocks').getPath(this.getSourceNodePrefix())
-            ].map(PATH.resolve.bind(null, this.root)));
+        var levels = ['blocks-common', 'blocks-desktop'].map(function(level) {
+                return environ.getLibPath('bem-bl', level);
+            }),
+            resolve = PATH.resolve.bind(null, this.root);
+
+        levels.concat([
+            '../common.blocks',
+            'desktop.blocks',
+            'test.blocks',
+            this.rootLevel.getTech('blocks').getPath(this.getSourceNodePrefix())
+        ].map(function(level) {
+            return resolve(level);
+        }));
+
+        return levels;
     }
 
 });

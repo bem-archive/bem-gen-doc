@@ -6,7 +6,7 @@ var PATH = require('path'),
      * @const
      * @private
      */
-    __root = getGlobalRoot(),
+        __root = getGlobalRoot(),
 
     /**
      * Константы, зависящие от окружения `ENV_ROOT`
@@ -17,16 +17,16 @@ var PATH = require('path'),
      * @private
      * @type Array
      */
-    __extendables = ['LIB_DIR', 'LIB_ROOT'],
+        __extendables = ['LIB_DIR', 'LIB_ROOT'],
 
     /** @type Function */
-    join = PATH.join,
+        join = PATH.join,
     /** @type Function */
-    relative = PATH.relative,
+        relative = PATH.relative,
     /** @type Function */
-    resolve = PATH.resolve.bind(null, __dirname),
+        resolve = PATH.resolve.bind(null, __dirname),
     /** @type Function */
-    envresolve = PATH.resolve.bind(null, __root),
+        envresolve = PATH.resolve.bind(null, __root),
 
     /**
      * Путь до корня окружения
@@ -37,21 +37,21 @@ var PATH = require('path'),
      * @type String
      * @exports ENV_ROOT
      */
-    ENV_ROOT = exports.ENV_ROOT = envresolve('../'),
+        ENV_ROOT = exports.ENV_ROOT = envresolve('../'),
 
     /**
      * Путь до корня проекта
      * @type String
      * @exports PRJ_ROOT
      */
-    PRJ_ROOT = exports.PRJ_ROOT = resolve('../'),
+        PRJ_ROOT = exports.PRJ_ROOT = resolve('../'),
 
     /**
      * Имя директории куда складываем библиотеки
      * @type String
      * @exports LIB_DIR
      */
-    LIB_DIR = exports.LIB_DIR = 'vendor',
+        LIB_DIR = exports.LIB_DIR = 'vendor',
 
     /**
      * Путь до корня хранилища библиотек
@@ -62,28 +62,28 @@ var PATH = require('path'),
      * @type String
      * @exports LIB_ROOT
      */
-    LIB_ROOT = exports.LIB_ROOT = join(ENV_ROOT, LIB_DIR),
+        LIB_ROOT = exports.LIB_ROOT = join(ENV_ROOT, LIB_DIR),
 
     /**
      * Имя директории с .bem-конфигами
      * @type String
      * @exports CONF_DIR
      */
-    CONF_DIR = exports.CONF_DIR = 'configs',
+        CONF_DIR = exports.CONF_DIR = 'configs',
 
     /**
      * Путь до директории с .bem-конфигами
      * @type String
      * @exports CONF_ROOT
      */
-    CONF_ROOT = exports.CONF_ROOT = resolve(CONF_DIR),
+        CONF_ROOT = exports.CONF_ROOT = resolve(CONF_DIR),
 
     /**
      * «Текущая» конфигурация
      * @exports getConf
      * @returns {Object}
      */
-    getConf = exports.getConf = function() {
+        getConf = exports.getConf = function() {
         return require(join(environ.CONF_ROOT, 'current'));
     },
 
@@ -94,8 +94,8 @@ var PATH = require('path'),
      * @param {String} [...path]
      * @returns {String}
      */
-    getLibPath = exports.getLibPath = function() {
-        var args = [].splice.call(arguments, 0);
+        getLibPath = exports.getLibPath = function() {
+        var args = [].slice.call(arguments, 0);
         return join.apply(null, [environ.LIB_ROOT].concat(args));
     },
 
@@ -106,10 +106,9 @@ var PATH = require('path'),
      * @param {String} [...path]
      * @returns {String}
      */
-    getLibRelPath = exports.getLibRelPath = function() {
+        getLibRelPath = exports.getLibRelPath = function() {
         return relative(environ.PRJ_ROOT, getLibPath.apply(null, arguments));
     };
-
 
 if(__root !== __dirname) {
     try {
@@ -130,13 +129,6 @@ if(__root !== __dirname) {
 }
 
 function getGlobalRoot() {
-//    var root = BEM.require('./env').getEnv('__root_level_dir');
-    // FIXME: подумать, как обойтись без `env`
     var root = process.env.__root_level_dir;
-    if(!root) {
-        require('bem/lib/logger').warn('[environ] variable "__root_level_dir" is not set properly');
-        root = __dirname;
-    }
-
-    return root;
+    return root || (root = __dirname);
 }
