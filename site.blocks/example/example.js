@@ -32,6 +32,22 @@ BEM.DOM.decl('example', {
             this._actualHeight = height;
         }
 
+    },
+
+    toggleSource : function() {
+        this.toggleMod(this.elem('source'), 'visible', 'yes', '');
+    }
+
+}, {
+
+    live: function() {
+
+        this.liveBindTo('source-switch', 'click', function() {
+            this.toggleSource();
+        });
+
+        return false;
+
     }
 
 });
