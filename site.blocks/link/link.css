@@ -1,0 +1,18 @@
+.link
+{
+}
+
+.link_pseudo_yes
+{
+    border-bottom: 1px dotted;
+    color: #1a3dc1;
+
+    cursor: pointer;
+
+    text-decoration: none;
+}
+
+.link_pseudo_yes:active
+{
+    color: #f00 !important;
+}
