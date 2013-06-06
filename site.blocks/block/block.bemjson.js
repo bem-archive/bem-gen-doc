@@ -71,6 +71,7 @@ BEM.JSON.decl('block', {
 
     _getExamples : function(ctx) {
 
+        var url, id;
         return ctx.filter(function(c) {
             return c.content;
         }).map(function(c) {
@@ -79,7 +80,14 @@ BEM.JSON.decl('block', {
                 name: c.level,
                 content: c.content.map(function(item) {
                         item.block = 'example';
-                        item.url && (item.url = item.url + '.html');
+                        if(item.url) {
+                            url = item.url;
+                            id = url.replace(/[\/\\\.]+/g, ':');
+
+                            item.id = id;
+                            item.url = url + '.html';
+                            item.src = url + '.bemjson.js';
+                        }
                         return item;
                     })
             };
