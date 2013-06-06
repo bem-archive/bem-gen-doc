@@ -1,0 +1,65 @@
+{
+  "name": "page",
+  "elems": [
+    {
+      "name": "assets",
+      "techs": [
+        {
+          "name": "bemhtml"
+        },
+        {
+          "name": "title.txt"
+        }
+      ],
+      "title": [
+        {
+          "level": "desktop.blocks",
+          "content": ""
+        },
+        {
+          "level": "../common.blocks",
+          "content": "Что-то, где-то\n"
+        }
+      ]
+    }
+  ],
+  "techs": [
+    {
+      "name": "bemhtml"
+    },
+    {
+      "name": "title.txt"
+    },
+    {
+      "name": "desc.md"
+    }
+  ],
+  "levels": [
+    {
+      "path": "../common.blocks"
+    },
+    {
+      "path": "desktop.blocks"
+    }
+  ],
+  "description": [
+    {
+      "level": "../common.blocks",
+      "content": ""
+    },
+    {
+      "level": "desktop.blocks",
+      "content": "<p>Обвязка страницы</p>\n"
+    }
+  ],
+  "title": [
+    {
+      "level": "desktop.blocks",
+      "content": ""
+    },
+    {
+      "level": "../common.blocks",
+      "content": "Базовый шаблон страницы\n"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "global",
+  "elems": [
+    {
+      "name": "environ",
+      "techs": [
+        {
+          "name": "title.txt"
+        }
+      ],
+      "title": [
+        {
+          "level": "../common.blocks",
+          "content": "Что-то про параметры\n"
+        }
+      ]
+    }
+  ],
+  "techs": [
+    {
+      "name": "bemhtml"
+    },
+    {
+      "name": "title.txt"
+    }
+  ],
+  "levels": [
+    {
+      "path": "../common.blocks"
+    }
+  ],
+  "title": [
+    {
+      "level": "../common.blocks",
+      "content": "Какой-то глобальный\n"
+    }
+  ]
+}

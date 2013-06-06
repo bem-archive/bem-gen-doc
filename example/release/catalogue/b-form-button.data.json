@@ -1,0 +1,391 @@
+{
+  "name": "b-form-button",
+  "elems": [
+    {
+      "name": "click",
+      "techs": [
+        {
+          "name": "examples"
+        },
+        {
+          "name": "title.txt"
+        }
+      ],
+      "title": [
+        {
+          "level": "test.blocks",
+          "content": ""
+        },
+        {
+          "level": "desktop.blocks",
+          "content": "Элемент ловит клики на кнопке-ссылке"
+        }
+      ],
+      "examples": [
+        {
+          "level": "desktop.blocks",
+          "content": [
+            {
+              "url": "b-form-button__click.examples/link/link",
+              "title": "Кнопка ссылкой"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "mods": [
+        {
+          "name": "type",
+          "techs": [
+            {
+              "name": "title.txt"
+            }
+          ],
+          "vals": [
+            {
+              "name": "first",
+              "techs": [
+                {
+                  "name": "title.txt"
+                }
+              ],
+              "title": [
+                {
+                  "level": "test.blocks",
+                  "content": ""
+                },
+                {
+                  "level": "desktop.blocks",
+                  "content": ""
+                }
+              ]
+            }
+          ],
+          "title": [
+            {
+              "level": "test.blocks",
+              "content": ""
+            },
+            {
+              "level": "desktop.blocks",
+              "content": ""
+            }
+          ]
+        }
+      ],
+      "techs": [
+        {
+          "name": "css"
+        },
+        {
+          "name": "title.txt"
+        }
+      ],
+      "title": [
+        {
+          "level": "test.blocks",
+          "content": ""
+        },
+        {
+          "level": "desktop.blocks",
+          "content": "Элемент, при добавлении которого, кнопка начинает submit-ить форму"
+        }
+      ]
+    }
+  ],
+  "mods": [
+    {
+      "name": "disabled",
+      "techs": [
+        {
+          "name": "title.txt"
+        }
+      ],
+      "vals": [
+        {
+          "name": "yes",
+          "techs": [
+            {
+              "name": "examples"
+            },
+            {
+              "name": "title.txt"
+            }
+          ],
+          "examples": [
+            {
+              "level": "desktop.blocks",
+              "content": [
+                {
+                  "url": "b-form-button_disabled_yes.examples/disabled/disabled",
+                  "title": "Кнопка отключена"
+                }
+              ]
+            }
+          ],
+          "title": [
+            {
+              "level": "test.blocks",
+              "content": "Кнопку нельзя нажимать"
+            },
+            {
+              "level": "desktop.blocks",
+              "content": "Неактивность есть"
+            }
+          ]
+        }
+      ],
+      "title": [
+        {
+          "level": "desktop.blocks",
+          "content": "Неактивное состояние"
+        },
+        {
+          "level": "test.blocks",
+          "content": "Недоступное состояние"
+        }
+      ]
+    },
+    {
+      "name": "size",
+      "techs": [
+        {
+          "name": "title.txt"
+        }
+      ],
+      "vals": [
+        {
+          "name": "l",
+          "techs": [
+            {
+              "name": "title.txt"
+            }
+          ],
+          "title": [
+            {
+              "level": "test.blocks",
+              "content": ""
+            },
+            {
+              "level": "desktop.blocks",
+              "content": "Кнопка размером l"
+            }
+          ]
+        },
+        {
+          "name": "m",
+          "techs": [
+            {
+              "name": "title.txt"
+            }
+          ],
+          "title": [
+            {
+              "level": "test.blocks",
+              "content": ""
+            },
+            {
+              "level": "desktop.blocks",
+              "content": "Кнопка размером m"
+            }
+          ]
+        },
+        {
+          "name": "s",
+          "techs": [
+            {
+              "name": "title.txt"
+            }
+          ],
+          "title": [
+            {
+              "level": "test.blocks",
+              "content": ""
+            },
+            {
+              "level": "desktop.blocks",
+              "content": "Кнопка размером s"
+            }
+          ]
+        },
+        {
+          "name": "xl",
+          "techs": [
+            {
+              "name": "title.txt"
+            }
+          ],
+          "title": [
+            {
+              "level": "test.blocks",
+              "content": ""
+            },
+            {
+              "level": "desktop.blocks",
+              "content": "Кнопка размером xl"
+            }
+          ]
+        }
+      ],
+      "title": [
+        {
+          "level": "test.blocks",
+          "content": ""
+        },
+        {
+          "level": "desktop.blocks",
+          "content": "Размер"
+        }
+      ]
+    },
+    {
+      "name": "height",
+      "techs": [
+        {
+          "name": "title.txt"
+        }
+      ],
+      "title": [
+        {
+          "level": "desktop.blocks",
+          "content": ""
+        },
+        {
+          "level": "test.blocks",
+          "content": "Высота"
+        }
+      ]
+    },
+    {
+      "name": "hovered",
+      "techs": [
+        {
+          "name": "title.txt"
+        }
+      ],
+      "vals": [
+        {
+          "name": "yes",
+          "techs": [
+            {
+              "name": "title.txt"
+            }
+          ],
+          "title": [
+            {
+              "level": "desktop.blocks",
+              "content": ""
+            },
+            {
+              "level": "test.blocks",
+              "content": "Наведение есть"
+            }
+          ]
+        }
+      ],
+      "title": [
+        {
+          "level": "desktop.blocks",
+          "content": ""
+        },
+        {
+          "level": "test.blocks",
+          "content": "Наведенное состояние"
+        }
+      ]
+    },
+    {
+      "name": "pressed",
+      "techs": [
+        {
+          "name": "title.txt"
+        }
+      ],
+      "vals": [
+        {
+          "name": "yes",
+          "techs": [
+            {
+              "name": "title.txt"
+            }
+          ],
+          "title": [
+            {
+              "level": "desktop.blocks",
+              "content": ""
+            },
+            {
+              "level": "test.blocks",
+              "content": "Нажатие есть"
+            }
+          ]
+        }
+      ],
+      "title": [
+        {
+          "level": "desktop.blocks",
+          "content": ""
+        },
+        {
+          "level": "test.blocks",
+          "content": "Нажатое состояние"
+        }
+      ]
+    }
+  ],
+  "techs": [
+    {
+      "name": "bemhtml"
+    },
+    {
+      "name": "examples"
+    },
+    {
+      "name": "desc.md"
+    },
+    {
+      "name": "title.txt"
+    }
+  ],
+  "levels": [
+    {
+      "path": "desktop.blocks"
+    },
+    {
+      "path": "test.blocks"
+    }
+  ],
+  "description": [
+    {
+      "level": "test.blocks",
+      "content": ""
+    },
+    {
+      "level": "desktop.blocks",
+      "content": "<p>Для того, чтобы Яндекс выглядел аккуратнее и развивался в одном стиле, были\nразработаны декоративные (нестандартные для операционной системы) элементы форм.</p>\n<p>Одним из таких элементов является кнопка.  Данная кнопка предназначена только для работы с интерфейсами, она не подходит\nдля промо-задач.  У кнопки можно поменять цвет текста, форму и тон. Если кнопку поставить на цветной фон, то она\nпринимает тон фона-подложки.</p>\n<p>Сейчас кнопка может быть <a href=\"#b-form-button.40height\">высотой 19px, 22px, 26px и 33px</a>, обратите внимание на то, что к\nразмерам кнопки прибавляется еще по 2 пикселя с каждой стороны. Это обусловленно тем, что состояние &quot;В фокусе&quot; имеет 2-х\nпиксельную, внешнюю обводку (outline). Текущая разметка спрайта позволяет без особых трудозатрат создавать и\nперекрашивать кнопки высотой до 50px.</p>\n<p>Остальные размеры мы договорились делать, если в них есть потребность. Если вам нужна кнопка больше или меньше уже\nреализованных высот — напишите на <a href=\"&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x6c;&#x65;&#103;&#x6f;&#64;&#121;&#x61;&#x6e;&#100;&#101;&#120;&#x2d;&#x74;&#x65;&#x61;&#x6d;&#x2e;&#x72;&#x75;\">&#x6c;&#x65;&#103;&#x6f;&#64;&#121;&#x61;&#x6e;&#100;&#101;&#120;&#x2d;&#x74;&#x65;&#x61;&#x6d;&#x2e;&#x72;&#x75;</a></p>\n"
+    }
+  ],
+  "examples": [
+    {
+      "level": "desktop.blocks",
+      "content": [
+        {
+          "url": "b-form-button.examples/submit/submit",
+          "title": "Кнопка, отправляющая форму на сервер"
+        }
+      ]
+    }
+  ],
+  "title": [
+    {
+      "level": "desktop.blocks",
+      "content": "Кнопка\n"
+    },
+    {
+      "level": "test.blocks",
+      "content": "Кнопка\n"
+    }
+  ]
+}

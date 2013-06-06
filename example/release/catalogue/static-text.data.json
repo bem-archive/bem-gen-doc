@@ -1,0 +1,19 @@
+{
+  "name": "static-text",
+  "techs": [
+    {
+      "name": "title.txt"
+    }
+  ],
+  "levels": [
+    {
+      "path": "../common.blocks"
+    }
+  ],
+  "title": [
+    {
+      "level": "../common.blocks",
+      "content": "Блок про просто-текст"
+    }
+  ]
+}

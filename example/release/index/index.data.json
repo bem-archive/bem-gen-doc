@@ -1,0 +1,57 @@
+[
+  {
+    "name": "b-text",
+    "url": "/catalogue/b-text.html",
+    "title": ""
+  },
+  {
+    "name": "global",
+    "url": "/catalogue/global.html",
+    "title": ""
+  },
+  {
+    "name": "headline",
+    "url": "/catalogue/headline.html",
+    "title": ""
+  },
+  {
+    "name": "link",
+    "url": "/catalogue/link.html",
+    "title": ""
+  },
+  {
+    "name": "menu",
+    "url": "/catalogue/menu.html",
+    "title": ""
+  },
+  {
+    "name": "page",
+    "url": "/catalogue/page.html",
+    "title": ""
+  },
+  {
+    "name": "static-text",
+    "url": "/catalogue/static-text.html",
+    "title": ""
+  },
+  {
+    "name": "b-form-button",
+    "url": "/catalogue/b-form-button.html",
+    "title": ""
+  },
+  {
+    "name": "b-form-input",
+    "url": "/catalogue/b-form-input.html",
+    "title": ""
+  },
+  {
+    "name": "b-link",
+    "url": "/catalogue/b-link.html",
+    "title": ""
+  },
+  {
+    "name": "i-request",
+    "url": "/catalogue/i-request.html",
+    "title": ""
+  }
+]

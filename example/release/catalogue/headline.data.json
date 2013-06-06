@@ -1,0 +1,56 @@
+{
+  "name": "headline",
+  "mods": [
+    {
+      "name": "level",
+      "techs": [
+        {
+          "name": "desc.md"
+        },
+        {
+          "name": "title.txt"
+        }
+      ],
+      "description": [
+        {
+          "level": "../common.blocks",
+          "content": "<p>Модификатор <code>level</code> задает уровень заголовка.</p>\n<pre><code>// page.bemjson.js\n{\n    block: &#39;headline&#39;,\n    mods: { level: 3 },\n    content: &#39;Примечание&#39;\n}\n\n&lt;!-- page.html --&gt;\n&lt;h3 class=&quot;headline headline_level_3&quot;&gt;Примечание&lt;/h3&gt;</code></pre>\n<p>Значение по-умолчанию — <strong>1</strong></p>\n"
+        }
+      ],
+      "title": [
+        {
+          "level": "../common.blocks",
+          "content": "Уровень заголовка"
+        }
+      ]
+    }
+  ],
+  "techs": [
+    {
+      "name": "bemhtml"
+    },
+    {
+      "name": "desc.md"
+    },
+    {
+      "name": "title.txt"
+    }
+  ],
+  "levels": [
+    {
+      "path": "../common.blocks"
+    }
+  ],
+  "description": [
+    {
+      "level": "../common.blocks",
+      "content": "<p>Описывает (под-)заголовок раздела.</p>\n<h4>Пример использования</h4>\n<p>Для входного <code>BEMJSON</code></p>\n<pre><code>// page.bemjson.js\n\n{\n    block: &#39;headline&#39;,\n    content: &#39;Узел как аномальная джетовая активность&#39;\n}</code></pre>\n<p>получим <code>HTML</code></p>\n<pre><code>&lt;!-- page.html --&gt;\n&lt;h1 class=&quot;headline headline_level_1&quot;&gt;Узел как аномальная джетовая активность&lt;/h1&gt;</code></pre>\n"
+    }
+  ],
+  "title": [
+    {
+      "level": "../common.blocks",
+      "content": "Заголовок"
+    }
+  ]
+}

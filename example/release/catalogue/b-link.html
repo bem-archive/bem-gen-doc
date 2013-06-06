@@ -1,0 +1,31 @@
+<!doctype html><html class="page__root"><head><meta charset="utf-8"/><title>catalogue</title><link rel="stylesheet" href="_catalogue.css"/><script src="//yandex.st/jquery/1.8.2/jquery.min.js"></script><script src="_catalogue.js"></script></head><body class="page"><div class="catalogue"><div class="menu catalogue__navigation"><a class="link menu__item" href="../../release/index/index.html">← каталог</a></div><div class="block"><div class="block__name">b-link</div><div class="block__title"></div><div class="block__description static-text"><p>Все ссылки желательно делать через этот блок.</p>
+<p>Если вы хотите разместить ссылку в тексте, то не нужно включать в нее предлог.</p>
+<p>Правильный цвет ссылки – <code>#1A3DC1</code>.</p>
+<p>Ссылки бывают:</p>
+<ul>
+<li><p>простые;</p>
+</li>
+<li><p>ссылки со счетчиками. По умолчанию вероятность показа счётчика — 10%. Вероятностью показа счётчика для конкретной ссылки управляет атрибут <code>show-counter</code>.
+ При <code>show-counter = 100</code> — показ счётчика гарантирован всегда;</p>
+</li>
+<li><p>псевдо-ссылки. Ссылка, подразумевающая действие без перехода на другую страницу. В HTML может быть представлена двумя способами:</p>
+<ul>
+<li>при наличии атрибута <code>url</code> выводится <code>&lt;a href=&quot;/&quot;...&gt;</code>. При отключенном JavaScript происходит переход по ссылке;</li>
+<li>без атрибута <code>url</code> выводится <code>&lt;span ...&gt;</code>;</li>
+</ul>
+</li>
+<li><p>с иконками. Добавление модификатора <code>_inner</code> разрешает добавлять во входных данных элемент <code>inner</code>, разделяя таким образом текст ссылки и иконку ссылки.
+Это позволяет вкладывать в ссылку иконки любого размера.</p>
+</li>
+</ul>
+<p>Блок <code>b-link</code> — является ссылкой. Используется в других блоках.</p>
+<p>В простом случае для отображения блока необходимо задать следующий <code>BEMJSON</code>:</p>
+<pre><code>{
+    block: &#39;b-link&#39;,
+    url: &#39;http://company.yandex.ru&#39;,
+    title: &#39;Click here to learn more&#39;,
+    target: &#39;_blank&#39;,
+    content: &#39;The best company all over the world&#39;
+}</code></pre>
+<p>Свойство <code>url</code> преобразуется в атрибут <code>href</code>. Свойства <code>title</code> и <code>target</code> — в соотвествующие атрибуты.</p>
+</div></div></div></body></html>

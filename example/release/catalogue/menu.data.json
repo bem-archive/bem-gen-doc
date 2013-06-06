@@ -1,0 +1,22 @@
+{
+  "name": "menu",
+  "techs": [
+    {
+      "name": "bemhtml"
+    },
+    {
+      "name": "title.txt"
+    }
+  ],
+  "levels": [
+    {
+      "path": "../common.blocks"
+    }
+  ],
+  "title": [
+    {
+      "level": "../common.blocks",
+      "content": "Меню"
+    }
+  ]
+}

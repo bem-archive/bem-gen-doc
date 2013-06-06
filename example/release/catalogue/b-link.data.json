@@ -1,0 +1,26 @@
+{
+  "name": "b-link",
+  "techs": [
+    {
+      "name": "desc.md"
+    }
+  ],
+  "levels": [
+    {
+      "path": "desktop.blocks"
+    },
+    {
+      "path": "test.blocks"
+    }
+  ],
+  "description": [
+    {
+      "level": "desktop.blocks",
+      "content": "<p>Все ссылки желательно делать через этот блок.</p>\n<p>Если вы хотите разместить ссылку в тексте, то не нужно включать в нее предлог.</p>\n<p>Правильный цвет ссылки – <code>#1A3DC1</code>.</p>\n<p>Ссылки бывают:</p>\n<ul>\n<li><p>простые;</p>\n</li>\n<li><p>ссылки со счетчиками. По умолчанию вероятность показа счётчика — 10%. Вероятностью показа счётчика для конкретной ссылки управляет атрибут <code>show-counter</code>.\n При <code>show-counter = 100</code> — показ счётчика гарантирован всегда;</p>\n</li>\n<li><p>псевдо-ссылки. Ссылка, подразумевающая действие без перехода на другую страницу. В HTML может быть представлена двумя способами:</p>\n<ul>\n<li>при наличии атрибута <code>url</code> выводится <code>&lt;a href=&quot;/&quot;...&gt;</code>. При отключенном JavaScript происходит переход по ссылке;</li>\n<li>без атрибута <code>url</code> выводится <code>&lt;span ...&gt;</code>;</li>\n</ul>\n</li>\n<li><p>с иконками. Добавление модификатора <code>_inner</code> разрешает добавлять во входных данных элемент <code>inner</code>, разделяя таким образом текст ссылки и иконку ссылки.\nЭто позволяет вкладывать в ссылку иконки любого размера.</p>\n</li>\n</ul>\n"
+    },
+    {
+      "level": "test.blocks",
+      "content": "<p>Блок <code>b-link</code> — является ссылкой. Используется в других блоках.</p>\n<p>В простом случае для отображения блока необходимо задать следующий <code>BEMJSON</code>:</p>\n<pre><code>{\n    block: &#39;b-link&#39;,\n    url: &#39;http://company.yandex.ru&#39;,\n    title: &#39;Click here to learn more&#39;,\n    target: &#39;_blank&#39;,\n    content: &#39;The best company all over the world&#39;\n}</code></pre>\n<p>Свойство <code>url</code> преобразуется в атрибут <code>href</code>. Свойства <code>title</code> и <code>target</code> — в соотвествующие атрибуты.</p>\n"
+    }
+  ]
+}

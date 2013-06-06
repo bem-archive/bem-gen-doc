@@ -1,0 +1,13 @@
+{
+  "name": "b-text",
+  "techs": [
+    {
+      "name": "bemhtml"
+    }
+  ],
+  "levels": [
+    {
+      "path": "../common.blocks"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "b-form-input",
+  "techs": [
+    {
+      "name": "examples"
+    }
+  ],
+  "levels": [
+    {
+      "path": "desktop.blocks"
+    }
+  ],
+  "examples": [
+    {
+      "level": "desktop.blocks",
+      "content": []
+    }
+  ]
+}
