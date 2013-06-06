@@ -2,9 +2,8 @@
  * @module nodes/build
  */
 
-var PATH = require('path'),
-    BEM = require('bem'),
-    MKDIRP = require('mkdirp'),
+var BEM = require('bem'),
+    PATH = require('path'),
     LOGGER = require('bem/lib/logger'),
     registry = require('bem/lib/nodesregistry'),
 
@@ -114,7 +113,7 @@ registry.decl(BundlesNodeName, 'Node', {
     getSiteRoot : function() {
 
         if(!this._path) {
-            this._path = createLevel(this.path);
+            this._path = createLevel(this.getPath());
         }
 
         return this._path;
@@ -136,9 +135,10 @@ registry.decl(BundlesNodeName, 'Node', {
                 if(!exists) {
                     var res = 'exports.blocks = ' + JSON.stringify(decl, null, 4) + ';\n';
 
-                    MKDIRP.sync(PATH.dirname(path));
-
-                    return U.writeFile(path, res);
+                    return QFS.makeTree(PATH.dirname(path))
+                        .then(function() {
+                            return U.writeFile(path, res);
+                        });
                 }
 
                 return Q.resolve(1);
@@ -179,7 +179,7 @@ registry.decl(BundlesNodeName, 'Node', {
     createSiteBundlesNode : function() {
 
         var arch = this.ctx.arch,
-            bundleLevelNode = PATH.relative(this.root, this.path);
+            bundleLevelNode = PATH.relative(this.root, this.getPath());
 
         if(arch.hasNode(bundleLevelNode)) {
             return arch.getNode(bundleLevelNode);

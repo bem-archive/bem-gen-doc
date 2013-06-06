@@ -100,7 +100,7 @@ registry.decl(NodeName, nodes.NodeName, {
         var node = new IntrospectNode({
             root : this.root,
             paths : this.levels,
-            lands : this.langs,
+            lands : this.langs
         });
 
         this.arch.setNode(node, parent, children);
@@ -110,6 +110,7 @@ registry.decl(NodeName, nodes.NodeName, {
     },
 
     createExamplesNode : function(common, bundles, children) {
+
         var arch = this.arch,
             node = new ExamplesNode({
                 root : this.root,
@@ -133,7 +134,7 @@ registry.decl(NodeName, nodes.NodeName, {
         var outputNodeFactory = function(nodeClass, name) {
             return new nodeClass({
                 root : this.root,
-                level : PATH.join(this.root, this.output),
+                level : PATH.resolve(this.root, this.output),
                 techName : 'data.json',
                 item : { block : name },
                 info : { title : 'Библиотека блоков' }

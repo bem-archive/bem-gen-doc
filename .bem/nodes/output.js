@@ -6,7 +6,7 @@ var PATH = require('path'),
     FS = require('fs'),
     URL = require('url'),
     BEM = require('bem'),
-    MKDIRP = require('mkdirp'),
+//    MKDIRP = require('mkdirp'),
     LOGGER = require('bem/lib/logger'),
     registry = require('bem/lib/nodesregistry'),
 
@@ -17,6 +17,7 @@ var PATH = require('path'),
     IntrospectNodeName = require('./introspect').IntrospectNodeName,
 
     Q = BEM.require('qq'),
+    QFS = BEM.require('q-fs'),
 
     createLevel = BEM.createLevel,
     U = BEM.util,
@@ -112,11 +113,19 @@ registry.decl(OutputNodeName, BemCreateNode, {
 
     storeDataBundle : function(path, data) {
 
-        MKDIRP.sync(PATH.dirname(path));
-        return U.writeFileIfDiffers(path, JSON.stringify(data, null, 2))
+        return QFS.makeTree(PATH.dirname(path))
+            .then(function() {
+                return U.writeFileIfDiffers(path, JSON.stringify(data, null, 2))
+            })
             .then(function() {
                 return data;
             });
+
+        /*MKDIRP.sync(PATH.dirname(path));
+        return U.writeFileIfDiffers(path, JSON.stringify(data, null, 2))
+            .then(function() {
+                return data;
+            });*/
 
     },
 

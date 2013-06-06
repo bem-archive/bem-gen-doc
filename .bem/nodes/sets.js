@@ -35,6 +35,10 @@ registry.decl(ExamplesNodeName, nodes.NodeName, {
         this.sources = o.sources;
     },
 
+    getPath : function() {
+        return PATH.resolve(this.root, this.output);
+    },
+
     make : function() {
         return this.ctx.arch.withLock(this.alterArch(), this);
     },
@@ -55,7 +59,7 @@ registry.decl(ExamplesNodeName, nodes.NodeName, {
 
     getOutputLevel : function() {
         if(!this._outputLevel)
-            this._outputLevel = createLevel(this.output);
+            this._outputLevel = createLevel(this.getPath());
         return this._outputLevel;
     },
 
