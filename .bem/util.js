@@ -1,7 +1,6 @@
 /** @type Function */
 var inspect = require('util').inspect;
 
-
 /**
  * @type Function
  * @exports log
