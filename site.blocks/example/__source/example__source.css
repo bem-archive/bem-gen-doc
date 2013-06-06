@@ -1,0 +1,20 @@
+.example__source
+{
+    display: none;
+
+    height: 300px;
+}
+
+.example__source_visible_yes
+{
+    display: block;
+
+    margin-bottom: 10px;
+}
+
+.example__source-switch
+{
+    font-size: 13px;
+
+    margin: 5px 0;
+}

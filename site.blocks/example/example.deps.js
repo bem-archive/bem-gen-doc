@@ -3,6 +3,8 @@
         { block: 'i-bem', elem: 'dom' }
     ],
     shouldDeps: [
-        { elems: ['title', 'live'] },
+        { elems: ['title', 'live', 'source'] },
+        { block: 'cut' },
+        { block: 'link', mods: { pseudo: 'yes' } }
     ]
 })

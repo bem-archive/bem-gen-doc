@@ -1,26 +1,71 @@
 block example {
 
-    default, !this.ctx.url: null
+    default {
+        true: {
+            var url = apply('url', this.ctx=this.ctx.url),
+                src = apply('url', this.ctx=this.ctx.src);
+
+            applyNext(this._url = url, this._src = src);
+        }
+
+        !this.ctx.url: false
+    }
+
+    attrs: {
+        id: this.ctx.id
+    }
 
     js: true
+
+    url: {
+        return this.environ['site-root'] + '/examples/examples.sets/' + this.ctx;
+    }
 
     content: [
         {
             elem: 'title',
+            url: this._url,
             content: this.ctx.title
+        },
+        { elem: 'source-switch' },
+        {
+            elem: 'source',
+            url: this._src
         },
         {
             elem: 'live',
-            url: this.ctx.url
+            url: this._url
         }
     ]
 
-    elem live {
+    elem title {
+
+        tag: 'a'
+
+        attrs: {
+            href: this.ctx.url,
+            target: '_blank'
+        }
+
+    }
+
+    this.elem === 'live' || this.elem === 'source' {
 
         tag: 'iframe'
 
         attrs: {
-            src: this.environ['site-root'] + '/examples/examples.sets/' + this.ctx.url
+            src: this.ctx.url
+        }
+
+    }
+
+    elem source-switch {
+
+        content: {
+            block: 'link',
+            mods: { pseudo: 'yes' },
+            mix: { block: 'cut' },
+            content: 'Исходный код'
         }
 
     }
