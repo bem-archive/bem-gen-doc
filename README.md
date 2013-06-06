@@ -4,26 +4,20 @@ BEM-GEN-DOC
 **bem-gen-doc** is a documentation generator which converts documentation of BEM-libraries' items
 (blocks, elements or modifiers) into HTML website.
 
-_This project is still under the heavy development_
-
-Requirements
-------------
-
-This library is used some APIs from the development version of [bem-tools](http://bem.info/tools/bem/)
-which are not in stable version yet. So you should use git version of bem-tools from the `introspect`
-branch.
+_This project is still under development_
 
 Usage
 -----
+
+    › git clone git://github.com/bem/bem-gen-doc.git
+    › cd bem-gen-doc
+    › npm install
 
 The simple usage example could be found in the `example` directory.
 
 To build `example` documentation site follow this steps:
 
-    › git clone git://github.com/bem/bem-gen-doc.git
-    › cd bem-gen-doc
-    › npm install
-    › bem make vendor
+    › bem make -r example vendor
 
 This will install all dependancies for library.
 
