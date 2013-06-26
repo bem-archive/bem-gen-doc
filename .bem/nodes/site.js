@@ -7,6 +7,8 @@ var PATH = require('path'),
     LOGGER = require('bem/lib/logger'),
     registry = require('bem/lib/nodesregistry'),
 
+    folder = require('../../../.bem/configs/site-config').folder,
+
     outputNodes = require('./output'),
 
     nodes = BEM.require('./nodes/node'),
@@ -41,7 +43,7 @@ registry.decl(NodeName, nodes.NodeName, {
         this.arch = o.arch;
 
         // FIXME: hardcode
-        this.output = 'release';
+        this.output = folder;
 
         this.levels = o.levels;
         this.langs = o.langs;
