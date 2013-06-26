@@ -24,7 +24,7 @@ registry.decl(setsNodes.ExampleNodeName, {
     getTechs : function() {
 
         var bundle = PATH.relative(this.root, this.getPath());
-        if(bundle.indexOf('release/examples') === 0) {
+        if(bundle.indexOf(this.output + '/examples') === 0) {
             return this.getMachineExamplesTechs();
         }
 
@@ -35,7 +35,7 @@ registry.decl(setsNodes.ExampleNodeName, {
     getLevels : function() {
 
         var bundle = PATH.relative(this.root, this.getPath());
-        if(bundle.indexOf('release/examples') === 0) {
+        if(bundle.indexOf(this.output + '/examples') === 0) {
             return this.getMachineExamplesLevels();
         }
 
