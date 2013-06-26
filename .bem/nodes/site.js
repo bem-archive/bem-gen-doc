@@ -39,10 +39,7 @@ registry.decl(NodeName, nodes.NodeName, {
 
         this.root = o.root;
         this.arch = o.arch;
-
-        // FIXME: hardcode
-        this.output = 'release';
-
+        this.output = o.output;
         this.levels = o.levels;
         this.langs = o.langs;
 
