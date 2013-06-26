@@ -2,10 +2,7 @@
  * @fileOverview
  */
 
-var PATH = require('path'),
-    BEM = require('bem'),
-    registry = require('bem/lib/nodesregistry'),
-
+var registry = require('bem/lib/nodesregistry'),
     nodes = require('bem/lib/nodes/node'),
     siteNodes = require('./site'),
 
@@ -43,8 +40,18 @@ registry.decl(ArchNodeName, nodes.NodeName, {
         this.root = o.root;
     },
 
+    outputName : 'release',
+
     /**
-     * A set of levels to build site from
+     * Output directory name
+     * @returns {String}
+     */
+    getOutputName : function() {
+        return this.outputName;
+    },
+
+    /**
+     * A set of levels to build site
      * @returns {Array}
      */
     getSources : function() {
@@ -65,9 +72,11 @@ registry.decl(ArchNodeName, nodes.NodeName, {
     alterArch : function() {
         var levels = this.getSources(),
             langs = this.getLands(),
+            output = this.getOutputName(),
             siteNode = new siteNodes.SiteNode({
                 arch : this.arch,
                 root : this.root,
+                output : output,
                 levels : levels,
                 langs  : langs
             });
