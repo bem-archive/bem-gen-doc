@@ -24,6 +24,8 @@ MAKE.decl('Arch', {
 
 MAKE.decl('GenDocNode', {
 
+    outputName : 'release',
+
     getSources : function() {
         return ['../common.blocks', 'desktop.blocks', 'test.blocks'];
     }
