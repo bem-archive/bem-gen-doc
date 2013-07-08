@@ -212,6 +212,9 @@ registry.decl(BundlesNodeName, 'Node', {
 
             })
             .then(function() {
+                createLevel(_this.getPath(), { noCache: true });
+            })
+            .then(function() {
                 // FIXME: hardcode
                 return Q.all(['index', 'catalogue'].map(_this.createSiteBundle, _this));
             })
