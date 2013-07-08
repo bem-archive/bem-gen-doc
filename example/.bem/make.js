@@ -17,7 +17,7 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp : /^.+?\.bundles$/,
 
-    libraries : ['bem-bl', 'bem-json', 'bem-pr @ 0.0.5']
+    libraries : ['bem-bl', 'bem-json', 'bem-pr @ 0.1.0']
 
 });
 
@@ -28,6 +28,15 @@ MAKE.decl('GenDocNode', {
 
     getSources : function() {
         return ['../common.blocks', 'desktop.blocks', 'test.blocks'];
+    }
+
+});
+
+
+MAKE.decl('SetsLevelNode', {
+
+    getSourceItemTechs : function() {
+        return ['examples'];
     }
 
 });
