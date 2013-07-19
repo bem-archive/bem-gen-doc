@@ -13,6 +13,12 @@ exports.techMixin = {
         return ['bemjson.js'];
     },
 
+    getBuildSuffixesMap : function() {
+        return {
+            'bemjson.js': this.getBuildSuffixes()
+        };
+    },
+
     getBuildResult : function(files, suffix, output) {
         var _this = this;
         return this.__base.apply(this, arguments).then(function(res) {
