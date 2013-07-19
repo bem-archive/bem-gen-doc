@@ -1,6 +1,6 @@
 {
   "name": "bem-gen-doc",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "dependencies": {
     "marked": "~0.2.5",
