@@ -1,6 +1,6 @@
 var PATH = require('path'),
 
-    environ = require('../environ'),
+    environ = require('bem-environ'),
 
     BEMJSON_ROOT = environ.getLibPath('bem-json', 'i-bem/__json'),
     BEMJSON_CORE = PATH.join(BEMJSON_ROOT, 'i-bem__json.js');

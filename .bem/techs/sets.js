@@ -1,5 +1,5 @@
 var PATH = require('path'),
-    environ = require('../environ.js');
+    environ = require('bem-environ');
 
 exports.baseTechPath = environ.getLibPath('bem-pr', 'bem/techs/sets.js');
 
