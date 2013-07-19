@@ -5,7 +5,7 @@
   "dependencies": {
     "marked": "~0.2.5",
     "shmakowiki": "~0.4.0",
-    "bem-environ": "~1.0.1"
+    "bem-environ": "~1.1.0"
   },
   "devDependencies": {
     "bem": "~0.6.6"
