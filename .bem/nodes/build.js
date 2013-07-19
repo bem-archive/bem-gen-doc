@@ -127,21 +127,21 @@ registry.decl(BundlesNodeName, 'Node', {
             return Q.reject(U.format('make error: unknown bundle %s', bundle));
 
         var level = this.getSiteRoot(),
-            path = level.getPathByObj({ block: bundle }, 'bemdecl.js');
+            path = level.getPathByObj({ block : bundle }, 'bemdecl.js');
 
         return QFS.exists(path)
             .then(function(exists) {
 
-                if(!exists) {
-                    var res = 'exports.blocks = ' + JSON.stringify(decl, null, 4) + ';\n';
-
-                    return QFS.makeTree(PATH.dirname(path))
-                        .then(function() {
-                            return U.writeFile(path, res);
-                        });
+                if(exists) {
+                    return;
                 }
 
-                return Q.resolve(1);
+                var res = 'exports.blocks = ' + JSON.stringify(decl, null, 4) + ';\n';
+
+                return QFS.makeTree(PATH.dirname(path))
+                    .then(function() {
+                        return U.writeFile(path, res);
+                    });
 
             });
 
@@ -152,7 +152,6 @@ registry.decl(BundlesNodeName, 'Node', {
      * @returns {Function}
      */
     createSiteSetsNode : function(name) {
-
         var ctx = this.ctx;
 
         return function() {
@@ -168,6 +167,8 @@ registry.decl(BundlesNodeName, 'Node', {
                     item     : item,
                     techName : tech
                 });
+
+            node.id = PATH.dirname(node.path);
 
             arch.setNode(node, arch.getParents(this));
 
@@ -225,7 +226,7 @@ registry.decl(BundlesNodeName, 'Node', {
                 return ctx.arch.withLock(_this.createSiteBundlesNode, _this);
             })
             .then(function() {
-                LOGGER.info(ctx.arch.toString());
+//                LOGGER.info(ctx.arch.toString());
                 return ctx.arch;
             });
 

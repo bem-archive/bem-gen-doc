@@ -54,6 +54,12 @@ registry.decl(ExamplesNodeName, nodes.NodeName, {
                 node = this.createSetsLevelNode();
 
             arch.setNode(node, arch.getParents(this));
+
+            // try to link: examples/examples.sets -> examples
+            var childNode = PATH.dirname(node.path);
+            if(arch.hasNode(childNode)) {
+                arch.addChildren(node, childNode);
+            }
         };
     },
 
