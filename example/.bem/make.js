@@ -5,7 +5,11 @@ require('bem-environ/lib/nodes/arch');
 try {
     require('../../.bem/nodes');
 } catch(e) {
-    require('bem/lib/logger').error(e? e.stack || e : '');
+    var LOGGER = require('bem/lib/logger');
+    LOGGER.warn(e);
+
+    if(e && e.stack)
+        LOGGER.debug(e.stack);
 }
 
 var PATH = require('path'),
