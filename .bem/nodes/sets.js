@@ -2,7 +2,7 @@ var PATH = require('path'),
     BEM = require('bem'),
 
     registry = require('bem/lib/nodesregistry'),
-    environ = require('../environ.js'),
+    environ = require('bem-environ'),
 
     nodes = require('bem/lib/nodes/node.js'),
     examplesNodes = require('./examples.js'),
