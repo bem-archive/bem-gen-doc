@@ -1,7 +1,6 @@
 var BEM = require('bem'),
     PATH = require('path'),
 
-    environ = require('../environ'),
     join = PATH.join,
 
     PRJ_TECHS = PATH.resolve(__dirname, '../techs');

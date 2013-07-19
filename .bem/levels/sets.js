@@ -1,5 +1,5 @@
 var PATH = require('path'),
-    environ = require('../environ'),
+    environ = require('bem-environ'),
     PRJ_TECHS = PATH.resolve(__dirname, '../techs');
 
 exports.baseLevelPath = require.resolve('bem/lib/levels/simple');
