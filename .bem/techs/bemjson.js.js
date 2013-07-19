@@ -1,6 +1,6 @@
 var PATH = require('path'),
 
-    environ = require('../environ'),
+    environ = require('bem-environ'),
 
     BEMJSON_ROOT = environ.getLibPath('bem-json', 'i-bem/__json'),
     BEMJSON_CORE = PATH.join(BEMJSON_ROOT, 'i-bem__json.js');
@@ -13,17 +13,18 @@ exports.techMixin = {
         return ['bemjson.js'];
     },
 
-    getBuildResult : function(prefixes, suffix, outputDir, outputName) {
-
+    getBuildResult : function(files, suffix, output) {
         var _this = this;
         return this.__base.apply(this, arguments).then(function(res) {
-            res.unshift(_this.getBemjsonCore(outputDir));
+            res.unshift(_this.getBemjsonCore(output));
             return res;
         });
-
     },
 
     getBemjsonCore : function(outputDir) {
+        if(this.API_VER === 2) {
+            outputDir = PATH.dirname(outputDir);
+        }
         return this.getBuildResultChunk(PATH.relative(outputDir, BEMJSON_CORE));
     },
 

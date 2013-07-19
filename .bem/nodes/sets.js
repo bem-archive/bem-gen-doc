@@ -2,7 +2,7 @@ var PATH = require('path'),
     BEM = require('bem'),
 
     registry = require('bem/lib/nodesregistry'),
-    environ = require('../environ.js'),
+    environ = require('bem-environ'),
 
     nodes = require('bem/lib/nodes/node.js'),
     examplesNodes = require('./examples.js'),
@@ -54,6 +54,12 @@ registry.decl(ExamplesNodeName, nodes.NodeName, {
                 node = this.createSetsLevelNode();
 
             arch.setNode(node, arch.getParents(this));
+
+            // try to link: examples/examples.sets -> examples
+            var childNode = PATH.dirname(node.path);
+            if(arch.hasNode(childNode)) {
+                arch.addChildren(node, childNode);
+            }
         };
     },
 

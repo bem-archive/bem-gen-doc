@@ -7,7 +7,7 @@ var PATH = require('path'),
     registry = require('bem/lib/nodesregistry'),
     BundleNode = require('bem/lib/nodes/bundle').BundleNodeName,
 
-    environ = require('../environ'),
+    environ = require('bem-environ'),
 
     U = BEM.util,
     join = PATH.join,

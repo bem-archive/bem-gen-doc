@@ -1,15 +1,19 @@
 /*global MAKE:true */
 
-require('../../.bem/nodes/arch');
+require('bem-environ/lib/nodes/arch');
 
 try {
     require('../../.bem/nodes');
 } catch(e) {
-    // FIXME: first-run problem
+    var LOGGER = require('bem/lib/logger');
+    LOGGER.warn(e);
+
+    if(e && e.stack)
+        LOGGER.debug(e.stack);
 }
 
 var PATH = require('path'),
-    environ = require('../../.bem/environ');
+    environ = require('bem-environ');
 
 MAKE.decl('Arch', {
 
@@ -17,7 +21,7 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp : /^.+?\.bundles$/,
 
-    libraries : ['bem-bl', 'bem-json', 'bem-pr @ 0.1.0']
+    libraries : [ 'bem-bl @ 0.3', 'bem-json', 'bem-pr @ 0.2.0' ]
 
 });
 
@@ -53,7 +57,7 @@ MAKE.decl('ExampleNode', {
             'css',
             'js',
             'html'
-            ];
+        ];
     },
 
     getLevels : function() {

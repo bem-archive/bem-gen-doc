@@ -142,7 +142,7 @@ registry.decl(NodeName, nodes.NodeName, {
             catalogue = outputNodeFactory(outputNodes.CatalogueItemNode, 'catalogue');
 
         return Q.all([index, catalogue].map(function(node) {
-                this.arch.setNode(node, parent, bundles, intraspector);
+                this.arch.setNode(node, parent, [bundles, intraspector]);
                 return node;
             }, this))
             .then(function() {

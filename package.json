@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "marked": "~0.2.5",
-    "shmakowiki": "~0.4.0"
+    "shmakowiki": "~0.4.0",
+    "bem-environ": "~1.0.1"
   },
   "devDependencies": {
     "bem": "~0.6.6"

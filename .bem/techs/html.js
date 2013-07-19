@@ -1,7 +1,7 @@
 var BEM = require('bem'),
     PATH = require('path'),
 
-    environ = require('../environ'),
+    environ = require('bem-environ'),
 
     Q = BEM.require('q'),
     U = BEM.util,

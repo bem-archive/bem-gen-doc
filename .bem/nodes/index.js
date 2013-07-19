@@ -21,7 +21,7 @@ registry.decl('Arch', {
     },
 
     createSiteNodes : function() {
-        new (registry.getNodeClass(ArchNodeName))({
+        return new (registry.getNodeClass(ArchNodeName))({
                 arch : this.arch,
                 root : this.root
             })

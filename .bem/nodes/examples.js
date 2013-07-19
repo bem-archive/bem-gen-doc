@@ -2,7 +2,7 @@ var PATH = require('path'),
     BEM = require('bem'),
 
     registry = require('bem/lib/nodesregistry'),
-    environ = require('../environ'),
+    environ = require('bem-environ'),
 
     setsNodes = require(environ.getLibPath('bem-pr', 'bem/nodes/sets.js'));
 

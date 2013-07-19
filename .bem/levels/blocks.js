@@ -1,5 +1,5 @@
 var PATH = require('path'),
-    environ = require('../environ'),
+    environ = require('bem-environ'),
 
     join = PATH.join,
     resolve = PATH.resolve.bind(this, __dirname),
@@ -7,13 +7,12 @@ var PATH = require('path'),
     PRJ_TECHS = resolve('../techs'),
     BEMBL_TECHS = environ.getLibPath('bem-bl', 'blocks-common/i-bem/bem/techs');
 
-
 exports.getTechs = function() {
 
     return {
         'title.txt'  : 'title.txt',
-        'css'        : 'css',
-        'js'         : 'js',
+        'css'        : 'v2/css',
+        'js'         : 'v2/js-i',
         'priv.js'    : 'priv.js',
 
         'bemhtml'    : join(BEMBL_TECHS, 'bemhtml'),
