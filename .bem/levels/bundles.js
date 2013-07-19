@@ -13,10 +13,10 @@ exports.getTechs = function() {
         'blocks'        : '',
         'bemjson.js'    : '',
 
-        'bemdecl.js'    : 'bemdecl.js',
-        'deps.js'       : 'deps.js',
-        'js'            : 'js-i',
-        'css'           : 'css',
+        'bemdecl.js'    : 'v2/bemdecl.js',
+        'deps.js'       : 'v2/deps.js',
+        'js'            : 'v2/js-i',
+        'css'           : 'v2/css',
 
         'html'          : join(BEMBL_TECHS, 'html'),
         'bemhtml.js'    : join(BEMBL_TECHS, 'bemhtml')
