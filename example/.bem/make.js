@@ -17,7 +17,7 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp : /^.+?\.bundles$/,
 
-    libraries : ['bem-bl', 'bem-json', 'bem-pr @ 0.1.0']
+    libraries : [ 'bem-bl @ 0.3', 'bem-json', 'bem-pr @ 0.2.0' ]
 
 });
 
@@ -53,7 +53,7 @@ MAKE.decl('ExampleNode', {
             'css',
             'js',
             'html'
-            ];
+        ];
     },
 
     getLevels : function() {
