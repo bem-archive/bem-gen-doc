@@ -1,15 +1,15 @@
 /*global MAKE:true */
 
-require('../../.bem/nodes/arch');
+require('bem-environ/lib/nodes/arch');
 
 try {
     require('../../.bem/nodes');
 } catch(e) {
-    // FIXME: first-run problem
+    require('bem/lib/logger').error(e? e.stack || e : '');
 }
 
 var PATH = require('path'),
-    environ = require('../../.bem/environ');
+    environ = require('bem-environ');
 
 MAKE.decl('Arch', {
 
