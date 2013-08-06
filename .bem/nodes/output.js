@@ -120,12 +120,6 @@ registry.decl(OutputNodeName, BemCreateNode, {
                 return data;
             });
 
-        /*MKDIRP.sync(PATH.dirname(path));
-        return U.writeFileIfDiffers(path, JSON.stringify(data, null, 2))
-            .then(function() {
-                return data;
-            });*/
-
     },
 
     /**
