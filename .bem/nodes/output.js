@@ -266,6 +266,15 @@ registry.decl(OutputNodeName, BemCreateNode, {
         return this['get-desc.wiki-data'].apply(this, arguments);
     },
 
+    'get-thumb.png-data' : function(prefix, tech) {
+        var path = tech.getPath(prefix);
+
+        if(!FS.existsSync(path))
+            return;
+
+        return path;
+    },
+
     'get-examples-data' : function(prefix, tech) {
 
         // FIXME: hardcode
@@ -465,6 +474,12 @@ registry.decl(CatalogueItemNodeName, OutputNodeName, {
             case 'examples':
                 key = 'examples';
                 content = d;
+                break;
+
+            case 'thumb.png':
+            case 'thumb.jpg':
+                key = 'thumb';
+                content = PATH.relative(level.dir, d);
                 break;
 
             }
