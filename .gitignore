@@ -1,5 +1,7 @@
+.idea/
 .project
 .settings
+*.iml
 
 .bem/cache
 .bem/snapshots
