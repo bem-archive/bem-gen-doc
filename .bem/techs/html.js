@@ -1,3 +1,5 @@
+'use strict';
+
 var BEM = require('bem'),
     PATH = require('path'),
 

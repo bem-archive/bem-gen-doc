@@ -1,3 +1,5 @@
+'use strict';
+
 var PATH = require('path'),
 
     environ = require('bem-environ'),
