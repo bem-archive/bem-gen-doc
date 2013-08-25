@@ -10,16 +10,16 @@ var PATH = require('path'),
 exports.getTechs = function() {
 
     return {
-        'blocks'        : '',
-        'bemjson.js'    : '',
+        'blocks'        : 'bem/lib/tech/v2',
+        'bemjson.js'    : 'bem/lib/tech/v2',
 
         'bemdecl.js'    : 'v2/bemdecl.js',
         'deps.js'       : 'v2/deps.js',
         'js'            : 'v2/js-i',
         'css'           : 'v2/css',
 
-        'html'          : join(BEMBL_TECHS, 'html'),
-        'bemhtml.js'    : join(BEMBL_TECHS, 'bemhtml')
+        'html'          : join(BEMBL_TECHS, 'v2/html'),
+        'bemhtml.js'    : join(BEMBL_TECHS, 'v2/bemhtml')
     };
 
 };

@@ -12,12 +12,12 @@ var PATH = require('path'),
 exports.getTechs = function() {
 
     return extend(require('./bundles.js').getTechs(), {
-        'blocks'        : '',
-        'bemjson.js'    : '',
-        'title.txt'     : '',
+        'blocks'        : 'bem/lib/tech/v2',
+        'bemjson.js'    : 'bem/lib/tech/v2',
+        'title.txt'     : 'bem/lib/tech/v2',
 
-        'bemhtml'       : join(BEMBL_TECHS, 'bemhtml'),
-        'html'          : join(BEMBL_TECHS, 'html')
+        'bemhtml'       : join(BEMBL_TECHS, 'v2/bemhtml'),
+        'html'          : join(BEMBL_TECHS, 'v2/html')
     });
 
 };
