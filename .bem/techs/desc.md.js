@@ -1,5 +1,7 @@
 var BEM = require('bem');
 
+exports.API_VER = 2;
+
 exports.techMixin = BEM.util.extend(require('./i18n.js').LangMixin, {
 
     getSuffixForLang : function(lang) {

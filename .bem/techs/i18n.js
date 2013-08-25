@@ -1,5 +1,7 @@
 var DEFAULT_LANGS = ['ru', 'en'];
 
+exports.API_VER = 2;
+
 exports.LangMixin = {
 
     getLangs : function() {

@@ -32,9 +32,9 @@ module.exports = {
         url      : 'git://github.com/bem/bem-gen-doc.git',
         treeish  : 'make'
     },
-    'bem-controls' : {
+    'bem-components' : {
         type     : 'git',
-        url      : 'git://github.com/bem/bem-controls.git'
+        url      : 'git://github.com/bem/bem-components.git'
     },
     'bem-yana' : {
         type     : 'git',

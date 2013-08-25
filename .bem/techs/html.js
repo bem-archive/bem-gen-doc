@@ -8,9 +8,10 @@ var BEM = require('bem'),
 
     LIB_ROOT = environ.LIB_ROOT;
 
+exports.API_VER = 2;
 
 exports.getBaseTechPath = require.resolve(
-        environ.getLibPath('bem-bl', 'blocks-common/i-bem/bem/techs/html.js'));
+        environ.getLibPath('bem-bl', 'blocks-common/i-bem/bem/techs/v2/html.js'));
 
 exports.techMixin = {
 

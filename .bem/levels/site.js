@@ -13,8 +13,8 @@ exports.getTechs = function() {
 
         'bemjson.js' : join(PRJ_TECHS, 'bemjson.js'),
         'html'       : join(PRJ_TECHS, 'html'),
-        'sets'       : join(PRJ_TECHS, 'sets')
-
+        'sets'       : join(PRJ_TECHS, 'sets'),
+        'data.json'  : 'bem/lib/tech/v2'
     });
 
 };
