@@ -1,132 +1,108 @@
-/**
- * @module nodes/introspect
- */
+'use strict';
 
 var PATH = require('path'),
     BEM = require('bem'),
-    LOGGER = require('bem/lib/logger'),
     VM = require('vm'),
-    registry = require('bem/lib/nodesregistry'),
-
     Q = BEM.require('qq'),
     QFS = BEM.require('q-fs'),
+    U = BEM.util;
 
-    createLevel = BEM.createLevel,
-    U = BEM.util,
-
-    IntrospectNodeName = exports.IntrospectNodeName = 'IntrospectNode';
-
-
-/** @exports IntrospectNode */
-Object.defineProperty(exports, IntrospectNodeName, {
-    'get' : function() {
-        return registry.getNodeClass(IntrospectNodeName);
-    }
-});
-
-
-/**
- * @namespace
- */
-registry.decl(IntrospectNodeName, 'Node', {
+module.exports = function(registry) {
 
     /**
-     * @constructor
+     * @namespace
      */
-    __constructor : function(o) {
+    registry.decl('IntrospectNode', 'Node', {
 
-        this.__base.apply(this, arguments);
+        /**
+         * @constructor
+         */
+        __constructor : function(o) {
+            this.__base.apply(this, arguments);
 
-        this.root = o.root;
-        /** @type String[] */
-        this.paths = o.paths;
-        /** @type String[] */
-        this.langs = o.langs;
+            this.root = o.root;
+            /** @type String[] */
+            this.paths = o.paths;
+            /** @type String[] */
+            this.langs = o.langs;
+        },
 
-    },
-
-    make : function() {
-
-        var _this = this;
-        return this.getStruct()
-            .then(function(struct) {
-                return _this.writeMeta(struct);
-            });
-
-    },
-
-    getStruct : function() {
-
-        var root = this.root,
-            decls = this.paths.reduce(function(decls, level) {
-
-                var levelPath = PATH.resolve(root, level);
-
-                createLevel(levelPath).getDeclByIntrospection().forEach(function(decl) {
-
-                    var name = decl.name;
-
-                    decl.level = { path: level };
-                    (decls[name] || (decls[name] = [])).push(decl);
-
+        make : function() {
+            var _this = this;
+            return this.getStruct()
+                .then(function(struct) {
+                    return _this.writeMeta(struct);
                 });
+        },
 
-                return decls;
+        getStruct : function() {
 
-            }, {});
+            var root = this.root,
+                decls = this.paths.reduce(function(decls, level) {
 
-        return Q.shallow(decls);
+                    var levelPath = PATH.resolve(root, level);
 
-    },
+                    BEM.createLevel(levelPath).getDeclByIntrospection().forEach(function(decl) {
 
-    getMetaPath : function() {
-        return this.__self.getMetaPath(this);
-    },
+                        var name = decl.name;
 
-    readMeta : function() {
-        return this.__self.readMeta(this);
-    },
+                        decl.level = { path: level };
+                        (decls[name] || (decls[name] = [])).push(decl);
 
-    writeMeta : function(meta) {
-        return this.__self.writeMeta(this, meta);
-    }
+                    });
 
-}, {
+                    return decls;
 
-    createId : function(o) {
-        return 'machine-introspect*';
-    },
+                }, {});
 
-    getMetaPath : function(o) {
+            return Q.shallow(decls);
 
-        // FIXME: hardcode
-        var metaPath = PATH.join('.bem', 'cache', 'introspector.meta.js');
-        return PATH.resolve(o.root, metaPath);
+        },
 
-    },
+        getMetaPath : function() {
+            return this.__self.getMetaPath(this);
+        },
 
-    readMeta : function(o) {
+        readMeta : function() {
+            return this.__self.readMeta(this);
+        },
 
-        var path = this.getMetaPath(o);
+        writeMeta : function(meta) {
+            return this.__self.writeMeta(this, meta);
+        }
 
-        return U.readFile(path)
-            .then(function(data) {
-                return VM.runInThisContext(data);
-            })
-            .fail(function() {
-                return null;
-            });
+    }, {
 
-    },
+        createId : function(o) {
+            return 'machine-introspect*';
+        },
 
-    writeMeta : function(o, meta) {
+        getMetaPath : function(o) {
+            // FIXME: hardcode
+            var metaPath = PATH.join('.bem', 'cache', 'introspector.meta.js');
+            return PATH.resolve(o.root, metaPath);
+        },
 
-        var path = this.getMetaPath(o);
+        readMeta : function(o) {
+            var path = this.getMetaPath(o);
 
-        U.mkdirs(PATH.dirname(path));
-        return QFS.write(path, '(' + JSON.stringify(meta, null, 2) + ')');
+            // FIXME: replace with bem util function
+            return U.readFile(path)
+                .then(function(data) {
+                    return VM.runInThisContext(data);
+                })
+                .fail(function() {
+                    return null;
+                });
+        },
 
-    }
+        writeMeta : function(o, meta) {
+            var path = this.getMetaPath(o);
 
+            U.mkdirs(PATH.dirname(path));
+            return QFS.write(path, '(' + JSON.stringify(meta, null, 2) + ')');
+        }
 
-});
+    });
+
+};

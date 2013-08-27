@@ -1,46 +1,45 @@
-var PATH = require('path'),
-    BEM = require('bem'),
+'use strict';
 
-    registry = require('bem/lib/nodesregistry'),
-    environ = require('bem-environ'),
+var PATH = require('path');
 
-    setsNodes = require(environ.getLibPath('bem-pr', 'bem/nodes/sets.js'));
+module.exports = function(registry) {
 
+    registry.decl('ExampleNode', {
 
-registry.decl(setsNodes.ExampleNodeName, {
+        getMachineExamplesTechs : function() {
+            return [
+                'bemjson.js'
+            ];
+        },
 
-    getMachineExamplesTechs : function() {
-        return [
-            'bemjson.js'
-        ];
-    },
+        getMachineExamplesLevels : function() {
 
-    getMachineExamplesLevels : function() {
+            return [];
 
-        return [];
+        },
 
-    },
+        getTechs : function() {
 
-    getTechs : function() {
+            var bundle = PATH.relative(this.root, this.getPath());
+            if(bundle.indexOf(this.output + '/examples') === 0) {
+                return this.getMachineExamplesTechs();
+            }
 
-        var bundle = PATH.relative(this.root, this.getPath());
-        if(bundle.indexOf(this.output + '/examples') === 0) {
-            return this.getMachineExamplesTechs();
+            return this.__base.apply(this, arguments);
+
+        },
+
+        getLevels : function() {
+
+            var bundle = PATH.relative(this.root, this.getPath());
+            if(bundle.indexOf(this.output + '/examples') === 0) {
+                return this.getMachineExamplesLevels();
+            }
+
+            return this.__base.apply(this, arguments);
+
         }
 
-        return this.__base.apply(this, arguments);
+    });
 
-    },
-
-    getLevels : function() {
-
-        var bundle = PATH.relative(this.root, this.getPath());
-        if(bundle.indexOf(this.output + '/examples') === 0) {
-            return this.getMachineExamplesLevels();
-        }
-
-        return this.__base.apply(this, arguments);
-
-    }
-
-});
+};
