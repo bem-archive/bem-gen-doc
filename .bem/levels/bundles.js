@@ -17,7 +17,7 @@ exports.getTechs = function() {
         'css'           : 'v2/css',
 
         'html'          : PATH.join(BEMBL_TECHS, 'v2/html'),
-        'bemhtml.js'    : PATH.join(BEMBL_TECHS, 'v2/bemhtml')
+        'bemhtml'       : PATH.join(BEMBL_TECHS, 'v2/bemhtml')
     };
 
 };

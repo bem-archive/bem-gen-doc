@@ -13,7 +13,7 @@ exports.getTechs = function() {
 
         'bemjson.js' : PATH.join(PRJ_TECHS, 'bemjson.js'),
         'html'       : PATH.join(PRJ_TECHS, 'html'),
-        'sets'       : PATH.join(PRJ_TECHS, 'sets'),
+        'sets'       : 'level-proto',
         'data.json'  : 'bem/lib/tech/v2'
 
     });

@@ -42,14 +42,16 @@ module.exports = function(registry) {
 
                     var levelPath = PATH.resolve(root, level);
 
-                    BEM.createLevel(levelPath).getDeclByIntrospection().forEach(function(decl) {
+                    BEM.createLevel(levelPath)
+                        .getDeclByIntrospection()
+                        .forEach(function(decl) {
 
-                        var name = decl.name;
+                            var name = decl.name;
 
-                        decl.level = { path: level };
-                        (decls[name] || (decls[name] = [])).push(decl);
+                            decl.level = { path: level };
+                            (decls[name] || (decls[name] = [])).push(decl);
 
-                    });
+                        });
 
                     return decls;
 
@@ -79,8 +81,7 @@ module.exports = function(registry) {
 
         getMetaPath : function(o) {
             // FIXME: hardcode
-            var metaPath = PATH.join('.bem', 'cache', 'introspector.meta.js');
-            return PATH.resolve(o.root, metaPath);
+            return PATH.resolve(o.root, '.bem/cache/introspector.meta.js');
         },
 
         readMeta : function(o) {
@@ -89,10 +90,10 @@ module.exports = function(registry) {
             // FIXME: replace with bem util function
             return U.readFile(path)
                 .then(function(data) {
-                    return VM.runInThisContext(data);
+                    return data ? VM.runInThisContext(data) : {};
                 })
                 .fail(function() {
-                    return null;
+                    return {};
                 });
         },
 

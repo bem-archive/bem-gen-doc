@@ -13,7 +13,7 @@ module.exports = function(registry) {
                 'bemdecl.js',
                 'deps.js',
                 'bemjson.js',
-                'bemhtml.js',
+                'bemhtml',
                 'css',
                 'js'
             ];
