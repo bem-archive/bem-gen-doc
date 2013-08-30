@@ -4,11 +4,13 @@
 
 var PATH = require('path'),
     environ = require('bem-environ')(__dirname),
+    bemPr = require('bem-pr'),
     genDoc = require('../..');
 
 (function(registry) {
 
     environ.extendMake(registry);
+    bemPr.extendMake(registry);
     genDoc.extendMake(registry);
 
     registry.decl('Arch', {
