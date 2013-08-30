@@ -8,7 +8,7 @@ module.exports = function(registry) {
 
     registry.decl('MachineBundlesLevelNode', 'BundlesLevelNode', {
 
-        itemNodeClassName : 'BundleNode',
+        itemNodeClassName : 'MachineBundleNode',
 
         getBundleSourceTechs : function() {
             return ['bemdecl.js'];

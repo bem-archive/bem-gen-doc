@@ -45,7 +45,9 @@ module.exports = function(registry) {
 
         createCommonSiteNode : function(parent) {
 
-            var node = new (registry.getNodeClass('Node'))('site');
+            var node = registry.getNodeClass('Node')
+                .create('site');
+
             this.arch.setNode(node, parent);
 
             return node.getId();
@@ -54,7 +56,8 @@ module.exports = function(registry) {
 
         createSiteBundlesNode : function(parent, children) {
 
-            var node = new (registry.getNodeClass('MachineBundlesNode'))({
+            var node = registry.getNodeClass('MachineBundlesNode')
+                .create({
                     root    : this.root,
                     path    : this.output,
                     levels  : this.levels
@@ -68,11 +71,12 @@ module.exports = function(registry) {
 
         createIntrospectNode : function(parent, children) {
 
-            var node = new (registry.getNodeClass('IntrospectNode'))({
-                root : this.root,
-                paths : this.levels,
-                lands : this.langs
-            });
+            var node = registry.getNodeClass('IntrospectNode')
+                .create({
+                    root : this.root,
+                    paths : this.levels,
+                    lands : this.langs
+                });
 
             this.arch.setNode(node, parent, children);
 
@@ -83,14 +87,14 @@ module.exports = function(registry) {
         createExamplesNode : function(common, bundles, children) {
 
             var arch = this.arch,
-                node = new (registry.getNodeClass('MachineExamplesNode'))({
-                    root : this.root,
-                    output : this.output,
-                    sources : this.levels
-                });
+                node = registry.getNodeClass('MachineExamplesNode')
+                    .create({
+                        root : this.root,
+                        output : this.output,
+                        sources : this.levels
+                    });
 
             arch.setNode(node, common, bundles);
-
             children && arch.addChildren(node, children);
 
             return node.getId();
@@ -103,22 +107,24 @@ module.exports = function(registry) {
         createOutputNode : function(parent, bundles, intraspector) {
 
             var outputNodeFactory = function(nodeClassName, name) {
-                return new (registry.getNodeClass(nodeClassName))({
-                    root : this.root,
-                    level : PATH.resolve(this.root, this.output),
-                    techName : 'data.json',
-                    item : { block : name },
-                    info : { title : 'Библиотека блоков' }
-                });
-            }.bind(this);
+                    return registry.getNodeClass(nodeClassName)
+                        .create({
+                            root : this.root,
+                            level : PATH.resolve(this.root, this.output),
+                            techName : 'data.json',
+                            item : { block : name },
+                            info : { title : 'Библиотека блоков' }
+                        });
+                }.bind(this);
 
             var index = outputNodeFactory('IndexNode', 'index'),
                 catalogue = outputNodeFactory('CatalogueItemNode', 'catalogue');
 
-            return Q.all([index, catalogue].map(function(node) {
-                    this.arch.setNode(node, parent, [bundles, intraspector]);
-                    return node;
-                }, this))
+            return Q.all([index, catalogue]
+                    .map(function(node) {
+                        this.arch.setNode(node, parent, [bundles, intraspector]);
+                        return node;
+                    }, this))
                 .then(function() {
                     return [parent, bundles];
                 });

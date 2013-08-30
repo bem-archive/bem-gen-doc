@@ -20,7 +20,7 @@ module.exports = function(registry) {
         },
 
         getPath : function() {
-            return PATH.resolve(this.root, this.output);
+            return PATH.join(this.root, this.output);
         },
 
         make : function() {
@@ -55,12 +55,13 @@ module.exports = function(registry) {
         },
 
         createSetsLevelNode : function() {
-            return new (registry.getNodeClass('MachineSetsLevelNode'))({
-                root    : this.root,
-                level   : this.getOutputLevel(),
-                item    : { block : 'examples', tech : 'sets' },
-                sources : this.sources
-            });
+            return registry.getNodeClass('MachineSetsLevelNode')
+                .create({
+                    root    : this.root,
+                    level   : this.getOutputLevel(),
+                    item    : { block : 'examples', tech : 'sets' },
+                    sources : this.sources
+                });
         }
 
     }, {

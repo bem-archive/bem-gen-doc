@@ -28,7 +28,7 @@ module.exports = function(registry) {
                     }),
                 siteLevels = ['common.blocks', 'site.blocks']
                     .map(function(level) {
-                        return PATH.join(environ.PRJ_ROOT, level);
+                        return PATH.join(__dirname, '../..', level);
                     });
 
             return bemblLevels.concat(siteLevels);

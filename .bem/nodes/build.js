@@ -2,7 +2,6 @@
 
 var BEM = require('bem'),
     PATH = require('path'),
-    LOGGER = BEM.logger,
     Q = BEM.require('q'),
     QFS = BEM.require('q-fs'),
     U = BEM.util;
@@ -38,7 +37,7 @@ module.exports = function(registry) {
         },
 
         getPath : function() {
-            return PATH.resolve(this.root, this.path);
+            return PATH.join(this.root, this.path);
         },
 
         /**
@@ -46,7 +45,7 @@ module.exports = function(registry) {
          * @returns {String}
          */
         getSiteRootProto : function() {
-            return PATH.resolve(__dirname, '../levels/site.js');
+            return PATH.join(this.root, '.bem/levels/site.js');
         },
 
         /**
@@ -92,13 +91,10 @@ module.exports = function(registry) {
         },
 
         getSiteRoot : function() {
-
             if(!this._path) {
                 this._path = BEM.createLevel(this.getPath());
             }
-
             return this._path;
-
         },
 
         createSiteBundle : function(bundle) {
@@ -138,17 +134,15 @@ module.exports = function(registry) {
             return function() {
 
                 var arch = ctx.arch,
-                    level = this.getSiteRoot(),
-                    tech = 'sets',
-                    item = { block : name, tech : tech },
+                    node = registry.getNodeClass('BemCreateNode')
+                        .create({
+                            root     : this.root,
+                            level    : this.getSiteRoot().dir,
+                            item     : { block : name },
+                            techName : 'sets'
+                        });
 
-                    node = new (registry.getNodeClass('BemCreateNode'))({
-                        root     : this.root,
-                        level    : level,
-                        item     : item,
-                        techName : tech
-                    });
-
+                // FIXME: hack?
                 node.id = PATH.dirname(node.path);
 
                 arch.setNode(node, arch.getParents(this));
@@ -167,7 +161,8 @@ module.exports = function(registry) {
                 return arch.getNode(bundleLevelNode);
             }
 
-            var node = new (registry.getNodeClass('MachineBundlesLevelNode'))({
+            var node = registry.getNodeClass('MachineBundlesLevelNode')
+                .create({
                     root : this.root,
                     level : bundleLevelNode,
                     levels : this.levels
@@ -186,15 +181,11 @@ module.exports = function(registry) {
 
             return QFS.exists(this.getPath())
                 .then(function(exists) {
-
-                    if(!exists)
-                        return _this.createSiteRoot();
-
-                    return exists;
-
+                    return exists || _this.createSiteRoot();
                 })
                 .then(function() {
-                    // FIXME: no assignment?
+                    // XXX: refresh level objects cache in bem-tools so newly created config
+                    // is used next time level is needed
                     BEM.createLevel(_this.getPath(), { noCache: true });
                 })
                 .then(function() {

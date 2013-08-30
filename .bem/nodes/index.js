@@ -14,7 +14,8 @@ module.exports = function(registry) {
         },
 
         createSiteNodes : function() {
-            return new (registry.getNodeClass('GenDocNode'))({
+            return registry.getNodeClass('GenDocNode')
+                .create({
                     arch : this.arch,
                     root : this.root
                 })
@@ -54,7 +55,7 @@ module.exports = function(registry) {
          * TODO
          * @returns {Array}
          */
-        getLands : function() {
+        getLangs : function() {
             return [];
         },
 
@@ -62,15 +63,13 @@ module.exports = function(registry) {
          * @returns {Function}
          */
         alterArch : function() {
-            var levels = this.getSources(),
-                langs = this.getLands(),
-                output = this.getOutputName(),
-                siteNode = new (registry.getNodeClass('SiteNode'))({
+            var siteNode = registry.getNodeClass('SiteNode')
+                .create({
                     arch : this.arch,
                     root : this.root,
-                    output : output,
-                    levels : levels,
-                    langs  : langs
+                    output : this.getOutputName(),
+                    levels : this.getSources(),
+                    langs  : this.getLangs()
                 });
 
             siteNode.alterArch();
