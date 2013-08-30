@@ -1,15 +1,13 @@
 'use strict';
 
-var BEM = require('bem'),
-    PATH = require('path'),
-    environ = require('bem-environ');
+var BEM = require('bem');
 
 exports.baseLevelPath = BEM.require.resolve('./levels/simple');
 
 exports.getTechs = function() {
 
     return {
-        'sets'      : 'level-proto',
+        'tests'     : 'level-proto',
         'examples'  : 'level-proto'
     };
 
