@@ -7,15 +7,11 @@ module.exports = function(registry) {
     registry.decl('ExampleNode', {
 
         getMachineExamplesTechs : function() {
-            return [
-                'bemjson.js'
-            ];
+            return ['bemjson.js'];
         },
 
         getMachineExamplesLevels : function() {
-
             return [];
-
         },
 
         getTechs : function() {

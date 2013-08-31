@@ -320,11 +320,9 @@ module.exports = function(registry) {
                     data.push(block);
                 }
 
-                if(!item.techs)
-                    return;
+                if(!item.techs) return;
 
                 block.title = this.getItemTechData(level, item, 'title.txt');
-                return;
 
             }
 
