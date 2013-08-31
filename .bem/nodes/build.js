@@ -138,7 +138,7 @@ module.exports = function(registry) {
                         .create({
                             root     : this.root,
                             level    : this.getSiteRoot().dir,
-                            item     : { block : name },
+                            item     : { block : name, tech: 'sets' },
                             techName : 'sets'
                         });
 
