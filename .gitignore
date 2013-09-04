@@ -5,6 +5,7 @@
 
 .bem/cache
 .bem/snapshots
+/**/.bem/**/files.json
 node_modules/
 libs
 release
