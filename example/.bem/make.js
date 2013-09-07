@@ -16,7 +16,7 @@ var PATH = require('path'),
     registry.decl('Arch', {
         blocksLevelsRegexp : /^.+?\.blocks$/,
         bundlesLevelsRegexp : /^.+?\.bundles$/,
-        libraries : [ 'bem-bl @ 0.3', 'bem-json' ]
+        libraries : [ 'bem-bl @ 0.3' ]
     });
 
     registry.decl('GenDocNode', {
