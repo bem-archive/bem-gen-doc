@@ -75,7 +75,7 @@ block page {
 
     elem favicon {
 
-        tag: 'link',
+        tag: 'link'
         attrs: { rel: 'shortcut icon', href: this.ctx.url }
 
     }

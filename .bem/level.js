@@ -1,6 +1,8 @@
+'use strict';
+
 var BEM = require('bem');
 
-exports.baseLevelPath = require.resolve('bem/lib/levels/simple');
+exports.baseLevelPath = BEM.require.resolve('./levels/project');
 
 exports.getTechs = function() {
 

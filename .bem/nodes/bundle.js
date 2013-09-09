@@ -1,79 +1,61 @@
-/**
- * @module nodes/bundle
- */
+'use strict';
 
 var PATH = require('path'),
-    BEM = require('bem'),
-    registry = require('bem/lib/nodesregistry'),
-    BundleNode = require('bem/lib/nodes/bundle').BundleNodeName,
 
-    environ = require('bem-environ'),
+    ROOT_PATH = PATH.resolve(__dirname, '../..'),
+    BEMBL_PATH = PATH.resolve(__dirname, '../../libs/bem-bl');
 
-    U = BEM.util,
-    join = PATH.join,
+module.exports = function(registry) {
 
-    BundleNodeName = exports.BundleNodeName = 'MachineBundleNode';
+    registry.decl('MachineBundleNode', 'BundleNode', {
 
+        getTechs : function() {
 
-/** @exports MachineBundleNode */
-Object.defineProperty(exports, BundleNodeName, {
-    'get' : function() {
-        return registry.getNodeClass(BundleNodeName);
-    }
-});
+            return [
+                'bemdecl.js',
+                'deps.js',
+                'bemjson.js',
+                'bemhtml',
+                'css',
+                'js'
+            ];
 
+        },
 
-registry.decl(BundleNodeName, BundleNode, {
+        getLevels : function(tech) {
 
-    __constructor : function(o) {
-        this.__base.apply(this, arguments);
-    },
+            var bemblLevels = ['blocks-common', 'blocks-desktop']
+                    .map(function(level) {
+                        return PATH.join(BEMBL_PATH, level);
+                    }),
+                siteLevels = ['common.blocks', 'site.blocks']
+                    .map(function(level) {
+                        return PATH.join(ROOT_PATH, level);
+                    });
 
-    getTechs : function() {
+            return bemblLevels.concat(siteLevels);
 
-        return [
-            'bemdecl.js',
-            'deps.js',
-            'bemjson.js',
-            'bemhtml.js',
-            'css',
-            'js'
-        ];
+        },
 
-    },
+        'create-bemjson.js-node' : function(tech, bundleNode, magicNode) {
+            return this.createDefaultTechNode.apply(this, arguments);
+        },
 
-    getLevels : function(tech) {
+        /*
+        'create-meta.tree-node' : function(tech, bundleNode, magicNode) {
+            return return this.setBemBuildNode(
+                    tech,
+                    this.level.resolveTech(tech),
+                    this.getBundlePath('deps..js'),
+                    bundleNode,
+                    magicNode);
+        },
+        */
 
-        var bemblLevels = ['blocks-common', 'blocks-desktop']
-                .map(function(level) {
-                    return environ.getLibPath('bem-bl', level);
-                }),
-            siteLevels = ['common.blocks', 'site.blocks']
-                .map(function(level) {
-                    return join(environ.PRJ_ROOT, level);
-                });
+        'create-bemjson.js-optimizer-node' : function() {
+            return this['create-js-optimizer-node'].apply(this, arguments);
+        }
 
-        return bemblLevels.concat(siteLevels);
+    });
 
-    },
-
-    'create-bemjson.js-node' : function(tech, bundleNode, magicNode) {
-        return this.createDefaultTechNode.apply(this, arguments);
-    },
-
-    /*
-    'create-meta.tree-node' : function(tech, bundleNode, magicNode) {
-        return return this.setBemBuildNode(
-                tech,
-                this.level.resolveTech(tech),
-                this.getBundlePath('deps..js'),
-                bundleNode,
-                magicNode);
-    },
-    */
-
-    'create-bemjson.js-optimizer-node' : function() {
-        return this['create-js-optimizer-node'].apply(this, arguments);
-    }
-
-});
+};

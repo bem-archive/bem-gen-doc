@@ -1,3 +1,5 @@
+'use strict';
+
 var DEFAULT_LANGS = ['ru', 'en'];
 
 exports.API_VER = 2;

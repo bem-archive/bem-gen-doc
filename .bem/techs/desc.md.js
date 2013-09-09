@@ -1,3 +1,5 @@
+'use strict';
+
 var BEM = require('bem');
 
 exports.API_VER = 2;

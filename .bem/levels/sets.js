@@ -1,14 +1,14 @@
-var PATH = require('path'),
-    environ = require('bem-environ'),
-    PRJ_TECHS = PATH.resolve(__dirname, '../techs');
+'use strict';
 
-exports.baseLevelPath = require.resolve('bem/lib/levels/simple');
+var BEM = require('bem');
+
+exports.baseLevelPath = BEM.require.resolve('./levels/simple');
 
 exports.getTechs = function() {
 
     return {
-        'sets'      : PATH.join(PRJ_TECHS, 'sets.js'),
-        'examples'  : PATH.join(environ.getLibPath('bem-pr', 'bem/techs/examples.js'))
+        'tests'     : 'level-proto',
+        'examples'  : 'level-proto'
     };
 
 };

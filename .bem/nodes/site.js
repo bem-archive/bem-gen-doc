@@ -1,154 +1,136 @@
-/**
- * @module nodes/site
- */
+'use strict';
 
 var PATH = require('path'),
     BEM = require('bem'),
-    LOGGER = require('bem/lib/logger'),
-    registry = require('bem/lib/nodesregistry'),
+    Q = BEM.require('q');
 
-    outputNodes = require('./output'),
+module.exports = function(registry) {
 
-    nodes = BEM.require('./nodes/node'),
+    registry.decl('SiteNode', 'Node', {
 
-    SiteBundlesNode = require('./build').MachineBundlesNode,
-    IntrospectNode = require('./introspect').IntrospectNode,
-    ExamplesNode = require('./sets').MachineExamplesNode,
+        __constructor : function(o) {
 
-    Q = BEM.require('q'),
+            this.__base.apply(this, arguments);
 
-    NodeName = exports.SiteNodeName = 'SiteNode';
+            this.root = o.root;
+            this.arch = o.arch;
+            this.output = o.output;
+            this.levels = o.levels;
+            this.langs = o.langs;
 
+        },
 
-/** @exports SiteNode */
-Object.defineProperty(exports, NodeName, {
-    'get' : function() {
-        return registry.getNodeClass(NodeName);
-    }
-});
+        alterArch : function(parent, children) {
 
+            var _this = this;
+            return Q.when(_this.createCommonSiteNode.call(_this, parent))
+                .then(function(common) {
+                    parent && (common = [common].concat(parent));
 
-/**
- * @namespace
- */
-registry.decl(NodeName, nodes.NodeName, {
+                    return Q.all([
+                        common,
+                        _this.createSiteBundlesNode(common, children),
+                        _this.createIntrospectNode(common, children)
+                    ]);
+                })
+                .spread(_this.createOutputNode.bind(_this))
+                .spread(function(common, bundle) {
+                    return _this.createExamplesNode(common, bundle, children);
+                })
+                .then(function() {
+                    return _this.arch;
+                });
 
-    __constructor : function(o) {
+        },
 
-        this.__base.apply(this, arguments);
+        createCommonSiteNode : function(parent) {
 
-        this.root = o.root;
-        this.arch = o.arch;
-        this.output = o.output;
-        this.levels = o.levels;
-        this.langs = o.langs;
+            var node = registry.getNodeClass('Node')
+                .create('site');
 
-    },
+            this.arch.setNode(node, parent);
 
-    alterArch : function(parent, children) {
+            return node.getId();
 
-        var _this = this;
-        return Q.when(_this.createCommonSiteNode.call(_this, parent))
-            .then(function(common) {
-                parent && (common = [common].concat(parent));
+        },
 
-                return Q.all([
-                    common,
-                    _this.createSiteBundlesNode(common, children),
-                    _this.createIntrospectNode(common, children)
-                ]);
-            })
-            .spread(_this.createOutputNode.bind(_this))
-            .spread(function(common, bundle) {
-                return _this.createExamplesNode(common, bundle, children);
-            })
-            .then(function() {
-//                LOGGER.info(_this.arch.toString());
-                return _this.arch;
-            });
+        createSiteBundlesNode : function(parent, children) {
 
-    },
+            var node = registry.getNodeClass('MachineBundlesNode')
+                .create({
+                    root    : this.root,
+                    path    : this.output,
+                    levels  : this.levels
+                });
 
-    createCommonSiteNode : function(parent) {
+            this.arch.setNode(node, parent, children);
 
-        var node = new nodes.Node('site');
-        this.arch.setNode(node, parent);
+            return node.getId();
 
-        return node.getId();
+        },
 
-    },
+        createIntrospectNode : function(parent, children) {
 
-    createSiteBundlesNode : function(parent, children) {
+            var node = registry.getNodeClass('IntrospectNode')
+                .create({
+                    root : this.root,
+                    paths : this.levels,
+                    lands : this.langs
+                });
 
-        var node = new SiteBundlesNode({
-                root    : this.root,
-                path    : this.output,
-                levels  : this.levels
-            });
+            this.arch.setNode(node, parent, children);
 
-        this.arch.setNode(node, parent, children);
+            return node.getId();
 
-        return node.getId();
+        },
 
-    },
+        createExamplesNode : function(common, bundles, children) {
 
-    createIntrospectNode : function(parent, children) {
+            var arch = this.arch,
+                node = registry.getNodeClass('MachineExamplesNode')
+                    .create({
+                        root : this.root,
+                        output : this.output,
+                        sources : this.levels
+                    });
 
-        var node = new IntrospectNode({
-            root : this.root,
-            paths : this.levels,
-            lands : this.langs
-        });
+            arch.setNode(node, common, bundles);
+            children && arch.addChildren(node, children);
 
-        this.arch.setNode(node, parent, children);
+            return node.getId();
 
-        return node.getId();
+        },
 
-    },
+        /**
+         * FIXME: BemCreateNode нельзя инициализировать из Arch, если output-уровень еще не создан
+         */
+        createOutputNode : function(parent, bundles, intraspector) {
 
-    createExamplesNode : function(common, bundles, children) {
+            var outputNodeFactory = function(nodeClassName, name) {
+                    return registry.getNodeClass(nodeClassName)
+                        .create({
+                            root : this.root,
+                            level : PATH.resolve(this.root, this.output),
+                            techName : 'data.json',
+                            item : { block : name },
+                            info : { title : 'Библиотека блоков' }
+                        });
+                }.bind(this);
 
-        var arch = this.arch,
-            node = new ExamplesNode({
-                root : this.root,
-                output : this.output,
-                sources : this.levels
-            });
+            var index = outputNodeFactory('IndexNode', 'index'),
+                catalogue = outputNodeFactory('CatalogueItemNode', 'catalogue');
 
-        arch.setNode(node, common, bundles);
+            return Q.all([index, catalogue]
+                    .map(function(node) {
+                        this.arch.setNode(node, parent, [bundles, intraspector]);
+                        return node;
+                    }, this))
+                .then(function() {
+                    return [parent, bundles];
+                });
 
-        children && arch.addChildren(node, children);
+        }
 
-        return node.getId();
+    });
 
-    },
-
-    /**
-     * FIXME: BemCreateNode нельзя инициализировать из Arch, если output-уровень еще не создан
-     */
-    createOutputNode : function(parent, bundles, intraspector) {
-
-        var outputNodeFactory = function(nodeClass, name) {
-            return new nodeClass({
-                root : this.root,
-                level : PATH.resolve(this.root, this.output),
-                techName : 'data.json',
-                item : { block : name },
-                info : { title : 'Библиотека блоков' }
-            });
-        }.bind(this);
-
-        var index = outputNodeFactory(outputNodes.IndexNode, 'index'),
-            catalogue = outputNodeFactory(outputNodes.CatalogueItemNode, 'catalogue');
-
-        return Q.all([index, catalogue].map(function(node) {
-                this.arch.setNode(node, parent, [bundles, intraspector]);
-                return node;
-            }, this))
-            .then(function() {
-                return [parent, bundles];
-            });
-
-    }
-
-});
+};

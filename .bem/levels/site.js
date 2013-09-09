@@ -1,7 +1,7 @@
+'use strict';
+
 var BEM = require('bem'),
     PATH = require('path'),
-
-    join = PATH.join,
 
     PRJ_TECHS = PATH.resolve(__dirname, '../techs');
 
@@ -11,10 +11,11 @@ exports.getTechs = function() {
 
     return BEM.util.extend(this.__base() || {}, {
 
-        'bemjson.js' : join(PRJ_TECHS, 'bemjson.js'),
-        'html'       : join(PRJ_TECHS, 'html'),
-        'sets'       : join(PRJ_TECHS, 'sets'),
+        'bemjson.js' : PATH.join(PRJ_TECHS, 'bemjson.js'),
+        'html'       : PATH.join(PRJ_TECHS, 'html'),
+        'sets'       : 'level-proto',
         'data.json'  : 'bem/lib/tech/v2'
+
     });
 
 };
