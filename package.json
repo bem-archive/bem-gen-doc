@@ -5,13 +5,14 @@
   "dependencies": {
     "marked": "~0.2.5",
     "shmakowiki": "~0.4.0",
-    "bem-environ": "~1.2.1",
+    "bem-environ": "~1.3.0",
     "bem-json": "~0.1.6"
   },
   "devDependencies": {
     "bem": "~0.6.15",
     "bem-pr": "https://github.com/bem/bem-pr/archive/dev.tar.gz"
   },
+  "bundledDependencies": ["bem-environ"],
   "repository": {
     "type": "git",
     "url": "git://github.com/bem/bem-gen-doc"
