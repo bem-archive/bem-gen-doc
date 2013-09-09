@@ -3,17 +3,13 @@
 var BEM = require('bem'),
     PATH = require('path'),
 
-    environ = require('bem-environ'),
-
     Q = BEM.require('q'),
-    U = BEM.util,
-
-    LIB_ROOT = environ.LIB_ROOT;
+    U = BEM.util;
 
 exports.API_VER = 2;
 
 exports.getBaseTechPath = require.resolve(
-        environ.getLibPath('bem-bl', 'blocks-common/i-bem/bem/techs/v2/html.js'));
+    PATH.resolve(__dirname, '../../libs/bem-bl/blocks-common/i-bem/bem/techs/v2/html.js'));
 
 exports.techMixin = {
 

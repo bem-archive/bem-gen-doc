@@ -1,10 +1,9 @@
 'use strict';
 
 var PATH = require('path'),
-    environ = require('bem-environ'),
 
     PRJ_TECHS = PATH.resolve(__dirname, '../techs'),
-    BEMBL_TECHS = environ.getLibPath('bem-bl', 'blocks-common/i-bem/bem/techs');
+    BEMBL_TECHS = PATH.resolve(__dirname, '../../libs/bem-bl/blocks-common/i-bem/bem/techs');
 
 exports.getTechs = function() {
 

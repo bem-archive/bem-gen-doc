@@ -1,7 +1,9 @@
 'use strict';
 
 var PATH = require('path'),
-    environ = require('bem-environ');
+
+    ROOT_PATH = PATH.resolve(__dirname, '../..'),
+    BEMBL_PATH = PATH.resolve(__dirname, '../../libs/bem-bl');
 
 module.exports = function(registry) {
 
@@ -24,11 +26,11 @@ module.exports = function(registry) {
 
             var bemblLevels = ['blocks-common', 'blocks-desktop']
                     .map(function(level) {
-                        return environ.getLibPath('bem-bl', level);
+                        return PATH.join(BEMBL_PATH, level);
                     }),
                 siteLevels = ['common.blocks', 'site.blocks']
                     .map(function(level) {
-                        return PATH.join(__dirname, '../..', level);
+                        return PATH.join(ROOT_PATH, level);
                     });
 
             return bemblLevels.concat(siteLevels);

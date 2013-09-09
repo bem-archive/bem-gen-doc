@@ -3,7 +3,5 @@
 .settings
 *.iml
 
-/**/.bem/**/files.json
-
 node_modules/
-libs/
+example/

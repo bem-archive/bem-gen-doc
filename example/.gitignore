@@ -1,3 +1,4 @@
-.bem/cache
-.bem/snapshot
-release
+.bem/cache/
+.bem/snapshot/
+release/
+libs/
